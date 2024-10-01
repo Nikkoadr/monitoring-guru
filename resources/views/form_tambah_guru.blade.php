@@ -23,22 +23,17 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-                                <h3 class="card-title">Data Guru</h3>
-                                <a href="/form_tambah_guru" class="btn btn-primary float-right">Tambah Guru</a>
+                                <h3 class="card-title">Form Tambah Guru</h3>
                             </div>
                             <div class="card-body">
-                                <table class="table table-bordered table-striped">
-                                    <thead>
-                                        <th>No</th>
-                                        <th>Nama</th>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($data_guru as  $guru)
-                                            <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $guru->nama_guru }}</td>
-                                        @endforeach
-                                    </tbody>
-                                </table>
+                                <form action="proses_tambah_guru" method="post">
+                                    @method('put')
+                                    @csrf
+                                    <div class="form-group">
+                                        <label for="inputName">Nama Lengkap</label>
+                                        <input type="text" class="form-control" id="inputName" placeholder="Name" name="name">
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>

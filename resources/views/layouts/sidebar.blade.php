@@ -55,13 +55,19 @@
                     <li class="nav-item">
                         <a href="/data_guru" class="nav-link {{ request()->is('data_guru') ? 'active' : '' }}">
                         <i class="far fa-circle nav-icon"></i>
-                        <p>Guru</p>
+                        <p>Data Guru</p>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a href="/data_mapel" class="nav-link {{ request()->is('data_mapel') ? 'active' : '' }}">
                         <i class="far fa-circle nav-icon"></i>
-                        <p>Mata Pelajaran</p>
+                        <p>Data Mata Pelajaran</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/data_siswa" class="nav-link {{ request()->is('data_siswa') ? 'active' : '' }}">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Data Siswa</p>
                         </a>
                     </li>
                     </ul>

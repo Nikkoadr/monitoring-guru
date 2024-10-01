@@ -11,7 +11,7 @@
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="#">Home</a></li>
-                    <li class="breadcrumb-item active">Data Guru</li>
+                    <li class="breadcrumb-item active">Data Siswa</li>
                     </ol>
                 </div>
                 </div>
@@ -23,8 +23,7 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-                                <h3 class="card-title">Data Guru</h3>
-                                <a href="/form_tambah_guru" class="btn btn-primary float-right">Tambah Guru</a>
+                                <h3 class="card-title">Data Siswa</h3>
                             </div>
                             <div class="card-body">
                                 <table class="table table-bordered table-striped">
@@ -33,9 +32,9 @@
                                         <th>Nama</th>
                                     </thead>
                                     <tbody>
-                                        @foreach ($data_guru as  $guru)
+                                        @foreach ($data_siswa as  $siswa)
                                             <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $guru->nama_guru }}</td>
+                                            <td>{{ $siswa->nama_siswa }}</td>
                                         @endforeach
                                     </tbody>
                                 </table>
