@@ -34,9 +34,11 @@
                                     </thead>
                                     <tbody>
                                         @foreach ($data_mapel as  $mapel)
+                                        <tr>
                                             <td>{{ $loop->iteration }}</td>
                                             <td>{{ $mapel->nama_mapel }}</td>
                                             <td>{{ $mapel->nama_guru }}</td>
+                                        </tr>
                                         @endforeach
                                     </tbody>
                                 </table>

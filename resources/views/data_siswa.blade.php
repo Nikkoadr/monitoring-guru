@@ -33,8 +33,10 @@
                                     </thead>
                                     <tbody>
                                         @foreach ($data_siswa as  $siswa)
+                                        <tr>
                                             <td>{{ $loop->iteration }}</td>
                                             <td>{{ $siswa->nama_siswa }}</td>
+                                        </tr>
                                         @endforeach
                                     </tbody>
                                 </table>

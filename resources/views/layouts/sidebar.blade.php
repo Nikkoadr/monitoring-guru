@@ -44,7 +44,7 @@
                     </a>
                 </li>
                 <li class="nav-item menu-open">
-                    <a href="" class="nav-link {{ request()->is('data_guru') ? 'active' : '' }}{{ request()->is('data_mapel') ? 'active' : '' }}">
+                    <a href="" class="nav-link {{ request()->is('data_guru') ? 'active' : '' }}{{ request()->is('data_mapel') ? 'active' : '' }}{{ request()->is('data_role') ? 'active' : '' }}{{ request()->is('data_jurusan') ? 'active' : '' }}{{ request()->is('data_kelas') ? 'active' : '' }}{{ request()->is('data_siswa') ? 'active' : '' }}">
                     <i class="nav-icon fas fa-database"></i>
                     <p>
                         Database
@@ -52,6 +52,12 @@
                     </p>
                     </a>
                     <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                        <a href="/data_role" class="nav-link {{ request()->is('data_role') ? 'active' : '' }}">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Role</p>
+                        </a>
+                    </li>
                     <li class="nav-item">
                         <a href="/data_guru" class="nav-link {{ request()->is('data_guru') ? 'active' : '' }}">
                         <i class="far fa-circle nav-icon"></i>
@@ -62,6 +68,18 @@
                         <a href="/data_mapel" class="nav-link {{ request()->is('data_mapel') ? 'active' : '' }}">
                         <i class="far fa-circle nav-icon"></i>
                         <p>Data Mata Pelajaran</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/data_jurusan" class="nav-link {{ request()->is('data_jurusan') ? 'active' : '' }}">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Data Jurusan</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/data_kelas" class="nav-link {{ request()->is('data_kelas') ? 'active' : '' }}">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>data_kelas</p>
                         </a>
                     </li>
                     <li class="nav-item">

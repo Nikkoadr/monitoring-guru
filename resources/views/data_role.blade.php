@@ -11,7 +11,7 @@
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="#">Home</a></li>
-                    <li class="breadcrumb-item active">Data Guru</li>
+                    <li class="breadcrumb-item active">Data Role</li>
                     </ol>
                 </div>
                 </div>
@@ -23,20 +23,20 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-                                <h3 class="card-title">Data Guru</h3>
-                                <a href="/form_tambah_guru" class="btn btn-primary float-right">Tambah Guru</a>
+                                <h3 class="card-title">Data Role</h3>
+                                <a href="/form_tambah_role" class="btn btn-primary float-right">Tambah Role</a>
                             </div>
                             <div class="card-body">
                                 <table class="table table-bordered table-striped">
                                     <thead>
                                         <th>No</th>
-                                        <th>Nama</th>
+                                        <th>Role</th>
                                     </thead>
                                     <tbody>
-                                        @foreach ($data_guru as  $guru)
+                                        @foreach ($data_role as  $role)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $guru->nama_guru }}</td>
+                                            <td>{{ $role->role }}</td>
                                         </tr>
                                         @endforeach
                                     </tbody>
