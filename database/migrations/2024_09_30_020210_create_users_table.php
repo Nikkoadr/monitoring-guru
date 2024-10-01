@@ -14,8 +14,6 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->foreignId('role')->nullable()->index()->references('id')->on('role');
-            $table->foreignId('kelas')->nullable()->index()->references('id')->on('kelas');
-            $table->foreignId('jurusan')->nullable()->index()->references('id')->on('jurusan');
             $table->string('gelar_depan')->nullable();
             $table->string('name')->nullable();
             $table->string('gelar_belakang')->nullable();
