@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('guru_mapel', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('id_user')->index()->references('id')->on('users');
+            $table->foreignId('id_user')->nullable()->index()->references('id')->on('users');
             $table->timestamps();
         });
     }

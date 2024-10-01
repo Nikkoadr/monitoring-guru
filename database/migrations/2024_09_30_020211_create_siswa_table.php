@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('siswa', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('id_user')->index()->references('id')->on('users');
-            $table->foreignId('id_kelas')->index()->references('id')->on('kelas');
-            $table->foreignId('id_jurusan')->index()->references('id')->on('jurusan');
+            $table->foreignId('id_user')->nullable()->index()->references('id')->on('users');
+            $table->foreignId('id_kelas')->nullable()->index()->references('id')->on('kelas');
+            $table->foreignId('id_jurusan')->nullable()->index()->references('id')->on('jurusan');
             $table->timestamps();
         });
     }

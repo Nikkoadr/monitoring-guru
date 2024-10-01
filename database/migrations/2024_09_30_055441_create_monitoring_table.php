@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->date('tanggal')->nullable();
             $table->string('kelas')->nullable();
-            $table->foreignId('id_mapel')->index()->references('id')->on('mapel');
+            $table->foreignId('id_mapel')->nullable()->index()->references('id')->on('mapel');
             $table->string('jam_ke')->nullable();
             $table->string('foto_masuk')->nullable();
             $table->string('jam_masuk')->nullable();
