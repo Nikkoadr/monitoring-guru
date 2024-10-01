@@ -25,10 +25,6 @@ class HomeController extends Controller
     {
         return view('home');
     }
-    public function data_guru()
-    {
-        return view('data_guru');
-    }
     public function data_mapel()
     {
         return view('data_mapel');
