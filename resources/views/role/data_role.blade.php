@@ -30,13 +30,17 @@
                                 <table class="table table-bordered table-striped">
                                     <thead>
                                         <th>No</th>
-                                        <th>Role</th>
+                                        <th>Nama Role</th>
+                                        <th>Menu</th>
                                     </thead>
                                     <tbody>
                                         @foreach ($data_role as  $role)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
                                             <td>{{ $role->nama_role }}</td>
+                                            <td><a href="/form_edit_role_{{ $role->id }}" class="btn btn-info float-right m-1">Edit</a>
+                                            <a href="/hapus_role_{{ $role->id }}" class="btn btn-danger float-right m-1">Hapus</a>
+                                            </td>
                                         </tr>
                                         @endforeach
                                     </tbody>
