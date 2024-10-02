@@ -54,7 +54,7 @@ class GuruController extends Controller
             return response()->json(['redirect' => url('/data_guru')]);
         }
 
-    public function hapus_guru(Request $request, $id)
+    public function hapus_guru($id)
         {
             DB::table('guru_mapel')->where('id', $id)->delete();
             return redirect('/data_guru');
