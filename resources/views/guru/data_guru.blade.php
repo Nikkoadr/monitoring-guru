@@ -31,12 +31,14 @@
                                     <thead>
                                         <th>No</th>
                                         <th>Nama</th>
+                                        <th>Aksi</th>
                                     </thead>
                                     <tbody>
                                         @foreach ($data_guru as  $guru)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
                                             <td>{{ $guru->nama_guru }}</td>
+                                            <td><a href="/hapus_guru_{{ $guru->id }}" class="btn btn-danger float-right">Hapus</a></td>
                                         </tr>
                                         @endforeach
                                     </tbody>

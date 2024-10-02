@@ -10,6 +10,6 @@ class JurusanController extends Controller
     public function index()
     {
         $data_jurusan = DB::table('jurusan')->get();
-        return view('data_jurusan', compact('data_jurusan'));
+        return view('jurusan.data_jurusan', compact('data_jurusan'));
     }
 }

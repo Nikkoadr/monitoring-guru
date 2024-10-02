@@ -73,7 +73,7 @@ class DatabaseSeeder extends Seeder
         ]);
         
         Mapel::create([
-            'nama_mapel' => 'Matematika',
+            'nama_mapel' => 'Administrasi Jaringan',
             'id_guru' => '1',
         ]);
     }

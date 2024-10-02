@@ -19,6 +19,9 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/data_guru', [GuruController::class, 'index']);
+Route::get('/get_guru', [GuruController::class, 'get_guru']);
+Route::post('/post_guru', [GuruController::class, 'post_guru']);
+Route::get('/hapus_guru_{id}', [GuruController::class, 'hapus_guru']);
 Route::get('/form_tambah_guru', [GuruController::class, 'form_tambah_guru']);
 Route::get('/data_mapel', [MapelController::class, 'index']);
 Route::get('/data_role', [RoleController::class, 'index']);

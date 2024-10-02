@@ -28,7 +28,7 @@ class SiswaController extends Controller
             ->join('users', 'siswa.id_user', '=', 'users.id')
             ->select('siswa.*', 'users.name as nama_siswa')
             ->get();
-            return view('data_siswa', compact('data_siswa'));
+            return view('siswa.data_siswa', compact('data_siswa'));
     }
 
 }

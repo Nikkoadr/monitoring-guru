@@ -30,6 +30,6 @@ class MapelController extends Controller
             ->select('mapel.*', 'guru_mapel.id as id_guru', 'users.name as nama_guru')
             ->get();
             
-        return view('data_mapel', compact('data_mapel'));
+        return view('mapel.data_mapel', compact('data_mapel'));
     }
 }
