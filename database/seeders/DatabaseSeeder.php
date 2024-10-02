@@ -22,19 +22,19 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
 
         Role::create([
-            'role' => 'admin',
+            'nama_role' => 'admin',
         ]);
 
         Role::create([
-            'role' => 'guru',
+            'nama_role' => 'guru',
         ]);
 
         Role::create([
-            'role' => 'siswa',
+            'nama_role' => 'siswa',
         ]);
 
         Jurusan::create([
-            'jurusan' => 'Teknik Komputer dan Jaringan',
+            'nama_jurusan' => 'Teknik Komputer dan Jaringan',
         ]);
 
         Kelas::create([
@@ -45,21 +45,21 @@ class DatabaseSeeder extends Seeder
             'name' => 'Ini Admin',
             'email' => 'admin@gmail.com',
             'password' => bcrypt('P4ssw0rd'),
-            'role' => '1',
+            'id_role' => '1',
 
         ]);
         User::create([
             'name' => 'Ini guru',
             'email' => 'guru@gmail.com',
             'password' => bcrypt('P4ssw0rd'),
-            'role' => '2',
+            'id_role' => '2',
 
         ]);
         User::create([
             'name' => 'Ini Siswa',
             'email' => 'siswa@gmail.com',
             'password' => bcrypt('P4ssw0rd'),
-            'role' => '3',
+            'id_role' => '3',
         ]);
 
         Siswa::create([

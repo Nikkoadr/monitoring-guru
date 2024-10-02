@@ -36,7 +36,7 @@
                                         @foreach ($data_role as  $role)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $role->role }}</td>
+                                            <td>{{ $role->nama_role }}</td>
                                         </tr>
                                         @endforeach
                                     </tbody>

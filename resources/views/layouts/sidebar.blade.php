@@ -44,7 +44,7 @@
                     </a>
                 </li>
                 <li class="nav-item menu-open">
-                    <a href="" class="nav-link {{ request()->is('data_guru') ? 'active' : '' }}{{ request()->is('data_mapel') ? 'active' : '' }}{{ request()->is('data_role') ? 'active' : '' }}{{ request()->is('data_jurusan') ? 'active' : '' }}{{ request()->is('data_kelas') ? 'active' : '' }}{{ request()->is('data_siswa') ? 'active' : '' }}">
+                    <a href="" class="nav-link {{ request()->is('data_guru') ? 'active' : '' }}{{ request()->is('data_user') ? 'active' : '' }}{{ request()->is('data_mapel') ? 'active' : '' }}{{ request()->is('data_role') ? 'active' : '' }}{{ request()->is('data_jurusan') ? 'active' : '' }}{{ request()->is('data_kelas') ? 'active' : '' }}{{ request()->is('data_siswa') ? 'active' : '' }}">
                     <i class="nav-icon fas fa-database"></i>
                     <p>
                         Database
@@ -55,7 +55,13 @@
                     <li class="nav-item">
                         <a href="/data_role" class="nav-link {{ request()->is('data_role') ? 'active' : '' }}">
                         <i class="far fa-circle nav-icon"></i>
-                        <p>Role</p>
+                        <p>Data Role</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/data_user" class="nav-link {{ request()->is('data_user') ? 'active' : '' }}">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Data User</p>
                         </a>
                     </li>
                     <li class="nav-item">
@@ -79,7 +85,7 @@
                     <li class="nav-item">
                         <a href="/data_kelas" class="nav-link {{ request()->is('data_kelas') ? 'active' : '' }}">
                         <i class="far fa-circle nav-icon"></i>
-                        <p>data_kelas</p>
+                        <p>Data Kelas</p>
                         </a>
                     </li>
                     <li class="nav-item">

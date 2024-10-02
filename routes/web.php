@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\JurusanController;
 use App\Http\Controllers\KelasController;
 use App\Http\Controllers\GuruController;
@@ -18,6 +19,7 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/data_user', [UserController::class, 'index']);
 Route::get('/data_guru', [GuruController::class, 'index']);
 Route::get('/get_guru', [GuruController::class, 'get_guru']);
 Route::post('/post_guru', [GuruController::class, 'post_guru']);
