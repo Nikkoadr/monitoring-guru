@@ -41,9 +41,15 @@
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
                                             <td>{{ $mapel->nama_mapel }}</td>
-                                            <td>{{ $mapel->nama_guru }}</td>
+                                            <td>
+                                                @foreach ($mapel->guru as $guru)
+                                                    <!-- Nama guru diambil dari relasi user -->
+                                                    <span>{{ $guru->user->name ?? 'Guru Tidak Ditemukan' }}</span><br>
+                                                @endforeach
+                                            </td>
                                             <td>
                                                 <a href="/form_edit_mapel_{{ $mapel->id }}" class="btn btn-info float-right m-1">Edit</a>
+                                                <a href="/form_tambah_guru_pengampu_{{ $mapel->id }}" class="btn btn-warning float-right m-1">Tambah</a>
                                                 <button class="btn btn-danger float-right m-1" onclick="confirmDelete({{ $mapel->id }})">Hapus</button>
                                             </td>
                                         </tr>

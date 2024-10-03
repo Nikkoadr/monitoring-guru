@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Models\Guru;
+use App\Models\Mapel;
 
 class MapelController extends Controller
 {
@@ -25,12 +25,8 @@ class MapelController extends Controller
      */
     public function index()
     {
-        $data_mapel = DB::table('mapel')
-            ->join('guru', 'mapel.id_guru', '=', 'guru.id')
-            ->join('users', 'guru.id_user', '=', 'users.id')
-            ->select('mapel.*', 'guru.id as id_guru', 'users.name as nama_guru')
-            ->get();
-            
+        $data_mapel = Mapel::with('guru.user')->get();
+
         return view('mapel.data_mapel', compact('data_mapel'));
     }
 
@@ -38,6 +34,11 @@ class MapelController extends Controller
     {
         $guru = DB::table('guru')->get();
         return view('mapel.form_tambah_mapel', compact('guru'));
+    }
+
+    public function form_tambah_guru_pengampu($id){
+        $mapel = DB::table('mapel')->where('id', $id)->first();
+        return view('mapel.form_tambah_guru_pengampu', compact('mapel'));
     }
 
     public function get_guru(Request $request)
@@ -52,15 +53,26 @@ class MapelController extends Controller
             return response()->json($gurus);
         }
 
+        public function post_guru_pengampu(Request $request, $id){
+            $request->validate([
+                'id_guru' => 'required',
+            ]);
+            $data = [
+                'id_mapel' => $id,
+                'id_guru' => $request->id_guru,
+                'created_at' => now(),
+            ];
+            DB::table('guru_mapel')->insert($data);
+            return redirect('/data_mapel')->with('success', 'Data Guru Berhasil Tambah');
+        }
+
         public function post_mapel(Request $request)
         {
             $request->validate([
                 'nama_mapel' => 'required',
-                'id_guru' => 'required',
             ]);
             $data = [
                 'nama_mapel' => $request->nama_mapel,
-                'id_guru' => $request->id_guru,
                 'created_at' => now(),
             ];
             DB::table('mapel')->insert($data);

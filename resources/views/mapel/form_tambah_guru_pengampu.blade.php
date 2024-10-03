@@ -28,10 +28,14 @@
                                 <h3 class="card-title">Form Tambah Mapel</h3>
                             </div>
                             <div class="card-body">
-                            <form action="/post_mapel" method="post" id="guruForm">
+                            <form action="/post_guru_pengampu_{{ $mapel->id }}" method="post" id="guruForm">
                                 @csrf
                                 <label for="nama_mapel">Nama Mata Pelajaran:</label>
-                                <input class="form-control" type="text" id="nama_mapel" name="nama_mapel" autocomplete="off">
+                                <input class="form-control" type="text" id="nama_mapel" name="nama_mapel" value="{{ $mapel->nama_mapel }}" readonly autocomplete="off">
+                                <label for="guru">Guru Pengampu:</label>
+                                <input class="form-control" type="text" id="guru" name="guru" autocomplete="off">
+                                <input type="hidden" id="id_guru" name="id_guru">
+                                <div class="suggestions dropdown-item" id="suggestions"></div>
                                 <button class="btn btn-primary mt-2 float-right" type="submit">Simpan</button>
                             </form>
                             </div>

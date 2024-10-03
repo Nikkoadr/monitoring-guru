@@ -10,4 +10,9 @@ class Mapel extends Model
     use HasFactory;
     protected $guarded = [];
     protected $table = 'mapel';
+
+    public function guru()
+    {
+        return $this->belongsToMany(Guru::class, 'guru_mapel', 'id_mapel', 'id_guru');
+    }
 }

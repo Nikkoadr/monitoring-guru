@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('guru_mapel', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('id_mapel')->nullable()->index()->references('id')->on('guru');
-            $table->foreignId('id_guru')->nullable()->index()->references('id')->on('mapel');
+            $table->foreignId('id_mapel')->nullable()->index()->references('id')->on('mapel');
+            $table->foreignId('id_guru')->nullable()->index()->references('id')->on('guru');
             $table->timestamps();
         });
     }

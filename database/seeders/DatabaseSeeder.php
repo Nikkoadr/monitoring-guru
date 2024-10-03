@@ -10,6 +10,7 @@ use App\Models\Kelas;
 use App\Models\Role;
 use App\Models\Siswa;
 use App\Models\Guru;
+use App\Models\Guru_mapel;
 use App\Models\Mapel;
 use App\Models\Monitoring;
 class DatabaseSeeder extends Seeder
@@ -73,8 +74,12 @@ class DatabaseSeeder extends Seeder
         ]);
         
         Mapel::create([
-            'nama_mapel' => 'Administrasi Jaringan',
+            'nama_mapel' => 'Eletronika Dasar',
+        ]);
+
+        Guru_mapel::create([
             'id_guru' => '1',
+            'id_mapel' => '1',
         ]);
     }
 }

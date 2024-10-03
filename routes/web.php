@@ -47,6 +47,8 @@ Route::get('/form_tambah_mapel', [MapelController::class, 'form_tambah_mapel']);
 Route::get('/get_guru', [MapelController::class, 'get_guru']);
 Route::post('/post_mapel', [MapelController::class, 'post_mapel']);
 Route::get('/form_edit_mapel_{id}', [MapelController::class, 'form_edit_mapel']);
+Route::get('/form_tambah_guru_pengampu_{id}', [MapelController::class, 'form_tambah_guru_pengampu']);
+Route::post('/post_guru_pengampu_{id}', [MapelController::class, 'post_guru_pengampu']);
 Route::put('/update_mapel_{id}', [MapelController::class, 'update_mapel']);
 Route::get('/hapus_mapel_{id}', [MapelController::class, 'hapus_mapel']);
 
