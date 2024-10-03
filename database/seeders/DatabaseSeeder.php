@@ -9,7 +9,7 @@ use App\Models\Jurusan;
 use App\Models\Kelas;
 use App\Models\Role;
 use App\Models\Siswa;
-use App\Models\Guru_mapel;
+use App\Models\Guru;
 use App\Models\Mapel;
 use App\Models\Monitoring;
 class DatabaseSeeder extends Seeder
@@ -68,7 +68,7 @@ class DatabaseSeeder extends Seeder
             'id_jurusan' => '1',
         ]);
 
-        Guru_mapel::create([
+        Guru::create([
             'id_user' => '2',
         ]);
         

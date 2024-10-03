@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('guru_mapel', function (Blueprint $table) {
+        Schema::create('guru', function (Blueprint $table) {
             $table->id();
             $table->foreignId('id_user')->nullable()->index()->references('id')->on('users');
             $table->timestamps();

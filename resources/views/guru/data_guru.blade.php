@@ -1,5 +1,6 @@
 @extends('layouts.main')
 @section('css')
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 @endsection
 @section('content')
     <div class="content-wrapper">
@@ -32,14 +33,16 @@
                                     <thead>
                                         <th>No</th>
                                         <th>Nama</th>
-                                        <th>Aksi</th>
+                                        <th>Menu</th>
                                     </thead>
                                     <tbody>
                                         @foreach ($data_guru as  $guru)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
                                             <td>{{ $guru->nama_guru }}</td>
-                                            <td><a href="/hapus_guru_{{ $guru->id }}" class="btn btn-danger float-right">Hapus</a></td>
+                                            <td>
+                                                <button class="btn btn-danger float-right m-1" onclick="confirmDelete({{ $guru->id }})">Hapus</button>
+                                            </td>
                                         </tr>
                                         @endforeach
                                     </tbody>
@@ -51,4 +54,39 @@
             </div>
         </div>
     </div>
+@endsection
+@section('js')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+<script>
+    @if (session()->has('success'))
+    var Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 5000
+    });
+        Toast.fire({
+        icon: 'success',
+        title: '{{ session('success') }}'
+        })
+    @endif
+</script>
+<script>
+    function confirmDelete(roleId) {
+        Swal.fire({
+            title: 'Apakah Anda yakin?',
+            text: "Data tidak dapat dikembalikan setelah dihapus!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, hapus!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = `/hapus_guru_${roleId}`;
+            }
+        });
+    }
+</script>
 @endsection

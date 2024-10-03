@@ -13,7 +13,7 @@
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="#">Home</a></li>
-                    <li class="breadcrumb-item active">Data Guru</li>
+                    <li class="breadcrumb-item active">Data Mapel</li>
                     </ol>
                 </div>
                 </div>
@@ -25,12 +25,13 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-                                <h3 class="card-title">Form Tambah Guru</h3>
+                                <h3 class="card-title">Form Tambah Mapel</h3>
                             </div>
                             <div class="card-body">
-                                <form action="/post_guru" method="post" id="guruForm">
+                                <form action="/post_mapel" method="post" id="guruForm">
                                     @csrf
-                                    <label for="guru">Nama Guru:</label>
+                                    <label for="mapel">Nama Mata Pelajaran:</label>
+                                    <input class="form-control" type="text" id="mapel" name="mapel" autocomplete="off">
                                     <input class="form-control" type="text" id="guru" name="guru" autocomplete="off">
                                     <input type="hidden" id="id_guru" name="id_guru">
                                     <div class="suggestions dropdown-item" id="suggestions"></div>
@@ -50,7 +51,7 @@
     document.getElementById('guru').addEventListener('input', function () {
         let query = this.value;
         if (query.length > 1) {
-            fetch(`/get_user?q=${query}`)
+            fetch(`/get_guru?q=${query}`)
                 .then(response => response.json())
                 .then(data => {
                     let suggestions = document.getElementById('suggestions');

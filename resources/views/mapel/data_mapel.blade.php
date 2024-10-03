@@ -24,6 +24,7 @@
                         <div class="card">
                             <div class="card-header">
                                 <h3 class="card-title">Data Mapel</h3>
+                                <a href="/form_tambah_mapel" class="btn btn-primary float-right">Tambah Mapel</a>
                             </div>
                             <div class="card-body">
                                 <table class="table table-bordered table-striped">
