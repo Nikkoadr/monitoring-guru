@@ -43,7 +43,7 @@ class RoleController extends Controller
             'created_at' => now(),
         ];
         DB::table('role')->insert($data);
-        return redirect('/data_role');
+        return redirect('/data_role')->with('success', 'Data role Berhasil Tambah');
     }
 
     public function form_edit_role($id)
@@ -67,6 +67,6 @@ class RoleController extends Controller
     public function hapus_role($id)
     {
         DB::table('role')->where('id', $id)->delete();
-        return redirect('/data_role');
+        return redirect('/data_role')->with('success', 'Data role Berhasil Hapus');
     }
 }

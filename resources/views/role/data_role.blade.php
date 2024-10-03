@@ -41,7 +41,7 @@
                                             <td>{{ $loop->iteration }}</td>
                                             <td>{{ $role->nama_role }}</td>
                                             <td><a href="/form_edit_role_{{ $role->id }}" class="btn btn-info float-right m-1">Edit</a>
-                                            <a href="/hapus_role_{{ $role->id }}" class="btn btn-danger float-right m-1">Hapus</a>
+                                            <button class="btn btn-danger float-right m-1" onclick="confirmDelete({{ $role->id }})">Hapus</button>
                                             </td>
                                         </tr>
                                         @endforeach
@@ -59,17 +59,35 @@
 @section('js')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 <script>
-@if (session()->has('success'))
-var Toast = Swal.mixin({
-    toast: true,
-    position: 'top-end',
-    showConfirmButton: false,
-    timer: 5000
-});
-    Toast.fire({
-    icon: 'success',
-    title: '{{ session('success') }}'
-    })
-@endif
+    @if (session()->has('success'))
+    var Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 5000
+    });
+        Toast.fire({
+        icon: 'success',
+        title: '{{ session('success') }}'
+        })
+    @endif
+</script>
+<script>
+    function confirmDelete(roleId) {
+        Swal.fire({
+            title: 'Apakah Anda yakin?',
+            text: "Data tidak dapat dikembalikan setelah dihapus!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, hapus!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = `/hapus_role_${roleId}`;
+            }
+        });
+    }
 </script>
 @endsection
