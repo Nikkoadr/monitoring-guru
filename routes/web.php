@@ -54,16 +54,16 @@ Route::get('/hapus_mapel_{id}', [MapelController::class, 'hapus_mapel']);
 
 Route::get('/data_jurusan', [JurusanController::class, 'index']);
 Route::get('/form_tambah_jurusan', [JurusanController::class, 'form_tambah_jurusan']);
-Route::get('/post_jurusan', [JurusanController::class, 'post_jurusan']);
-Route::get('/fom_edit_jurusan_{id}', [JurusanController::class, 'fom_edit_jurusan']);
-Route::get('/update_edit_jurusan_{id}', [JurusanController::class, 'update_edit_jurusan']);
+Route::post('/post_jurusan', [JurusanController::class, 'post_jurusan']);
+Route::get('/form_edit_jurusan_{id}', [JurusanController::class, 'form_edit_jurusan']);
+Route::put('/update_jurusan_{id}', [JurusanController::class, 'update_jurusan']);
 Route::get('/hapus_jurusan_{id}', [JurusanController::class, 'hapus_jurusan']);
 
 Route::get('/data_kelas', [KelasController::class, 'index']);
 Route::get('/form_tambah_kelas', [KelasController::class, 'form_tambah_kelas']);
-Route::get('/post_kelas', [KelasController::class, 'post_kelas']);
+Route::post('/post_kelas', [KelasController::class, 'post_kelas']);
 Route::get('/form_edit_kelas_{id}', [KelasController::class, 'form_edit_kelas']);
-Route::get('/update_edit_kelas_{id}', [KelasController::class, 'update_edit_kelas']);
+Route::put('/update_kelas_{id}', [KelasController::class, 'update_kelas']);
 Route::get('/hapus_kelas_{id}', [KelasController::class, 'hapus_kelas']);
 
 Route::get('/data_siswa', [SiswaController::class, 'index']);

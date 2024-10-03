@@ -43,8 +43,8 @@ class KelasController extends Controller
 
     public function form_edit_kelas($id)
     {
-        $kelas = DB::table('kelas')->where('id', $id)->first();
-        return view('kelas.form_edit_kelas', compact('kelas'));
+        $data_kelas = DB::table('kelas')->where('id', $id)->first();
+        return view('kelas.form_edit_kelas', compact('data_kelas'));
     }
 
     public function update_kelas(Request $request, $id)

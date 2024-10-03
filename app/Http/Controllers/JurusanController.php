@@ -35,16 +35,20 @@ class JurusanController extends Controller
 
     public function post_jurusan(Request $request)
     {
+        $request->validate([
+            'nama_jurusan' => 'required',
+        ]);
+
         DB::table('jurusan')->insert([
             'nama_jurusan' => $request->nama_jurusan,
         ]);
-        return redirect('/jurusan')->with('success', 'Data Jurusan Berhasil Tambah');
+        return redirect('/data_jurusan')->with('success', 'Data Jurusan Berhasil Tambah');
     }   
 
     public function form_edit_jurusan($id)
     {
-        $jurusan = DB::table('jurusan')->where('id', $id)->first();
-        return view('jurusan.form_edit_jurusan', compact('jurusan'));
+        $data_jurusan = DB::table('jurusan')->where('id', $id)->first();
+        return view('jurusan.form_edit_jurusan', compact('data_jurusan'));
     }
 
     public function update_jurusan(Request $request, $id)
@@ -57,12 +61,12 @@ class JurusanController extends Controller
             'updated_at' => now(),
         ];
         DB::table('jurusan')->where('id', $id)->update($data);
-        return redirect('/jurusan')->with('success', 'Data Jurusan Berhasil Edit');
+        return redirect('/data_jurusan')->with('success', 'Data Jurusan Berhasil Edit');
     }
 
     public function hapus_jurusan($id)
     {
         DB::table('jurusan')->where('id', $id)->delete();
-        return redirect('/jurusan')->with('success', 'Data Jurusan Berhasil Hapus');
+        return redirect('/data_jurusan')->with('success', 'Data Jurusan Berhasil Hapus');
     }   
 }
