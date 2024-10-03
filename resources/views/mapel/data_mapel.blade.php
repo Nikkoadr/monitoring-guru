@@ -1,5 +1,7 @@
 @extends('layouts.main')
-
+@section('css')
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+@endsection
 @section('content')
 <div class="content-wrapper">
         <div class="content-header">
@@ -32,6 +34,7 @@
                                         <th>No</th>
                                         <th>Nama Mata pelajaran</th>
                                         <th>Guru Pengampu</th>
+                                        <th>Menu</th>
                                     </thead>
                                     <tbody>
                                         @foreach ($data_mapel as  $mapel)
@@ -39,6 +42,10 @@
                                             <td>{{ $loop->iteration }}</td>
                                             <td>{{ $mapel->nama_mapel }}</td>
                                             <td>{{ $mapel->nama_guru }}</td>
+                                            <td>
+                                                <a href="/form_edit_mapel_{{ $mapel->id }}" class="btn btn-info float-right m-1">Edit</a>
+                                                <button class="btn btn-danger float-right m-1" onclick="confirmDelete({{ $mapel->id }})">Hapus</button>
+                                            </td>
                                         </tr>
                                         @endforeach
                                     </tbody>
@@ -50,4 +57,39 @@
             </div>
         </div>
     </div>
+@endsection
+@section('js')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+<script>
+    @if (session()->has('success'))
+    var Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 5000
+    });
+        Toast.fire({
+        icon: 'success',
+        title: '{{ session('success') }}'
+        })
+    @endif
+</script>
+<script>
+    function confirmDelete(roleId) {
+        Swal.fire({
+            title: 'Apakah Anda yakin?',
+            text: "Data tidak dapat dikembalikan setelah dihapus!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, hapus!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = `/hapus_mapel_${roleId}`;
+            }
+        });
+    }
+</script>
 @endsection

@@ -25,9 +25,7 @@ class UserController extends Controller
     public function post_user(Request $request)
     {
         $request->validate([
-            'gelar_depan' => 'required',
             'name' => 'required',
-            'gelar_belakang' => 'required',
             'email' => 'required',
             'password' => 'required',
         ]);
