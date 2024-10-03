@@ -1,5 +1,6 @@
 @extends('layouts.main')
-
+@section('css')
+@endsection
 @section('content')
     <div class="content-wrapper">
         <div class="content-header">

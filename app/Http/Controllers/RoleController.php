@@ -52,16 +52,16 @@ class RoleController extends Controller
         return view('role.form_edit_role', compact('data_role'));
     }
 
-    public function update_edit_role(Request $request){
+    public function update_edit_role(Request $request,$id){
         $request->validate([
-            'id_role' => 'required',
+            'nama_role' => 'required',
         ]);
         $data = [
             'nama_role' => $request->nama_role,
             'updated_at' => now(),
         ];
-        DB::table('role')->where('id', $request->id_role)->update($data);
-        return redirect('/data_role');
+        DB::table('role')->where('id', $id)->update($data);
+        return redirect('/data_role')->with('success', 'Data role Berhasil Update');
     }
 
     public function hapus_role($id)

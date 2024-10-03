@@ -23,7 +23,7 @@ Route::get('/data_role', [RoleController::class, 'index']);
 Route::get('/form_tambah_role', [RoleController::class, 'form_tambah_role']);
 Route::post('/post_role', [RoleController::class, 'post_role']);
 Route::get('/form_edit_role_{id}', [RoleController::class, 'form_edit_role']);
-Route::get('/update_edit_role_{id}', [RoleController::class, 'update_edit_role']);
+Route::put('/update_edit_role_{id}', [RoleController::class, 'update_edit_role']);
 Route::get('/hapus_role_{id}', [RoleController::class, 'hapus_role']);
 Route::get('/data_user', [UserController::class, 'index']);
 Route::get('/data_guru', [GuruController::class, 'index']);

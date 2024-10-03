@@ -28,10 +28,16 @@
                                 <h3 class="card-title">Form edit Role</h3>
                             </div>
                             <div class="card-body">
-                                <form action="/post_role" method="post">
+                                <form action="/update_edit_role_{{ $data_role->id }}" method="post">
+                                @method('put')
                                 @csrf
                                     <label for="nama_role">Nama Role:</label>
-                                    <input class="form-control" type="text" id="nama_role" name="nama_role" value="{{ $data_role->nama_role }}" autocomplete="off">
+                                    <input class="form-control @error('nama_role') is-invalid @enderror" type="text" id="nama_role" name="nama_role" value="{{ $data_role->nama_role }}" autocomplete="off">
+                                    @error('nama_role')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
                                     <button class="btn btn-primary mt-2 float-right" type="submit">Simpan</button>
                                 </form>
                             </div>
@@ -43,5 +49,4 @@
     </div>
 @endsection
 @section('js')
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 @endsection

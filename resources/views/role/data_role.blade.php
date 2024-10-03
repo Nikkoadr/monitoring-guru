@@ -1,5 +1,7 @@
 @extends('layouts.main')
-
+@section('css')
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+@endsection
 @section('content')
     <div class="content-wrapper">
         <div class="content-header">
@@ -52,4 +54,22 @@
             </div>
         </div>
     </div>
+@endsection
+
+@section('js')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+<script>
+@if (session()->has('success'))
+var Toast = Swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 5000
+});
+    Toast.fire({
+    icon: 'success',
+    title: '{{ session('success') }}'
+    })
+@endif
+</script>
 @endsection
