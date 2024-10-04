@@ -33,8 +33,9 @@
                                     <thead>
                                         <th>No</th>
                                         <th>Tanggal</th>
+                                        <th>Guru</th>
                                         <th>Kelas</th>
-                                        <th>Mapel</th>
+                                        <th>Mata Pelajaran</th>
                                         <th>Jam Ke</th>
                                         <th>Foto Masuk</th>
                                         <th>Jam Masuk</th>

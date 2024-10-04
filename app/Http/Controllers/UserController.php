@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -9,12 +10,15 @@ class UserController extends Controller
 {
     public function index()
     {
-
-        $data_user = DB::table('users')
-        ->join('role', 'users.id_role', '=', 'role.id')
-        ->select('users.*', 'role.nama_role as nama_role')
-        ->get(); 
-        return view('user.data_user', compact('data_user'));
+        if (Gate::allows('admin')) {
+            $data_user = DB::table('users')
+            ->join('role', 'users.id_role', '=', 'role.id')
+            ->select('users.*', 'role.nama_role as nama_role')
+            ->get(); 
+            return view('user.data_user', compact('data_user'));
+        }else{
+            return redirect('/home')->with('error', 'Anda Tidak Memiliki Akses');
+        }
     }
 
     public function form_tambah_user()

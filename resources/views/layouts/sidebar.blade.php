@@ -51,6 +51,7 @@
                     </p>
                     </a>
                 </li>
+                @can('admin')
                 <li class="nav-item menu-open">
                     <a href="" class="nav-link {{ request()->is('data_guru') ? 'active' : '' }}{{ request()->is('data_user') ? 'active' : '' }}{{ request()->is('data_mapel') ? 'active' : '' }}{{ request()->is('data_role') ? 'active' : '' }}{{ request()->is('data_jurusan') ? 'active' : '' }}{{ request()->is('data_kelas') ? 'active' : '' }}{{ request()->is('data_siswa') ? 'active' : '' }}">
                     <i class="nav-icon fas fa-database"></i>
@@ -104,6 +105,7 @@
                     </li>
                     </ul>
                 </li>
+                @endcan
                 <li class="nav-item">
                     <a href="/laporan" class="nav-link {{ request()->is('laporan') ? 'active' : '' }}">
                     <i class="nav-icon fas fa-copy"></i>
