@@ -19,6 +19,7 @@ Route::get('/', function () {
 Auth::routes(['register' => false]);
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/kbm', [App\Http\Controllers\KbmController::class, 'index']);
 
 Route::get('/data_role', [RoleController::class, 'index']);
 Route::get('/form_tambah_role', [RoleController::class, 'form_tambah_role']);

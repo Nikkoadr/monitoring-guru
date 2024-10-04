@@ -43,6 +43,14 @@
                     </p>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="kbm" class="nav-link {{ request()->is('kbm') ? 'active' : '' }}">
+                    <i class="nav-icon fa-solid fa-people-roof"></i>
+                    <p>
+                        KBM
+                    </p>
+                    </a>
+                </li>
                 <li class="nav-item menu-open">
                     <a href="" class="nav-link {{ request()->is('data_guru') ? 'active' : '' }}{{ request()->is('data_user') ? 'active' : '' }}{{ request()->is('data_mapel') ? 'active' : '' }}{{ request()->is('data_role') ? 'active' : '' }}{{ request()->is('data_jurusan') ? 'active' : '' }}{{ request()->is('data_kelas') ? 'active' : '' }}{{ request()->is('data_siswa') ? 'active' : '' }}">
                     <i class="nav-icon fas fa-database"></i>

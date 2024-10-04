@@ -11,17 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('kelas_aktif', function (Blueprint $table) {
+        Schema::create('kbm', function (Blueprint $table) {
             $table->id();
             $table->date('tanggal')->nullable();
-            $table->string('kelas')->nullable();
+            $table->foreignId('id_guru')->nullable()->index()->references('id')->on('guru');
             $table->foreignId('id_mapel')->nullable()->index()->references('id')->on('mapel');
+            $table->foreignId('id_kelas')->nullable()->index()->references('id')->on('kelas');
             $table->string('jam_ke')->nullable();
             $table->string('foto_masuk')->nullable();
-            $table->string('jam_masuk')->nullable();
+            $table->time('jam_masuk')->nullable();
             $table->string('foto_keluar')->nullable();
-            $table->string('jam_keluar')->nullable();
-            $table->string('keterangan')->nullable();
+            $table->time('jam_keluar')->nullable();
+            $table->text('keterangan')->nullable();
             $table->timestamps();
         });
     }
@@ -31,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('kelas_aktif');
+        Schema::dropIfExists('kbm');
     }
 };

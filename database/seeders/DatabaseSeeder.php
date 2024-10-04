@@ -11,8 +11,8 @@ use App\Models\Role;
 use App\Models\Siswa;
 use App\Models\Guru;
 use App\Models\Guru_mapel;
+use App\Models\Kbm;
 use App\Models\Mapel;
-use App\Models\Monitoring;
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -81,6 +81,19 @@ class DatabaseSeeder extends Seeder
         Guru_mapel::create([
             'id_guru' => '1',
             'id_mapel' => '1',
+        ]);
+
+        Kbm::create([
+            'id_guru' => '1',
+            'id_mapel' => '1',
+            'id_kelas' => '1',
+            'tanggal' => date('Y-m-d'),
+            'jam_ke' => '1',
+            'foto_masuk' => NULL,
+            'jam_masuk' => NULL,
+            'foto_keluar' => NULL,
+            'jam_keluar' => NULL,
+            'keterangan' => 'cihuy ulala',
         ]);
     }
 }

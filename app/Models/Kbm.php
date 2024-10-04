@@ -5,9 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Monitoring extends Model
+class Kbm extends Model
 {
     use HasFactory;
-    protected $table = 'monitoring';
+
+    protected $table = 'kbm';
     protected $guarded = [];
 }
