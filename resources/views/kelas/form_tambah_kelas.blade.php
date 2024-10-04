@@ -30,6 +30,12 @@
                             <div class="card-body">
                                 <form action="/post_kelas" method="post">
                                 @csrf
+                                    <label for="jurusan">Jurusan:</label>
+                                    <select class="form-control " name="id_jurusan" id="id_jurusan">
+                                        @foreach ($data_jurusan as $jurusan)
+                                            <option value="{{ $jurusan->id }}">{{ $jurusan->nama_jurusan }}</option>
+                                        @endforeach
+                                    </select>
                                     <label for="nama_kelas">Nama Kelas:</label>
                                     <input class="form-control" type="text" id="nama_kelas" name="nama_kelas" autocomplete="off">
                                     <button class="btn btn-primary mt-2 float-right" type="submit">Simpan</button>

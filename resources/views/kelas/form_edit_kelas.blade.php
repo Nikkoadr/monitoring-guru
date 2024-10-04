@@ -31,6 +31,12 @@
                                 <form action="/update_kelas_{{ $data_kelas->id }}" method="post">
                                 @method('put')
                                 @csrf
+                                    <label for="jurusan">Jurusan:</label>
+                                    <select class="form-control @error('id_jurusan') is-invalid @enderror" name="id_jurusan" id="id_jurusan">
+                                        @foreach ($data_jurusan as $jurusan)
+                                            <option value="{{ $jurusan->id }}" {{ $data_kelas->id_jurusan == $jurusan->id ? 'selected' : '' }}>{{ $jurusan->nama_jurusan }}</option>
+                                        @endforeach
+                                    </select>
                                     <label for="nama_kelas">Nama Kelas:</label>
                                     <input class="form-control @error('nama_kelas') is-invalid @enderror" type="text" id="nama_kelas" name="nama_kelas" value="{{ $data_kelas->nama_kelas }}" autocomplete="off">
                                     @error('nama_kelas')

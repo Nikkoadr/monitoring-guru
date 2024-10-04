@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('kelas', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('id_jurusan')->nullable()->index()->references('id')->on('jurusan');
             $table->string('nama_kelas');
             $table->timestamps();
         });

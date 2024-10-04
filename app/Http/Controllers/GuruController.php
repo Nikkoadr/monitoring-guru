@@ -41,6 +41,7 @@ class GuruController extends Controller
             return response()->json($users);
         }
 
+
     public function post_guru(Request $request)
         {
             $request->validate([

@@ -32,6 +32,7 @@
                                 <table class="table table-bordered table-striped">
                                     <thead>
                                         <th>No</th>
+                                        <th>Konsentrasi Keahlian</th>
                                         <th>Nama Kelas</th>
                                         <th>Menu</th>
                                     </thead>
@@ -39,6 +40,7 @@
                                         @foreach ($data_kelas as  $kelas)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
+                                            <td>{{ $kelas->nama_jurusan }}</td>
                                             <td>{{ $kelas->nama_kelas }}</td>
                                             <td>
                                                 <a href="/form_edit_kelas_{{ $kelas->id }}" class="btn btn-info float-right m-1">Edit</a>

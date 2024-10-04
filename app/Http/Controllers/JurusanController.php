@@ -66,6 +66,8 @@ class JurusanController extends Controller
 
     public function hapus_jurusan($id)
     {
+        DB::table('siswa')->where('id_jurusan', $id)->delete();
+        DB::table('kelas')->where('id_jurusan', $id)->delete();
         DB::table('jurusan')->where('id', $id)->delete();
         return redirect('/data_jurusan')->with('success', 'Data Jurusan Berhasil Hapus');
     }   
