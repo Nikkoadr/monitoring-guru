@@ -2,16 +2,22 @@
 
 namespace App\Imports;
 
-use Illuminate\Support\Collection;
-use Maatwebsite\Excel\Concerns\ToCollection;
+use Maatwebsite\Excel\Concerns\ToModel;
+use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use App\Models\Walas;
 
-class WalasImport implements ToCollection
+class WalasImport implements ToModel, WithHeadingRow
 {
     /**
-    * @param Collection $collection
+    * @param array $row
+    *
+    * @return \Illuminate\Database\Eloquent\Model|null
     */
-    public function collection(Collection $collection)
+    public function model(array $row)
     {
-        //
+        return new Walas([
+            'id_guru'  => $row['id_guru'],
+            'id_kelas'  => $row['id_kelas'],
+        ]);
     }
 }

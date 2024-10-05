@@ -23,24 +23,70 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
 
         Role::create([
-            'nama_role' => 'admin',
+            'nama_role' => 'Admin',
         ]);
 
         Role::create([
-            'nama_role' => 'guru',
+            'nama_role' => 'Wali Kelas',
         ]);
 
         Role::create([
-            'nama_role' => 'siswa',
+            'nama_role' => 'Guru Mapel',
+        ]);
+        Role::create([
+            'nama_role' => 'Ketua Kelas',
+        ]);
+        Role::create([
+            'nama_role' => 'Siswa',
         ]);
 
         Jurusan::create([
-            'nama_jurusan' => 'Teknik Komputer dan Jaringan',
+            'nama_jurusan' => 'Teknik pengelasan',
+        ]);
+        
+        Jurusan::create([
+            'nama_jurusan' => 'Teknik Eletronika Industri',
+        ]);
+
+        Jurusan::create([
+            'nama_jurusan' => 'Teknik Kendaraan Ringan Otomotif',
+        ]);
+
+        Jurusan::create([
+            'nama_jurusan' => 'Teknik Komputer dan jaringan',
+        ]);
+
+        Jurusan::create([
+            'nama_jurusan' => 'Teknik Sepeda Motor',
+        ]);
+
+        Jurusan::create([
+            'nama_jurusan' => 'Farmasi Klinis dan Komunitas',
         ]);
 
         Kelas::create([
-            'id_jurusan' => '1',
+            'id_jurusan' => '4',
             'nama_kelas' => 'X-TKJ-1',
+        ]);
+        Kelas::create([
+            'id_jurusan' => '4',
+            'nama_kelas' => 'XI-TKJ-1',
+        ]);
+        Kelas::create([
+            'id_jurusan' => '4',
+            'nama_kelas' => 'XII-TKJ-1',
+        ]);
+        Kelas::create([
+            'id_jurusan' => '3',
+            'nama_kelas' => 'X-TKR-1',
+        ]);
+        Kelas::create([
+            'id_jurusan' => '3',
+            'nama_kelas' => 'XI-TKR-1',
+        ]);
+        Kelas::create([
+            'id_jurusan' => '3',
+            'nama_kelas' => 'XII-TKR-1',
         ]);
 
         User::create([
@@ -51,39 +97,69 @@ class DatabaseSeeder extends Seeder
 
         ]);
         User::create([
-            'name' => 'Ini guru',
+            'name' => 'Ini guru mapel',
             'email' => 'guru@gmail.com',
             'password' => bcrypt('P4ssw0rd'),
-            'id_role' => '2',
+            'id_role' => '3',
 
         ]);
         User::create([
             'name' => 'Ini Walas',
             'email' => 'walas@gmail.com',
             'password' => bcrypt('P4ssw0rd'),
-            'id_role' => '3',
+            'id_role' => '2',
         ]);
         User::create([
-            'name' => 'Ini KM',
-            'email' => 'km@gmail.com',
+            'name' => 'Ini KM TKJ',
+            'email' => 'kmtkj@gmail.com',
             'password' => bcrypt('P4ssw0rd'),
             'id_role' => '4',
         ]);
         User::create([
-            'name' => 'Ini Siswa',
-            'email' => 'siswa@gmail.com',
+            'name' => 'Ini Siswa TKJ',
+            'email' => 'siswatkj@gmail.com',
+            'password' => bcrypt('P4ssw0rd'),
+            'id_role' => '5',
+        ]);
+        User::create([
+            'name' => 'Ini KM TKR',
+            'email' => 'kmtkr@gmail.com',
+            'password' => bcrypt('P4ssw0rd'),
+            'id_role' => '4',
+        ]);
+        User::create([
+            'name' => 'Ini Siswa TKR',
+            'email' => 'siswatkr@gmail.com',
             'password' => bcrypt('P4ssw0rd'),
             'id_role' => '5',
         ]);
 
         Siswa::create([
-            'id_user' => '3',
+            'id_user' => '4',
             'id_kelas' => '1',
-            'id_jurusan' => '1',
+            'id_jurusan' => '4',
+        ]);
+        Siswa::create([
+            'id_user' => '5',
+            'id_kelas' => '2',
+            'id_jurusan' => '4',
+        ]);
+        Siswa::create([
+            'id_user' => '6',
+            'id_kelas' => '4',
+            'id_jurusan' => '3',
+        ]);
+        Siswa::create([
+            'id_user' => '7',
+            'id_kelas' => '5',
+            'id_jurusan' => '3',
         ]);
 
         Guru::create([
             'id_user' => '2',
+        ]);
+        Guru::create([
+            'id_user' => '3',
         ]);
         
         Mapel::create([

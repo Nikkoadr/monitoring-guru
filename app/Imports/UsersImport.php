@@ -15,7 +15,10 @@ class UsersImport implements ToModel, WithHeadingRow
     public function model(array $row)
     {
         return new User([
+            'id_role'  => $row['id_role'],
+            'gelar_depan'  => $row['gelar_depan'],
             'name'  => $row['name'],
+            'gelar_belakang'  => $row['gelar_belakang'],
             'email' => $row['email'],
             'password' => bcrypt($row['password']),
         ]);
