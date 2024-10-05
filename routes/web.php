@@ -29,6 +29,7 @@ Route::put('/update_edit_role_{id}', [RoleController::class, 'update_edit_role']
 Route::get('/hapus_role_{id}', [RoleController::class, 'hapus_role']);
 
 Route::get('/data_user', [UserController::class, 'index']);
+Route::get('/import_user', [UserController::class, 'import_user']);
 Route::get('/form_tambah_user', [UserController::class, 'form_tambah_user']);
 Route::post('/post_user', [UserController::class, 'post_user']);
 Route::get('/form_edit_user_{id}', [UserController::class, 'form_edit_user']);
