@@ -9,13 +9,13 @@ class DataImport implements WithMultipleSheets
     {
         return [
             'User' => new UsersImport(),
-            'Kelas' => new KelasImport(),
-            'Guru' => new GuruImport(),
-            'Mapel' => new MapelImport(),
-            'Guru_mapel' => new Guru_mapelImport(),
-            'Siswa' => new SiswaImport(),
-            'Walas' => new WalasImport(),
-            'Ketua_kelas' => new Ketua_kelasImport(),
+            // 'Kelas' => new KelasImport(),
+            // 'Guru' => new GuruImport(),
+            // 'Mapel' => new MapelImport(),
+            // 'Guru_mapel' => new Guru_mapelImport(),
+            // 'Siswa' => new SiswaImport(),
+            // 'Walas' => new WalasImport(),
+            // 'Ketua_kelas' => new Ketua_kelasImport(),
 
         ];
     }

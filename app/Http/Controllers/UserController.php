@@ -5,8 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Maatwebsite\Excel\Facades\Excel;
-use App\Imports\DataImport;
 
 class UserController extends Controller
 {
@@ -23,10 +21,6 @@ class UserController extends Controller
         }
     }
 
-    public function import_user(){
-        Excel::import(new DataImport, request()->file('file'));
-        return redirect('/data_user')->with('success', 'Data User Berhasil Import');
-    }
     public function form_tambah_user()
     {
         return view('user.form_tambah_user');

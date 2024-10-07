@@ -4,7 +4,7 @@ namespace App\Imports;
 
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
-use App\Models\Status_hadir;
+use App\Models\Guru_mapel;
 
 class Guru_mapelImport implements ToModel, WithHeadingRow
 {
@@ -15,7 +15,7 @@ class Guru_mapelImport implements ToModel, WithHeadingRow
     */
     public function model(array $row)
     {
-        return new Status_hadir([
+        return new Guru_mapel([
             'id_mapel'  => $row['id_mapel'],
             'id_guru'  => $row['id_guru'],
         ]);

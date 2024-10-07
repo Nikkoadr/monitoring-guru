@@ -4,7 +4,7 @@ namespace App\Imports;
 
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
-use App\Models\Status_hadir;
+use App\Models\Ketua_kelas;
 
 class Ketua_kelasImport implements ToModel, WithHeadingRow
 {
@@ -15,7 +15,7 @@ class Ketua_kelasImport implements ToModel, WithHeadingRow
     */
     public function model(array $row)
     {
-        return new Status_hadir([
+        return new Ketua_kelas([
             'id_siswa'  => $row['id_siswa'],
         ]);
     }

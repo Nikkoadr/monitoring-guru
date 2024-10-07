@@ -10,6 +10,9 @@ use App\Http\Controllers\KelasController;
 use App\Http\Controllers\GuruController;
 use App\Http\Controllers\MapelController;
 use App\Http\Controllers\SiswaController;
+use App\Http\Controllers\KbmController;
+use App\Http\Controllers\SettingController;
+
 
 
 Route::get('/', function () {
@@ -18,8 +21,8 @@ Route::get('/', function () {
 
 Auth::routes(['register' => false]);
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::get('/kbm', [App\Http\Controllers\KbmController::class, 'index']);
+Route::get('/home', [HomeController::class, 'index'])->name('home');
+Route::get('/kbm', [KbmController::class, 'index']);
 
 Route::get('/data_role', [RoleController::class, 'index']);
 Route::get('/form_tambah_role', [RoleController::class, 'form_tambah_role']);
@@ -29,7 +32,6 @@ Route::put('/update_edit_role_{id}', [RoleController::class, 'update_edit_role']
 Route::get('/hapus_role_{id}', [RoleController::class, 'hapus_role']);
 
 Route::get('/data_user', [UserController::class, 'index']);
-Route::get('/import_user', [UserController::class, 'import_user']);
 Route::get('/form_tambah_user', [UserController::class, 'form_tambah_user']);
 Route::post('/post_user', [UserController::class, 'post_user']);
 Route::get('/form_edit_user_{id}', [UserController::class, 'form_edit_user']);
@@ -77,3 +79,5 @@ Route::put('/update_siswa_{id}', [SiswaController::class, 'update_siswa']);
 Route::get('/hapus_siswa_{id}', [SiswaController::class, 'hapus_siswa']);
 
 Route::get('/laporan', [HomeController::class, 'laporan'])->name('laporan');
+Route::get('/setting', [SettingController::class, 'index']);
+Route::post('/import_data', [SettingController::class, 'import_data']);

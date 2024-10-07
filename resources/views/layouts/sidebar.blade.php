@@ -114,6 +114,14 @@
                     </p>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="/setting" class="nav-link {{ request()->is('laporan') ? 'active' : '' }}">
+                    <i class="nav-icon fas fa-copy"></i>
+                    <p>
+                        Setting
+                    </p>
+                    </a>
+                </li>
                 </ul>
             </nav>
             <!-- /.sidebar-menu -->
