@@ -13,6 +13,8 @@ use App\Models\Guru;
 use App\Models\Guru_mapel;
 use App\Models\Kbm;
 use App\Models\Mapel;
+use App\Models\Status_hadir;
+
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -63,6 +65,27 @@ class DatabaseSeeder extends Seeder
         Jurusan::create([
             'nama_jurusan' => 'Farmasi Klinis dan Komunitas',
         ]);
+
+        Status_hadir::create([
+            'status_hadir' => 'Hadir',
+        ]);
+
+        Status_hadir::create([
+            'status_hadir' => 'Tidak Hadir',
+        ]);
+
+        Status_hadir::create([
+            'status_hadir' => 'Izin',
+        ]);
+
+        Status_hadir::create([
+            'status_hadir' => 'Sakit',
+        ]);
+
+        Status_hadir::create([
+            'status_hadir' => 'Bolos',
+        ]);
+
 
         Kelas::create([
             'id_jurusan' => '4',
