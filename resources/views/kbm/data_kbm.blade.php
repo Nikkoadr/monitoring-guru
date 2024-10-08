@@ -45,7 +45,7 @@
                                         <th>Foto Keluar</th>
                                         <th>Jam Keluar</th>
                                         <th>keterangan</th>
-                                        <th>Menu</th>
+                                        <th class="text-center">Menu</th>
                                     </thead>
                                     <tbody>
                                         @foreach ($data_kbm as  $kbm)
@@ -61,10 +61,17 @@
                                             <td>{{ $kbm->foto_keluar }}</td>
                                             <td>{{ $kbm->jam_keluar }}</td>
                                             <td>{{ $kbm->keterangan }}</td>
-                                            <td>
-                                                <a href="/form_edit_kbm_{{ $kbm->id }}" class="btn btn-info float-right m-1"><i class="fa-solid fa-pen-to-square"></i></a>
-                                                <button class="btn btn-danger float-right m-1" onclick="confirmDelete({{ $kbm->id }})"><i class="fa-solid fa-trash-can"></i></button>
-                                            </td>
+                                            
+                                            @if($user->id_role == '5')
+                                                <td class="text-center">
+                                                    <a href="/absen_kbm_{{ $kbm->id }}" class=" btn btn-info m-1"><i class="fa-solid fa-hand-point-up"></i></i></a>
+                                                </td>
+                                            @else
+                                                <td>
+                                                    <a href="/form_edit_kbm_{{ $kbm->id }}" class="btn btn-info float-right m-1"><i class="fa-solid fa-pen-to-square"></i></a>
+                                                    <button class="btn btn-danger float-right m-1" onclick="confirmDelete({{ $kbm->id }})"><i class="fa-solid fa-trash-can"></i></button>
+                                                </td>
+                                            @endif
                                         </tr>
                                         @endforeach
                                     </tbody>

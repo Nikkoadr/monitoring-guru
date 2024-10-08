@@ -105,7 +105,6 @@
                     </li>
                     </ul>
                 </li>
-                @endcan
                 <li class="nav-item">
                     <a href="/laporan" class="nav-link {{ request()->is('laporan') ? 'active' : '' }}">
                     <i class="nav-icon fa-regular fa-folder-open"></i>
@@ -122,6 +121,7 @@
                     </p>
                     </a>
                 </li>
+                @endcan
                 </ul>
             </nav>
             <!-- /.sidebar-menu -->
