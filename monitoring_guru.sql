@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Waktu pembuatan: 08 Okt 2024 pada 03.15
+-- Waktu pembuatan: 08 Okt 2024 pada 04.15
 -- Versi server: 8.0.33
 -- Versi PHP: 8.3.9
 
@@ -214,6 +214,46 @@ CREATE TABLE `guru_mapel` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data untuk tabel `guru_mapel`
+--
+
+INSERT INTO `guru_mapel` (`id`, `id_mapel`, `id_guru`, `created_at`, `updated_at`) VALUES
+(1, 1, 29, '2024-10-07 20:26:05', NULL),
+(2, 1, 90, '2024-10-07 20:26:12', NULL),
+(3, 1, 16, '2024-10-07 20:26:19', NULL),
+(4, 2, 29, '2024-10-07 20:26:26', NULL),
+(5, 2, 91, '2024-10-07 20:26:40', NULL),
+(6, 3, 85, '2024-10-07 20:27:05', NULL),
+(7, 3, 88, '2024-10-07 20:27:13', NULL),
+(8, 4, 39, '2024-10-07 20:27:19', NULL),
+(9, 4, 47, '2024-10-07 20:27:27', NULL),
+(10, 4, 57, '2024-10-07 20:27:35', NULL),
+(11, 5, 30, '2024-10-07 20:27:44', NULL),
+(12, 5, 62, '2024-10-07 20:27:50', NULL),
+(13, 5, 89, '2024-10-07 20:27:56', NULL),
+(14, 6, 32, '2024-10-07 20:28:05', NULL),
+(15, 6, 17, '2024-10-07 20:28:12', NULL),
+(16, 6, 53, '2024-10-07 20:28:23', NULL),
+(17, 7, 27, '2024-10-07 20:28:37', NULL),
+(18, 7, 3, '2024-10-07 20:28:47', NULL),
+(19, 7, 1, '2024-10-07 20:29:00', NULL),
+(20, 8, 75, '2024-10-07 20:29:10', NULL),
+(21, 8, 68, '2024-10-07 20:29:19', NULL),
+(22, 9, 66, '2024-10-07 20:29:38', NULL),
+(23, 9, 87, '2024-10-07 20:29:44', NULL),
+(24, 10, 15, '2024-10-07 20:29:59', NULL),
+(25, 11, 42, '2024-10-07 20:30:12', NULL),
+(26, 12, 74, '2024-10-07 20:30:28', NULL),
+(27, 13, 35, '2024-10-07 20:30:39', NULL),
+(28, 13, 16, '2024-10-07 20:30:45', NULL),
+(29, 14, 59, '2024-10-07 20:30:57', NULL),
+(30, 14, 78, '2024-10-07 20:31:06', NULL),
+(31, 14, 65, '2024-10-07 20:31:26', NULL),
+(32, 15, 64, '2024-10-07 20:31:51', NULL),
+(33, 15, 43, '2024-10-07 20:32:06', NULL),
+(34, 15, 23, '2024-10-07 20:32:31', NULL);
 
 -- --------------------------------------------------------
 
@@ -526,7 +566,9 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('IyToqQnwArhby1IAZzaAIUGcNuTfFwNNM3vVy9CY', 1, '127.0.0.1', 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36', 'YTo2OntzOjY6Il90b2tlbiI7czo0MDoiZlRwblBRNmNZSkJoeFluN3dWRjhIMk1ya0dBWjdBcGIwa0N1Z0xibiI7czozOiJ1cmwiO2E6MDp7fXM6OToiX3ByZXZpb3VzIjthOjE6e3M6MzoidXJsIjtzOjM5OiJodHRwczovL21vbml0b3JpbmctZ3VydS50ZXN0L2RhdGFfc2lzd2EiO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX1zOjUwOiJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aToxO3M6NDoiYXV0aCI7YToxOntzOjIxOiJwYXNzd29yZF9jb25maXJtZWRfYXQiO2k6MTcyODM1NjgyNDt9fQ==', 1728357284);
+('Ff8UDMPyRohWXiTNAvbLEjsqHJaBCofmYpZFDGQD', NULL, '127.0.0.1', 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoiM09zQXBMQkQ1cnBYTkVmUExaRTVQejE4SWN0NTRReFhsa1ZScEtlTCI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzM6Imh0dHA6Ly9tb25pdG9yaW5nLWd1cnUudGVzdC9sb2dpbiI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1728360905),
+('IyToqQnwArhby1IAZzaAIUGcNuTfFwNNM3vVy9CY', 1, '127.0.0.1', 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36', 'YTo2OntzOjY6Il90b2tlbiI7czo0MDoiZlRwblBRNmNZSkJoeFluN3dWRjhIMk1ya0dBWjdBcGIwa0N1Z0xibiI7czozOiJ1cmwiO2E6MDp7fXM6OToiX3ByZXZpb3VzIjthOjE6e3M6MzoidXJsIjtzOjMyOiJodHRwczovL21vbml0b3JpbmctZ3VydS50ZXN0L2tibSI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjE7czo0OiJhdXRoIjthOjE6e3M6MjE6InBhc3N3b3JkX2NvbmZpcm1lZF9hdCI7aToxNzI4MzU2ODI0O319', 1728360879),
+('YNKSqy0UvXHWLOwfwxtPBCfQsk48Fn01mBeRLw28', NULL, '127.0.0.1', 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36', 'YToyOntzOjY6Il90b2tlbiI7czo0MDoiVlZWSWZodE9Ybk5xVnk1RzBLdkdLMGVhcDJJUVl1ZjcxWlJabktIRSI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319fQ==', 1728360902);
 
 -- --------------------------------------------------------
 
@@ -4302,7 +4344,7 @@ ALTER TABLE `guru`
 -- AUTO_INCREMENT untuk tabel `guru_mapel`
 --
 ALTER TABLE `guru_mapel`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT untuk tabel `jobs`

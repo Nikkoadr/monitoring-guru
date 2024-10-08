@@ -108,15 +108,15 @@
                 @endcan
                 <li class="nav-item">
                     <a href="/laporan" class="nav-link {{ request()->is('laporan') ? 'active' : '' }}">
-                    <i class="nav-icon fas fa-copy"></i>
+                    <i class="nav-icon fa-regular fa-folder-open"></i>
                     <p>
                         Laporan
                     </p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="/setting" class="nav-link {{ request()->is('laporan') ? 'active' : '' }}">
-                    <i class="nav-icon fas fa-copy"></i>
+                    <a href="/setting" class="nav-link {{ request()->is('setting') ? 'active' : '' }}">
+                    <i class="nav-icon fa-solid fa-sliders"></i>
                     <p>
                         Setting
                     </p>

@@ -101,6 +101,7 @@ class MapelController extends Controller
 
         public  function hapus_mapel($id)
         {
+            DB::table('guru_mapel')->where('id_mapel', $id)->delete();
             DB::table('mapel')->where('id', $id)->delete();
             return redirect('/data_mapel')->with('success', 'Data Mapel Berhasil Hapus');
         }
