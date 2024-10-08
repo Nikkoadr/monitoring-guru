@@ -8,7 +8,7 @@ class DataImport implements WithMultipleSheets
     public function sheets(): array
     {
         return [
-            //'User' => new UsersImport(),
+            'User' => new UsersImport(),
             'Kelas' => new KelasImport(),
             'Guru' => new GuruImport(),
             'Mapel' => new MapelImport(),
@@ -16,7 +16,6 @@ class DataImport implements WithMultipleSheets
             'Siswa' => new SiswaImport(),
             'Walas' => new WalasImport(),
             'Ketua_kelas' => new Ketua_kelasImport(),
-
         ];
     }
 }
