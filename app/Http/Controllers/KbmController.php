@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Carbon;
 use App\Models\Kbm;
 use Illuminate\Support\Facades\Storage;
+use PhpOffice\PhpSpreadsheet\Calculation\Statistical\Distributions\F;
 
 class KbmController extends Controller
 {
@@ -83,7 +84,7 @@ class KbmController extends Controller
         } else {
             $data_kbm = collect();
         }
-    } elseif ($user->id_role == 5) {
+    } elseif ($user->id_role == 4 || $user->id_role == 5) {
         // Jika siswa login, tampilkan data berdasarkan kelas mereka pada hari ini
         $siswa = DB::table('siswa')
             ->where('id_user', $user->id)
@@ -114,8 +115,8 @@ class KbmController extends Controller
         $tanggal_sekarang = Carbon::now()->format('Y-m-d'); // Mendapatkan tanggal hari ini
         $jam_sekarang = Carbon::now()->format('H:i');   // Mendapatkan waktu (jam dan menit) sekarang
 
-        if (Gate::allows('siswa')) {
-            $kelas = DB::table('kelas')
+        if (Gate::allows('km_kelas')) {
+            $data_kelas = DB::table('kelas')
                 ->join('siswa', 'kelas.id', '=', 'siswa.id_kelas')
                 ->select('kelas.*')
                 ->where('siswa.id_user', $user->id)
@@ -123,13 +124,13 @@ class KbmController extends Controller
 
             $data_mapel = DB::table('mapel')->get();
 
-            return view('kbm.form_tambah_kbm', compact('user', 'kelas','data_mapel', 'tanggal_sekarang', 'jam_sekarang'));
+            return view('kbm.form_tambah_kbm', compact('user', 'data_kelas','data_mapel', 'tanggal_sekarang', 'jam_sekarang'));
 
         } elseif (Gate::allows('admin')) {
-            $kelas = DB::table('kelas')->get();
+            $data_kelas = DB::table('kelas')->get();
             $data_mapel = DB::table('mapel')->get();
 
-            return view('kbm.form_tambah_kbm', compact('user', 'kelas', 'data_mapel', 'tanggal_sekarang', 'jam_sekarang'));
+            return view('kbm.form_tambah_kbm', compact('user', 'data_kelas', 'data_mapel', 'tanggal_sekarang', 'jam_sekarang'));
         }
     }
 
@@ -153,6 +154,7 @@ public function tambah_kbm(Request $request) {
         'id_kelas' => 'required',
         'jam_ke' => 'required',
         'foto_masuk' => 'required',
+        'keterangan' => 'required',
     ]);
 
     // Buat instance baru untuk KBM
@@ -163,6 +165,7 @@ public function tambah_kbm(Request $request) {
     $kbm->id_mapel = $request->id_mapel;
     $kbm->id_guru = $request->id_guru;
     $kbm->id_kelas = $request->id_kelas;
+    $kbm->keterangan = $request->keterangan;
 
     // Proses penyimpanan foto masuk
     if ($request->has('foto_masuk')) {
@@ -185,4 +188,37 @@ public function tambah_kbm(Request $request) {
     // Redirect dengan pesan sukses
     return redirect('/kbm')->with('success', 'Data KBM berhasil ditambahkan');
 }
+public function form_selesai_kbm($id) {
+    // Ambil data KBM berdasarkan ID
+    $kbm = Kbm::findOrFail($id);
+    
+    // Ambil jam saat ini
+    $jam_sekarang = Carbon::now()->format('H:i');
+    
+    // Kirim data ke view
+    return view('kbm.form_selesai_kbm', compact('kbm', 'jam_sekarang', 'id'));
+}
+public function update_selesai_kbm(Request $request, $id) {
+    $request->validate([
+        'jam_keluar' => 'required',
+        'foto_keluar' => 'required',
+    ]);
+    $kbm = Kbm::findOrFail($id);
+    $kbm->jam_keluar = $request->jam_keluar;
+    if ($request->has('foto_keluar')) {
+        $foto_base64 = base64_decode(explode("base64,", $request->foto_keluar)[1]);
+        $nama_foto = uniqid() . '.png';
+        Storage::disk(env('STORAGE_DISK'))->put('foto_keluar_kbm/' . $nama_foto, $foto_base64);
+        $kbm->foto_keluar = $nama_foto;
+    }
+    $kbm->save();
+    return redirect('/kbm')->with('success', 'Data KBM berhasil diperbarui');
+}
+
+
+    public function hapus_kbm($id) {
+        $kbm = Kbm::find($id);
+        $kbm->delete();
+        return redirect('/kbm')->with('success', 'Data KBM berhasil dihapus'); 
+    }
 }

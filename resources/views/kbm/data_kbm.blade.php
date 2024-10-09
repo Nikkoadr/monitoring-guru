@@ -29,7 +29,9 @@
                         <div class="card">
                             <div class="card-header">
                                 <h3 class="card-title">Data Kegiatan Belajar Mengajar</h3>
+                                @if($user->id_role == '1' || $user->id_role == '4')
                                 <a href="/form_tambah_kbm" class="btn btn-primary float-right">Tambah KBM</a>
+                                @endif
                             </div>
                             <div class="card-body">
                                 <table id="table_kbm" class="table table-bordered table-striped">
@@ -51,27 +53,56 @@
                                         @foreach ($data_kbm as  $kbm)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $kbm->tanggal }}</td>
+                                            <td>{{ \Carbon\Carbon::parse($kbm->tanggal)->translatedFormat('d F Y') }}</td>
                                             <td>{{ $kbm->nama_guru }}</td>
                                             <td>{{ $kbm->nama_kelas }}</td>
                                             <td>{{ $kbm->nama_mapel }}</td>
                                             <td>{{ $kbm->jam_ke }}</td>
                                             <td>
-                                                <img src="{{ asset('/storage/foto_masuk_kbm/'.$kbm->foto_masuk) }}" width="100px">
+                                                <a href="{{ asset('/storage/foto_masuk_kbm/'.$kbm->foto_masuk) }}" target="_blank"><img src="{{ asset('/storage/foto_masuk_kbm/'.$kbm->foto_masuk) }}" width="100px"></a>
                                             </td>
                                             <td>{{ $kbm->jam_masuk }}</td>
-                                            <td>{{ $kbm->foto_keluar }}</td>
-                                            <td>{{ $kbm->jam_keluar }}</td>
+                                            <td>
+                                                @if($kbm->foto_keluar == null)
+                                                <span class="badge badge-danger">Belum Ada</span>
+                                                @else
+                                                <a href="{{ asset('/storage/foto_keluar_kbm/'.$kbm->foto_keluar) }}" target="_blank"><img src="{{ asset('/storage/foto_keluar_kbm/'.$kbm->foto_keluar) }}" width="100px"></a>
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if ($kbm->jam_keluar == null)
+                                                    00:00:00
+                                                @else
+                                                {{ $kbm->jam_keluar }}
+                                                @endif
+                                            </td>
                                             <td>{{ $kbm->keterangan }}</td>
                                             
-                                            @if($user->id_role == '5')
+                                            @if($user->id_role == '4')
+                                                @if ($kbm->jam_keluar == null)
+                                                <td class="text-center">
+                                                    <a href="/absen_kbm_{{ $kbm->id }}" class=" btn btn-info m-1"><i class="fa-solid fa-hand-point-up"></i></i></a>
+                                                    <a href="/form_selesai_kbm_{{ $kbm->id }}" class="btn btn-primary m-1"><i class="fa-regular fa-circle-check"></i></a>
+                                                </td>
+                                                @else
+                                                <td>
+                                                    <span class="badge badge-success">Selesai</span>
+                                                </td>
+                                                @endif
+                                            @elseif($user->id_role == '5')
+                                                @if ($kbm->jam_keluar == null)
                                                 <td class="text-center">
                                                     <a href="/absen_kbm_{{ $kbm->id }}" class=" btn btn-info m-1"><i class="fa-solid fa-hand-point-up"></i></i></a>
                                                 </td>
-                                            @else
+                                                @else
                                                 <td>
-                                                    <a href="/form_edit_kbm_{{ $kbm->id }}" class="btn btn-info float-right m-1"><i class="fa-solid fa-pen-to-square"></i></a>
-                                                    <button class="btn btn-danger float-right m-1" onclick="confirmDelete({{ $kbm->id }})"><i class="fa-solid fa-trash-can"></i></button>
+                                                    <span class="badge badge-success">Selesai</span>
+                                                </td>
+                                                @endif
+                                            @elseif($user->id_role == '1')
+                                                <td class="text-center">
+                                                    <a href="/form_edit_kbm_{{ $kbm->id }}" class="btn btn-info m-1"><i class="fa-solid fa-pen-to-square"></i></a>
+                                                    <button class="btn btn-danger m-1" onclick="confirmDelete({{ $kbm->id }})"><i class="fa-solid fa-trash-can"></i></button>
                                                 </td>
                                             @endif
                                         </tr>

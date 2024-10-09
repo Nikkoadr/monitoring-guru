@@ -28,47 +28,12 @@
                                 <h3 class="card-title">Form Kegiatan Belajar Mengajar</h3>
                             </div>
                             <div class="card-body">
-                                <form action="/tambah_kbm" method="POST" enctype="multipart/form-data">
+                                <form action="/update_selesai_kbm_{{ $id }}" method="POST" enctype="multipart/form-data">
+                                    @method('put')
                                     @csrf
-                                    <label class="form-label" for="tanggal">Tanggal:</label>
-                                    <input type="date" class="form-control" name="tanggal" id="tanggal" value="{{ $tanggal_sekarang }}" readonly>
+                                    <label class="form-label" for="jam_keluar">Jam keluar:</label>
+                                    <input type="time" class="form-control" name="jam_keluar" id="jam_keluar" value="{{ $jam_sekarang }}" readonly>
 
-                                    <label class="form-label" for="jam_masuk">Jam Masuk:</label>
-                                    <input type="time" class="form-control" name="jam_masuk" id="jam_masuk" value="{{ $jam_sekarang }}" readonly>
-
-                                    <label class="form-label" for="jam_ke">Jam Ke:</label>
-                                    <select class="form-control" name="jam_ke" id="jam_ke" required>
-                                        <option value="1">1</option>
-                                        <option value="2">2</option>
-                                        <option value="3">3</option>
-                                        <option value="4">4</option>
-                                        <option value="5">5</option>
-                                    </select>
-                                    <label class="form-label" for="id_kelas">Kelas:</label>
-                                    @if (Gate::allows('km_kelas'))
-                                        <select class="form-control" name="id_kelas" id="id_kelas">
-                                            <option value="{{ $data_kelas->id }}">{{ $data_kelas->nama_kelas }}</option>
-                                        </select>
-                                    @elseif(Gate::allows('admin'))
-                                        <select class="form-control" name="id_kelas" id="id_kelas" required>
-                                            @foreach($data_kelas as $kelas)
-                                                <option value="{{ $kelas->id }}">{{ $kelas->nama_kelas }}</option>
-                                            @endforeach
-                                        </select>
-                                    @endif
-                                    <label class="form-label" for="id_mapel">Mata Pelajaran:</label>
-                                    <select class="form-control" name="id_mapel" id="id_mapel" required>
-                                        <option value="">Pilih Mata Pelajaran</option>
-                                        @foreach ($data_mapel as $mapel)
-                                            <option value="{{ $mapel->id }}">{{ $mapel->nama_mapel }}</option>
-                                        @endforeach
-                                    </select>
-                                    <label class="form-label" for="id_guru">Guru Mata Pelajaran:</label>
-                                    <select class="form-control" name="id_guru" id="id_guru" required>
-                                        <option value="">Pilih Guru Mata Pelajaran</option>
-                                    </select>
-                                    <label class="form-label" for="keterangan">keterangan:</label>
-                                    <textarea class="form-control" name="keterangan" id="keterangan" rows="5" required></textarea>
                                     <div id="camera-container" class="text-center mt-2">
                                         <h5><b>Ambil Foto:</b></h5>
                                         <video id="video" width="320" height="240" autoplay class="border"></video><br>
@@ -83,7 +48,7 @@
                                     </div>
 
                                     <canvas id="canvas" style="display: none;"></canvas>
-                                    <input type="hidden" name="foto_masuk" id="foto_masuk_data" required>
+                                    <input type="hidden" name="foto_keluar" id="foto_keluar_data">
                                     <button class="btn btn-primary mt-2 float-right" type="submit">Simpan</button>
                                 </form>
                             </div>
@@ -95,31 +60,6 @@
     </div>
 @endsection
 @section('js')
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $(document).ready(function() {
-        $('#id_mapel').on('change', function() {
-            var mapelId = $(this).val();
-            if (mapelId) {
-                $.ajax({
-                    url: '/get_guru_by_mapel_' + mapelId,
-                    type: "GET",
-                    dataType: "json",
-                    success: function(data) {
-                        $('#id_guru').empty();
-                        $('#id_guru').append('<option value="">Pilih Guru Mata Pelajaran</option>');
-                        $.each(data, function(key, value) {
-                            $('#id_guru').append('<option value="' + value.id + '">' + value.nama_guru + '</option>');
-                        });
-                    }
-                });
-            } else {
-                $('#id_guru').empty();
-                $('#id_guru').append('<option value="">Pilih Guru Mata Pelajaran</option>');
-            }
-        });
-    });
-</script>
 <script>
 const video = document.getElementById('video');
 const canvas = document.getElementById('canvas');
@@ -129,7 +69,7 @@ const switchCameraButton = document.getElementById('switch-camera');
 const previewContainer = document.getElementById('preview-container');
 const previewImage = document.getElementById('preview-image');
 const cameraContainer = document.getElementById('camera-container');
-const fotoMasukData = document.getElementById('foto_masuk_data');
+const fotoMasukData = document.getElementById('foto_keluar_data');
 
 let currentStream;
 let currentCamera = 'environment';  // Default ke kamera belakang
@@ -183,4 +123,21 @@ switchCameraButton.addEventListener('click', function () {
     startCamera(currentCamera);  // Mulai ulang dengan kamera yang dipilih
 });
 </script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+
+@if ($errors->any())
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            html: `
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>`,
+            confirmButtonText: 'OK'
+        });
+    </script>
+@endif
 @endsection

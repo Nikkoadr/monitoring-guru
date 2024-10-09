@@ -36,5 +36,6 @@ class AppServiceProvider extends ServiceProvider
         Gate::define('siswa', function(User $user) {
         return $user->id_role == '5';
         });
+
     }
 }

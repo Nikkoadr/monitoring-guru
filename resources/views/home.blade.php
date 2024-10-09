@@ -25,7 +25,13 @@
         <div class="content">
             <div class="container-fluid">
                 <div class="row">
-
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <p class="card-title">Assalaamu’alaikum Warahmatullaahi Wabarakaatuh. {{ Auth::user()->name }}</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div><!-- /.container-fluid -->
         </div>
