@@ -13,8 +13,6 @@ use App\Http\Controllers\SiswaController;
 use App\Http\Controllers\KbmController;
 use App\Http\Controllers\SettingController;
 
-
-
 Route::get('/', function () {
     return view('welcome');
 });
@@ -23,6 +21,9 @@ Auth::routes(['register' => false]);
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/kbm', [KbmController::class, 'index']);
+Route::get('/form_tambah_kbm', [KbmController::class, 'form_tambah_kbm']);
+Route::get('/get_guru_by_mapel_{id_mapel}', [KbmController::class, 'get_guru']);
+Route::post('/tambah_kbm', [KbmController::class, 'tambah_kbm']);
 
 Route::get('/data_role', [RoleController::class, 'index']);
 Route::get('/form_tambah_role', [RoleController::class, 'form_tambah_role']);

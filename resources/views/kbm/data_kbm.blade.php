@@ -56,7 +56,9 @@
                                             <td>{{ $kbm->nama_kelas }}</td>
                                             <td>{{ $kbm->nama_mapel }}</td>
                                             <td>{{ $kbm->jam_ke }}</td>
-                                            <td>{{ $kbm->foto_masuk }}</td>
+                                            <td>
+                                                <img src="{{ asset('/storage/foto_masuk_kbm/'.$kbm->foto_masuk) }}" width="100px">
+                                            </td>
                                             <td>{{ $kbm->jam_masuk }}</td>
                                             <td>{{ $kbm->foto_keluar }}</td>
                                             <td>{{ $kbm->jam_keluar }}</td>

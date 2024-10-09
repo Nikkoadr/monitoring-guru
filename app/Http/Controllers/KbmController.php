@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Carbon;
+use App\Models\Kbm;
+use Illuminate\Support\Facades\Storage;
 
 class KbmController extends Controller
 {
@@ -105,5 +109,80 @@ class KbmController extends Controller
     return view('kbm.data_kbm', compact('data_kbm','user'));
 }
 
+    public function form_tambah_kbm() {
+        $user = Auth::user();
+        $tanggal_sekarang = Carbon::now()->format('Y-m-d'); // Mendapatkan tanggal hari ini
+        $jam_sekarang = Carbon::now()->format('H:i');   // Mendapatkan waktu (jam dan menit) sekarang
 
+        if (Gate::allows('siswa')) {
+            $kelas = DB::table('kelas')
+                ->join('siswa', 'kelas.id', '=', 'siswa.id_kelas')
+                ->select('kelas.*')
+                ->where('siswa.id_user', $user->id)
+                ->first();
+
+            $data_mapel = DB::table('mapel')->get();
+
+            return view('kbm.form_tambah_kbm', compact('user', 'kelas','data_mapel', 'tanggal_sekarang', 'jam_sekarang'));
+
+        } elseif (Gate::allows('admin')) {
+            $kelas = DB::table('kelas')->get();
+            $data_mapel = DB::table('mapel')->get();
+
+            return view('kbm.form_tambah_kbm', compact('user', 'kelas', 'data_mapel', 'tanggal_sekarang', 'jam_sekarang'));
+        }
+    }
+
+    public function get_guru($id_mapel) {
+        $guru = DB::table('guru_mapel')
+            ->join('guru', 'guru_mapel.id_guru', '=', 'guru.id')
+            ->join('users', 'guru.id_user', '=', 'users.id')  // Join ke tabel users untuk mendapatkan nama guru
+            ->select('guru.id', 'users.name as nama_guru')     // Ambil nama dari tabel users
+            ->where('guru_mapel.id_mapel', $id_mapel)
+            ->get();
+
+        return response()->json($guru);
+    }
+
+public function tambah_kbm(Request $request) {
+    $request->validate([
+        'jam_masuk' => 'required',
+        'tanggal' => 'required',
+        'id_mapel' => 'required',
+        'id_guru' => 'required',
+        'id_kelas' => 'required',
+        'jam_ke' => 'required',
+        'foto_masuk' => 'required',
+    ]);
+
+    // Buat instance baru untuk KBM
+    $kbm = new Kbm();
+    $kbm->tanggal = $request->tanggal;
+    $kbm->jam_masuk = $request->jam_masuk;
+    $kbm->jam_ke = $request->jam_ke;
+    $kbm->id_mapel = $request->id_mapel;
+    $kbm->id_guru = $request->id_guru;
+    $kbm->id_kelas = $request->id_kelas;
+
+    // Proses penyimpanan foto masuk
+    if ($request->has('foto_masuk')) {
+        // Decode base64
+        $foto_base64 = base64_decode(explode("base64,", $request->foto_masuk)[1]);
+
+        // Nama unik untuk file foto
+        $nama_foto = uniqid() . '.png';
+
+        // Simpan ke folder public/storage/foto_masuk_kbm
+        Storage::disk(env('STORAGE_DISK'))->put('foto_masuk_kbm/' . $nama_foto, $foto_base64);
+
+        // Simpan nama file ke database
+        $kbm->foto_masuk = $nama_foto;
+    }
+
+    // Simpan data KBM
+    $kbm->save();
+
+    // Redirect dengan pesan sukses
+    return redirect('/kbm')->with('success', 'Data KBM berhasil ditambahkan');
+}
 }
