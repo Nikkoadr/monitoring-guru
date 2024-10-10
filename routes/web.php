@@ -24,6 +24,8 @@ Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 Route::get('/kbm', [KbmController::class, 'index']);
 Route::get('/form_tambah_kbm', [KbmController::class, 'form_tambah_kbm']);
+Route::get('/form_edit_kbm_{id}', [KbmController::class, 'form_edit_kbm']);
+Route::put('/update_kbm_{id}', [KbmController::class, 'update_kbm']);
 Route::get('/get_guru_by_mapel_{id_mapel}', [KbmController::class, 'get_guru']);
 Route::post('/tambah_kbm', [KbmController::class, 'tambah_kbm']);
 Route::get('/form_selesai_kbm_{id}', [KbmController::class, 'form_selesai_kbm']);

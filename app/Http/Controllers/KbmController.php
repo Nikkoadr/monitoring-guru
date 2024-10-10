@@ -123,6 +123,30 @@ class KbmController extends Controller
         }
     }
 
+    public function form_edit_kbm($id) {
+        $data_kbm = Kbm::find($id);
+        return view('kbm.form_edit_kbm', compact('data_kbm'));
+    }
+
+    public function update_kbm(Request $request, $id) {
+        $request->validate([
+            'tanggal' => 'required',
+            'jam_ke' => 'required',
+            'jam_masuk' => 'required',
+            'jam_keluar' => 'nullable',
+            'keterangan' => 'required',
+        ]);
+        $kbm = Kbm::findOrFail($id);
+        $kbm->tanggal = $request->tanggal;
+        $kbm->jam_ke = $request->jam_ke;
+        $kbm->jam_masuk = $request->jam_masuk;
+        $kbm->jam_keluar = $request->jam_keluar;
+        $kbm->keterangan = $request->keterangan;
+        $kbm->save();
+        return redirect('/kbm')->with('success', 'Data KBM berhasil diperbarui');
+    }
+
+
     public function get_guru($id_mapel) {
         $guru = DB::table('guru_mapel')
             ->join('guru', 'guru_mapel.id_guru', '=', 'guru.id')
@@ -188,6 +212,7 @@ public function update_selesai_kbm(Request $request, $id) {
 
 
     public function hapus_kbm($id) {
+        DB::table('absensi_siswa')->where('id_kbm', $id)->delete();
         $kbm = Kbm::find($id);
         $kbm->delete();
         return redirect('/kbm')->with('success', 'Data KBM berhasil dihapus'); 
