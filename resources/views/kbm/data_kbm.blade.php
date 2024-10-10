@@ -81,7 +81,7 @@
                                             @if($user->id_role == '4')
                                                 @if ($kbm->jam_keluar == null)
                                                 <td class="text-center">
-                                                    <a href="/absen_kbm_{{ $kbm->id }}" class=" btn btn-info m-1"><i class="fa-solid fa-hand-point-up"></i></i></a>
+                                                    <a href="/presensi_siswa_{{ $kbm->id }}" class=" btn btn-info m-1"><i class="fa-solid fa-hand-point-up"></i></i></a>
                                                     <a href="/form_selesai_kbm_{{ $kbm->id }}" class="btn btn-primary m-1"><i class="fa-regular fa-circle-check"></i></a>
                                                 </td>
                                                 @else
@@ -161,6 +161,15 @@ $("#table_kbm").DataTable({
         icon: 'success',
         title: '{{ session('success') }}'
         })
+    @endif
+</script>
+<script>
+    @if (session()->has('error'))
+        Swal.fire({
+            icon: 'error',
+            title: '{{ session('error') }}',
+            showConfirmButton: true, // Show the confirm button
+        });
     @endif
 </script>
 <script>

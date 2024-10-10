@@ -13,11 +13,13 @@ return new class extends Migration
     {
         Schema::create('absensi_siswa', function (Blueprint $table) {
             $table->id();
+            $table->date('tanggal')->nullable();
             $table->foreignId('id_kbm')->nullable()->index()->references('id')->on('kbm');
             $table->foreignId('id_siswa')->nullable()->index()->references('id')->on('siswa');
             $table->foreignId('id_status_hadir')->nullable()->index()->references('id')->on('status_hadir');
             $table->string('jam_hadir')->nullable();
             $table->string('foto')->nullable();
+            $table->string('lokasi')->nullable();
             $table->timestamps();
         });
     }
