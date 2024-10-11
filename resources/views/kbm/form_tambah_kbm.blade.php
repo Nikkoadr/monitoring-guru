@@ -1,6 +1,14 @@
 @extends('layouts.main')
 @section('css')
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<style>
+.flip-card
+{
+    transform: rotateY(180deg);
+    -webkit-transform:rotateY(180deg); /* Safari and Chrome */
+    -moz-transform:rotateY(180deg); /* Firefox */
+}
+</style>
 @endsection
 @section('content')
     <div class="content-wrapper">
@@ -71,14 +79,14 @@
                                     <textarea class="form-control" name="keterangan" id="keterangan" rows="5" required></textarea>
                                     <div id="camera-container" class="text-center mt-2">
                                         <h5><b>Ambil Foto:</b></h5>
-                                        <video id="video" width="320" height="240" autoplay class="border"></video><br>
+                                        <video id="video" width="320" height="240" autoplay class="border flip-card"></video><br>
                                         <button type="button" id="capture" class="btn btn-primary mt-2">Ambil Foto</button>
                                         <button type="button" id="switch-camera" class="btn btn-secondary mt-2">Switch Kamera</button>
                                     </div>
 
                                     <div id="preview-container" class="text-center mt-3" style="display: none;">
                                         <h4>Foto telah diambil:</h4>
-                                        <img id="preview-image" src="" alt="Preview Foto" class="img-thumbnail" width="320" height="240"><br>
+                                        <img id="preview-image" src="" alt="Preview Foto" class="img-thumbnail flip-card" width="320" height="240"><br>
                                         <button type="button" id="retake" class="btn btn-warning mt-2">Foto Ulang</button>
                                     </div>
 
