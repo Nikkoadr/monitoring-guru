@@ -16,7 +16,7 @@
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="#">Home</a></li>
-                    <li class="breadcrumb-item active">Data Role</li>
+                    <li class="breadcrumb-item active">Data Ketua kelas</li>
                     </ol>
                 </div>
                 </div>
@@ -28,23 +28,25 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-                                <h3 class="card-title">Data Role</h3>
-                                <a href="/form_tambah_role" class="btn btn-primary float-right">Tambah Role</a>
+                                <h3 class="card-title">Data Ketua kelas</h3>
+                                <a href="/form_tambah_ketua_kelas" class="btn btn-primary float-right">Tambah Ketua kelas</a>
                             </div>
                             <div class="card-body">
-                                <table id="table_role" class="table table-bordered table-striped">
+                                <table id="table_ketua_kelas" class="table table-bordered table-striped">
                                     <thead>
                                         <th>No</th>
-                                        <th>Nama Role</th>
+                                        <th>Nama Ketua kelas</th>
+                                        <th>Nama Kelas</th>
                                         <th>Menu</th>
                                     </thead>
                                     <tbody>
-                                        @foreach ($data_role as  $role)
+                                        @foreach ($data_ketua_kelas as  $ketua_kelas)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $role->nama_role }}</td>
-                                            <td><a href="/form_edit_role_{{ $role->id }}" class="btn btn-info float-right m-1"><i class="fa-solid fa-pen-to-square"></i></a>
-                                            {{-- <button class="btn btn-danger float-right m-1" onclick="confirmDelete({{ $role->id }})">Hapus</button> --}}
+                                            <td>{{ $ketua_kelas->nama_ketua_kelas }}</td>
+                                            <td>{{ $ketua_kelas->nama_kelas }}</td>
+                                            <td><a href="/form_edit_ketua_kelas_{{ $ketua_kelas->id }}" class="btn btn-info float-right m-1"><i class="fa-solid fa-pen-to-square"></i></a>
+                                            <button class="btn btn-danger float-right m-1" onclick="confirmDelete({{ $ketua_kelas->id }})">Hapus</button>
                                             </td>
                                         </tr>
                                         @endforeach
@@ -77,7 +79,7 @@
 
 <script>
 $(function () {
-$("#table_role").DataTable({
+$("#table_ketua_kelas").DataTable({
     "responsive": true, 
     "lengthChange": true, 
     "autoWidth": true, 
@@ -87,7 +89,7 @@ $("#table_role").DataTable({
         [25, 50, 100, 200, "All"]
     ],
     "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-}).buttons().container().appendTo('#table_role_wrapper .col-md-6:eq(0)');
+}).buttons().container().appendTo('#table_ketua_kelas_wrapper .col-md-6:eq(0)');
 });
 </script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
