@@ -14,8 +14,10 @@ return new class extends Migration
         Schema::create('setting', function (Blueprint $table) {
             $table->id();
             $table->string('nama_aplikasi');
-            $table->string('versi_aplikasi');
-            $table->string('footer_aplikasi');
+            $table->string('logo_aplikasi');
+            $table->string('lokasi_longitude');
+            $table->string('lokasi_latitude');
+            $table->string('radius_lokasi');
             $table->timestamps();
         });
     }

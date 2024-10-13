@@ -9,6 +9,8 @@ use App\Http\Controllers\JurusanController;
 use App\Http\Controllers\KelasController;
 use App\Http\Controllers\GuruController;
 use App\Http\Controllers\MapelController;
+use App\Http\Controllers\WalasController;
+use App\Http\Controllers\Ketua_kelasController;
 use App\Http\Controllers\SiswaController;
 use App\Http\Controllers\KbmController;
 use App\Http\Controllers\SettingController;
@@ -79,6 +81,10 @@ Route::post('/post_kelas', [KelasController::class, 'post_kelas']);
 Route::get('/form_edit_kelas_{id}', [KelasController::class, 'form_edit_kelas']);
 Route::put('/update_kelas_{id}', [KelasController::class, 'update_kelas']);
 Route::get('/hapus_kelas_{id}', [KelasController::class, 'hapus_kelas']);
+
+Route::get('/data_walas', [WalasController::class, 'index']);
+
+Route::get('/data_ketua_kelas', [Ketua_kelasController::class, 'index']);
 
 Route::get('/data_siswa', [SiswaController::class, 'index']);
 Route::get('/form_tambah_siswa', [SiswaController::class, 'form_tambah_siswa']);
