@@ -44,7 +44,6 @@ class WalasController extends Controller
         }
 
     public function post_walas(Request $request){
-        dd($request);
         $request->validate([
             'id_guru' => 'required',
             'id_kelas' => 'required',

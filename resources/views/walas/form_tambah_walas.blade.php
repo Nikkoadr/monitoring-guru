@@ -51,23 +51,22 @@
     </div>
 @endsection
 @section('js')
-@section('js')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 <script>
     document.getElementById('guru').addEventListener('input', function () {
         let query = this.value;
         if (query.length > 1) {
-            fetch(`/get_user?q=${query}`)
+            fetch(`/get_guru?q=${query}`)
                 .then(response => response.json())
                 .then(data => {
                     let suggestions = document.getElementById('suggestions');
                     suggestions.innerHTML = '';
-                    data.forEach(user => {
+                    data.forEach(guru => {
                         let suggestion = document.createElement('div');
-                        suggestion.textContent = user.name;
+                        suggestion.textContent = guru.name;
                         suggestion.addEventListener('click', function () {
-                            document.getElementById('guru').value = user.name;
-                            document.getElementById('id_guru').value = user.id;
+                            document.getElementById('guru').value = guru.name;
+                            document.getElementById('id_guru').value = guru.id;
                             suggestions.innerHTML = '';
                         });
                         suggestions.appendChild(suggestion);
