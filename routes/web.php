@@ -83,6 +83,7 @@ Route::put('/update_kelas_{id}', [KelasController::class, 'update_kelas']);
 Route::get('/hapus_kelas_{id}', [KelasController::class, 'hapus_kelas']);
 
 Route::get('/data_walas', [WalasController::class, 'index']);
+Route::get('/form_tambah_walas', [WalasController::class, 'form_tambah_walas']);
 
 Route::get('/data_ketua_kelas', [Ketua_kelasController::class, 'index']);
 
