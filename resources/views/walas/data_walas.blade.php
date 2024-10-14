@@ -120,7 +120,7 @@ $("#table_walas").DataTable({
             cancelButtonText: 'Batal'
         }).then((result) => {
             if (result.isConfirmed) {
-                window.location.href = `/hapus_role_${roleId}`;
+                window.location.href = `/hapus_walas_${roleId}`;
             }
         });
     }

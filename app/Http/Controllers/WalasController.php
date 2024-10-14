@@ -42,4 +42,19 @@ class WalasController extends Controller
             $users = User::where('name', 'like', '%' . $search . '%')->get();
             return response()->json($users);
         }
+
+    public function post_walas(Request $request){
+        dd($request);
+        $request->validate([
+            'id_guru' => 'required',
+            'id_kelas' => 'required',
+        ]);
+        $data = [
+            'id_guru' => $request->id_guru,
+            'id_kelas' => $request->id_kelas,
+            'created_at' => now(),
+        ];
+        DB::table('walas')->insert($data);
+        return redirect('/data_walas')->with('success', 'Data Walas Berhasil Tambah');
+    }
 }
