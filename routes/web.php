@@ -60,7 +60,7 @@ Route::get('/hapus_guru_{id}', [GuruController::class, 'hapus_guru']);
 
 Route::get('/data_mapel', [MapelController::class, 'index']);
 Route::get('/form_tambah_mapel', [MapelController::class, 'form_tambah_mapel']);
-Route::get('/get_guru', [MapelController::class, 'get_guru']);
+Route::get('/get_guru', [MapelController::class, 'get_guru']);//search guru menggunakan ajax
 Route::post('/post_mapel', [MapelController::class, 'post_mapel']);
 Route::get('/form_edit_mapel_{id}', [MapelController::class, 'form_edit_mapel']);
 Route::get('/form_tambah_guru_pengampu_{id}', [MapelController::class, 'form_tambah_guru_pengampu']);
@@ -84,9 +84,17 @@ Route::get('/hapus_kelas_{id}', [KelasController::class, 'hapus_kelas']);
 
 Route::get('/data_walas', [WalasController::class, 'index']);
 Route::get('/form_tambah_walas', [WalasController::class, 'form_tambah_walas']);
+Route::get('/form_edit_walas_{id}', [WalasController::class, 'form_edit_walas']);
+Route::put('/update_walas_{id}', [WalasController::class, 'update_walas']);
 Route::post('/post_walas', [WalasController::class, 'post_walas']);
+Route::get('/hapus_walas_{id}', [WalasController::class, 'hapus_walas']);
 
 Route::get('/data_ketua_kelas', [Ketua_kelasController::class, 'index']);
+Route::get('/form_tambah_ketua_kelas', [Ketua_kelasController::class, 'form_tambah_ketua_kelas']);
+Route::get('/form_edit_ketua_kelas_{id}', [Ketua_kelasController::class, 'form_edit_ketua_kelas']);
+Route::put('/update_ketua_kelas_{id}', [Ketua_kelasController::class, 'update_ketua_kelas']);
+Route::post('/post_ketua_kelas', [Ketua_kelasController::class, 'post_ketua_kelas']);
+Route::get('/hapus_ketua_kelas_{id}', [Ketua_kelasController::class, 'hapus_ketua_kelas']);
 
 Route::get('/data_siswa', [SiswaController::class, 'index']);
 Route::get('/form_tambah_siswa', [SiswaController::class, 'form_tambah_siswa']);

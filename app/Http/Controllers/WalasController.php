@@ -56,4 +56,38 @@ class WalasController extends Controller
         DB::table('walas')->insert($data);
         return redirect('/data_walas')->with('success', 'Data Walas Berhasil Tambah');
     }
+
+    public function form_edit_walas($id)
+    {
+        $data_walas = DB::table('walas')
+            ->join('guru', 'walas.id_guru', '=', 'guru.id')
+            ->join('users', 'guru.id_user', '=', 'users.id')
+            ->join('kelas', 'walas.id_kelas', '=', 'kelas.id')
+            ->select('walas.*', 'users.name as nama_walas', 'kelas.nama_kelas')
+            ->where('walas.id', $id)
+            ->first();
+        $data_kelas = DB::table('kelas')->get();
+        return view('walas.form_edit_walas', compact('data_walas', 'data_kelas'));
+    }
+
+    public function update_walas(Request $request, $id)
+    {
+        $request->validate([
+            'id_guru' => 'required',
+            'id_kelas' => 'required',
+        ]);
+        $data = [
+            'id_guru' => $request->id_guru,
+            'id_kelas' => $request->id_kelas,
+            'updated_at' => now(),
+        ];
+        DB::table('walas')->where('id', $id)->update($data);
+        return redirect('/data_walas')->with('success', 'Data Walas Berhasil Diupdate');
+    }
+
+    public function hapus_walas($id)
+    {
+        DB::table('walas')->where('id', $id)->delete();
+        return redirect('/data_walas')->with('success', 'Data Walas Berhasil Dihapus');
+    }
 }

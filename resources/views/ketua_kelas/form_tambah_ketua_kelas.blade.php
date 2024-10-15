@@ -13,7 +13,7 @@
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="#">Home</a></li>
-                    <li class="breadcrumb-item active">Data Role</li>
+                    <li class="breadcrumb-item active">Data Siswa</li>
                     </ol>
                 </div>
                 </div>
@@ -25,13 +25,13 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-                                <h3 class="card-title">Form Tambah Role</h3>
+                                <h3 class="card-title">Form Tambah Ketua kelas</h3>
                             </div>
                             <div class="card-body">
-                                <form action="/post_role" method="post">
+                                <form action="/post_ketua_kelas" method="post">
                                 @csrf
-                                    <label for="nama_role">Nama Role:</label>
-                                    <input class="form-control" type="text" id="nama_role" name="nama_role" autocomplete="off">
+                                    <label for="siswa">Nama Siswa:</label>
+                                    <input class="form-control" type="text" id="siswa" name="siswa" autocomplete="off">
                                     <button class="btn btn-primary mt-2 float-right" type="submit">Simpan</button>
                                 </form>
                             </div>

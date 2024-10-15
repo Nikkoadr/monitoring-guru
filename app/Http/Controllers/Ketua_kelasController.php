@@ -27,4 +27,15 @@ class Ketua_kelasController extends Controller{
 
         return view('ketua_kelas.data_ketua_kelas', compact('data_ketua_kelas'));
     }
+
+    public function form_tambah_ketua_kelas(){
+        $data_kelas = DB::table('kelas')->get();
+        return view('ketua_kelas.form_tambah_ketua_kelas', compact('data_kelas'));
+    }
+
+    public function post_ketua_kelas(Request $request){
+        $data = $request->all();
+        DB::table('ketua_kelas')->insert($data);
+        return redirect('/data_ketua_kelas')->with('success', 'Data Berhasilr');
+    }
 }
