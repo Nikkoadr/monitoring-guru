@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('ketua_kelas', function (Blueprint $table) {
             $table->id();
             $table->foreignId('id_siswa')->nullable()->index()->references('id')->on('siswa');
+            $table->foreignId('id_kelas')->nullable()->index()->references('id')->on('kelas');
             $table->timestamps();
         });
     }

@@ -33,6 +33,15 @@ class Ketua_kelasController extends Controller{
         return view('ketua_kelas.form_tambah_ketua_kelas', compact('data_kelas'));
     }
 
+    public function get_ketua_kelas_by_kelas($id){
+        $data_siswa = DB::table('siswa')
+            ->join('users', 'siswa.id_user', '=', 'users.id')
+            ->where('siswa.id_kelas', '=', $id)
+            ->select('siswa.*', 'users.name as nama_siswa')
+            ->get();
+        return response()->json($data_siswa);
+    }
+
     public function post_ketua_kelas(Request $request){
         $data = $request->all();
         DB::table('ketua_kelas')->insert($data);
