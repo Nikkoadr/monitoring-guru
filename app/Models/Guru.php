@@ -11,10 +11,10 @@ class Guru extends Model
     protected $table = 'guru';
     protected $guarded = [];
     
-    public function mapel()
-    {
-        return $this->belongsToMany(Mapel::class, 'guru_mapel', 'id_guru', 'id_mapel');
-    }
+    // public function mapel()
+    // {
+    //     return $this->belongsToMany(Mapel::class, 'guru_mapel', 'id_guru', 'id_mapel');
+    // }
     public function user()
     {
         return $this->belongsTo(User::class, 'id_user');

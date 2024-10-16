@@ -57,6 +57,7 @@ class GuruController extends Controller
 
     public function hapus_guru($id)
         {
+            DB::table('guru_mapel')->where('id_guru', $id)->delete();
             DB::table('guru')->where('id', $id)->delete();
             return redirect('/data_guru')->with('success', 'Data Guru Berhasil Hapus');
         }
