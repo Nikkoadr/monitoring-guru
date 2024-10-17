@@ -78,7 +78,22 @@
                                             </td>
                                             <td>{{ $kbm->keterangan }}</td>
                                             
-                                            @if($user->id_role == '4')
+                                            @if($user->id_role == '1')
+                                                <td class="text-center">
+                                                    <a href="/form_edit_kbm_{{ $kbm->id }}" class="btn btn-info m-1"><i class="fa-solid fa-pen-to-square"></i></a>
+                                                    <button class="btn btn-danger m-1" onclick="confirmDelete({{ $kbm->id }})"><i class="fa-solid fa-trash-can"></i></button>
+                                                </td>
+                                            @elseif($user->id_role == '3')
+                                                @if ($kbm->jam_keluar == null)
+                                                <td class="text-center">
+                                                <span class="badge badge-warning">Belum Selesai</span><span class="badge badge-warning"></span>
+                                                </td>
+                                                @else
+                                                <td>
+                                                    <span class="badge badge-success">Selesai</span>
+                                                </td>
+                                                @endif
+                                            @elseif($user->id_role == '4')
                                                 @if ($kbm->jam_keluar == null)
                                                 <td class="text-center">
                                                     <a href="/presensi_siswa_{{ $kbm->id }}" class=" btn btn-info m-1"><i class="fa-solid fa-hand-point-up"></i></i></a>
@@ -99,11 +114,6 @@
                                                     <span class="badge badge-success">Selesai</span>
                                                 </td>
                                                 @endif
-                                            @elseif($user->id_role == '1')
-                                                <td class="text-center">
-                                                    <a href="/form_edit_kbm_{{ $kbm->id }}" class="btn btn-info m-1"><i class="fa-solid fa-pen-to-square"></i></a>
-                                                    <button class="btn btn-danger m-1" onclick="confirmDelete({{ $kbm->id }})"><i class="fa-solid fa-trash-can"></i></button>
-                                                </td>
                                             @endif
                                         </tr>
                                         @endforeach

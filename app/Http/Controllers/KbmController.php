@@ -59,8 +59,11 @@ class KbmController extends Controller
             $data_kbm = collect();
         }
     } elseif ($user->id_role == 3) {
-        $wali_kelas = DB::table('guru')
+        $guru = DB::table('guru')
             ->where('id_user', $user->id)
+            ->first();
+        $wali_kelas = DB::table('walas')
+            ->where('id_guru', $guru->id)
             ->first();
         if ($wali_kelas) {
             $data_kbm = DB::table('kbm')
