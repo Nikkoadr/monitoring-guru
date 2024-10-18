@@ -86,7 +86,7 @@
                                             @elseif($user->id_role == '3')
                                                 @if ($kbm->jam_keluar == null)
                                                 <td class="text-center">
-                                                <span class="badge badge-warning">Belum Selesai</span><span class="badge badge-warning"></span>
+                                                <span class="badge badge-warning">Belum Selesai</span>
                                                 </td>
                                                 @else
                                                 <td>
