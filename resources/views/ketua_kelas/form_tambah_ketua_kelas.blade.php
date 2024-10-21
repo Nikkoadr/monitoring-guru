@@ -19,44 +19,71 @@
                 </div>
             </div>
         </div>
-<div class="content">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Form Tambah Ketua Kelas</h3>
-                    </div>
-                    <div class="card-body">
-                        <form action="/post_ketua_kelas" method="post">
-                            @csrf
-                            <div class="form-group">
-                                <label for="kelas">Pilih Kelas:</label>
-                                <select class="form-control" id="kelas" name="kelas">
-                                    <option value="">-- Pilih Kelas --</option>
-                                    @foreach($kelas as $kls)
-                                        <option value="{{ $kls->id }}">{{ $kls->nama_kelas }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
+            <div class="content">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Form Tambah Ketua Kelas</h3>
+                                </div>
+                                <div class="card-body">
+                                    <form action="/post_ketua_kelas" method="post">
+                                        @csrf
+                                        <div class="form-group">
+                                            <label for="kelas">Pilih Kelas:</label>
+                                            <select class="form-control" id="kelas" name="id_kelas">
+                                                <option value="">-- Pilih Kelas --</option>
+                                                @foreach($data_kelas as $kelas)
+                                                    <option value="{{ $kelas->id }}">{{ $kelas->nama_kelas }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
 
-                            <div class="form-group">
-                                <label for="siswa">Nama Siswa:</label>
-                                <select class="form-control" id="siswa" name="siswa">
-                                    <option value="">-- Pilih Siswa --</option>
-                                </select>
-                            </div>
+                                        <div class="form-group">
+                                            <label for="siswa">Nama Siswa:</label>
+                                            <input type="text" class="form-control" id="siswa" name="siswa">
+                                            <input type="hidden" id="siswa_id" name="id_siswa"> <!-- hidden input untuk menyimpan ID siswa -->
+                                            <div id="suggestions" class="autocomplete-list"></div> <!-- untuk menampilkan hasil autocomplete -->
+                                        </div>
 
-                            <button class="btn btn-primary mt-2 float-right" type="submit">Simpan</button>
-                        </form>
+                                        <button class="btn btn-primary mt-2 float-right" type="submit">Simpan</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
 
 @endsection
 @section('js')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+<script>
+    document.getElementById('siswa').addEventListener('input', function () {
+        let query = this.value;
+        let kelasId = document.getElementById('kelas').value;
+        if (query.length > 1 && kelasId) {
+            fetch(`/get_ketua_kelas_by_kelas?q=${query}&id_kelas=${kelasId}`)
+                .then(response => response.json())
+                .then(data => {
+                    let suggestions = document.getElementById('suggestions');
+                    suggestions.innerHTML = '';
+                    data.forEach(siswa => {
+                        let suggestion = document.createElement('div');
+                        suggestion.textContent = siswa.name;
+                        suggestion.addEventListener('click', function () {
+                            document.getElementById('siswa').value = siswa.name;
+                            document.getElementById('siswa_id').value = siswa.id;
+                            suggestions.innerHTML = ''; // Clear suggestions setelah dipilih
+                        });
+                        suggestions.appendChild(suggestion);
+                    });
+                });
+        } else {
+            document.getElementById('suggestions').innerHTML = '';
+        }
+    });
+</script>
 @endsection
