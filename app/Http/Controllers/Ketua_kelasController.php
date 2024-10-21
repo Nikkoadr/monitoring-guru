@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\Siswa;
+use App\Models\User;
 
 class Ketua_kelasController extends Controller{
     
@@ -33,17 +35,37 @@ class Ketua_kelasController extends Controller{
         return view('ketua_kelas.form_tambah_ketua_kelas', compact('data_kelas'));
     }
 
-    public function get_ketua_kelas_by_kelas($id){
-        $data_siswa = DB::table('siswa')
-            ->join('users', 'siswa.id_user', '=', 'users.id')
-            ->where('siswa.id_kelas', '=', $id)
-            ->select('siswa.*', 'users.name as nama_siswa')
-            ->get();
-        return response()->json($data_siswa);
+    public function get_ketua_kelas_by_kelas(Request $request) {
+        $id_kelas = $request->id_kelas;
+        $query = $request->q;
+
+        // Ambil data siswa dari tabel 'siswa' yang berelasi dengan tabel 'users'
+        $siswa = Siswa::where('id_kelas', $id_kelas)
+                    ->whereHas('user', function ($queryBuilder) use ($query) {
+                        $queryBuilder->where('name', 'LIKE', "%{$query}%");
+                    })
+                    ->with('user:id,name') // Mengambil relasi user dengan kolom id dan name saja
+                    ->get();
+
+        // Jika tidak ada siswa di kelas yang dipilih
+        if ($siswa->isEmpty()) {
+            return response()->json(['message' => 'Siswa tidak ada di kelas Anda.'], 404);
+        }
+
+        // Return data dalam format JSON dengan ID siswa
+        return response()->json($siswa->map(function ($s) {
+            return [
+                'id' => $s->id,  // Mengembalikan id dari tabel 'siswa'
+                'name' => $s->user->name,  // Nama dari tabel 'users'
+            ];
+        }));
     }
 
     public function post_ketua_kelas(Request $request){
-        $data = $request->all();
+        $data = [
+            'id_kelas' => $request->id_kelas,
+            'id_siswa' => $request->id_siswa,
+        ];
         DB::table('ketua_kelas')->insert($data);
         return redirect('/data_ketua_kelas')->with('success', 'Data Berhasilr');
     }

@@ -91,7 +91,7 @@ Route::get('/hapus_walas_{id}', [WalasController::class, 'hapus_walas']);
 
 Route::get('/data_ketua_kelas', [Ketua_kelasController::class, 'index']);
 Route::get('/form_tambah_ketua_kelas', [Ketua_kelasController::class, 'form_tambah_ketua_kelas']);
-Route::get('/get_ketua_kelas_by_kelas_{id_kelas}', [Ketua_kelasController::class, 'get_ketua_kelas_by_kelas']);
+Route::get('/get_ketua_kelas_by_kelas', [Ketua_kelasController::class, 'get_ketua_kelas_by_kelas']);
 Route::get('/form_edit_ketua_kelas_{id}', [Ketua_kelasController::class, 'form_edit_ketua_kelas']);
 Route::put('/update_ketua_kelas_{id}', [Ketua_kelasController::class, 'update_ketua_kelas']);
 Route::post('/post_ketua_kelas', [Ketua_kelasController::class, 'post_ketua_kelas']);
