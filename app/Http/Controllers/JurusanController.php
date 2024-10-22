@@ -4,10 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 class JurusanController extends Controller
 {
-        /**
+    /**
      * Create a new controller instance.
      *
      * @return void
@@ -24,8 +25,12 @@ class JurusanController extends Controller
      */
     public function index()
     {
-        $data_jurusan = DB::table('jurusan')->get();
-        return view('jurusan.data_jurusan', compact('data_jurusan'));
+        if (Gate::allows('admin')) {
+            $data_jurusan = DB::table('jurusan')->get();
+            return view('jurusan.data_jurusan', compact('data_jurusan'));
+        }else{
+            return redirect('/home')->with('error', 'Anda Tidak Memiliki Akses');
+        }
     }
 
     public function form_tambah_jurusan()

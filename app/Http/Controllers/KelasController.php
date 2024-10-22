@@ -4,10 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 class KelasController extends Controller
 {
-        /**
+    /**
      * Create a new controller instance.
      *
      * @return void
@@ -24,11 +25,15 @@ class KelasController extends Controller
      */
     public function index()
     {
-        $data_kelas = DB::table('kelas')
-        ->join('jurusan', 'kelas.id_jurusan', '=', 'jurusan.id')
-        ->select('kelas.*', 'jurusan.nama_jurusan')
-        ->get();
-        return view('kelas.data_kelas', compact('data_kelas'));
+        if (Gate::allows('admin')) {
+            $data_kelas = DB::table('kelas')
+            ->join('jurusan', 'kelas.id_jurusan', '=', 'jurusan.id')
+            ->select('kelas.*', 'jurusan.nama_jurusan')
+            ->get();
+            return view('kelas.data_kelas', compact('data_kelas'));
+        }else{
+            return redirect('/home')->with('error', 'Anda Tidak Memiliki Akses');
+        }
     }
 
     public function form_tambah_kelas()

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use App\Models\kelas;
+use Illuminate\Support\Facades\Gate;
 
 class SiswaController extends Controller
 {
@@ -26,6 +27,7 @@ class SiswaController extends Controller
      */
     public function index()
     {
+        if (Gate::allows('admin')) {
         $data_siswa = DB::table('siswa')
             ->join('users', 'siswa.id_user', '=', 'users.id')
             ->join('kelas', 'siswa.id_kelas', '=', 'kelas.id')
@@ -33,6 +35,9 @@ class SiswaController extends Controller
             ->select('siswa.*', 'users.name as nama_siswa', 'kelas.nama_kelas', 'jurusan.nama_jurusan')
             ->get();
             return view('siswa.data_siswa', compact('data_siswa'));
+            }else{
+            return redirect('/home')->with('error', 'Anda Tidak Memiliki Akses');
+            }
     }
 
     public function form_tambah_siswa()

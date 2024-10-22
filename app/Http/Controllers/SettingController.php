@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Maatwebsite\Excel\Facades\Excel; 
 use App\Imports\DataImport;
+use Illuminate\Support\Facades\Gate;
 
 class SettingController extends Controller
 {
@@ -24,7 +25,11 @@ class SettingController extends Controller
      */
     public function index()
     {
-        return view('setting');
+        if (Gate::allows('admin')) {
+            return view('setting');
+            }else{
+            return redirect('/home')->with('error', 'Anda Tidak Memiliki Akses');
+            }
     }
 
     public function import_data(){

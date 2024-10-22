@@ -4,10 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 class RoleController extends Controller
 {
-        /**
+    /**
      * Create a new controller instance.
      *
      * @return void
@@ -24,8 +25,12 @@ class RoleController extends Controller
      */
     public function index()
     {
+        if (Gate::allows('admin')) {
         $data_role = DB::table('role')->get();
         return view('role.data_role', compact('data_role'));
+        }else{
+            return redirect('/home')->with('error', 'Anda Tidak Memiliki Akses');
+        }
     }
 
     public function form_tambah_role()

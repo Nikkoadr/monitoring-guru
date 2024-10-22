@@ -8,6 +8,21 @@ use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
     public function index()
     {
         if (Gate::allows('admin')) {
@@ -65,6 +80,21 @@ class UserController extends Controller
             'name' => $request->name,
             'gelar_belakang' => $request->gelar_belakang,
             'email' => $request->email,
+            'password' => bcrypt($request->password),
+        ]);
+        return redirect('/data_user')->with('success', 'Data User Berhasil Edit');
+    }
+    public function form_edit_password_user($id)
+        {
+            $data_user = DB::table('users')->where('id', $id)->first();
+            return view('user.form_edit_password_user', compact('data_user'));
+        }
+
+    public function update_password_user(Request $request,$id){
+        $request->validate([
+            'password' => 'required | confirmed',
+        ]);
+        DB::table('users')->where('id', $id)->update([
             'password' => bcrypt($request->password),
         ]);
         return redirect('/data_user')->with('success', 'Data User Berhasil Edit');

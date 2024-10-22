@@ -5,10 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Siswa;
-use App\Models\User;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Auth;
 
 class Ketua_kelasController extends Controller{
-    
     /**
      * Create a new controller instance.
      *
@@ -18,15 +18,53 @@ class Ketua_kelasController extends Controller{
     {
         $this->middleware('auth');
     }
-    public function index(){
-        $data_ketua_kelas = DB::table('ketua_kelas')
-            ->join('siswa', 'ketua_kelas.id_siswa', '=', 'siswa.id')
-            ->join('users', 'siswa.id_user', '=', 'users.id')
-            ->join('kelas', 'siswa.id_kelas', '=', 'kelas.id')
-            ->select('ketua_kelas.*', 'users.name as nama_ketua_kelas', 'kelas.nama_kelas')
-            ->get();
 
-        return view('ketua_kelas.data_ketua_kelas', compact('data_ketua_kelas'));
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function index(){
+        if (Gate::allows('admin')) {
+            // Admin melihat semua data ketua kelas
+            $data_ketua_kelas = DB::table('ketua_kelas')
+                ->join('siswa', 'ketua_kelas.id_siswa', '=', 'siswa.id')
+                ->join('users', 'siswa.id_user', '=', 'users.id')
+                ->join('kelas', 'siswa.id_kelas', '=', 'kelas.id')
+                ->select('ketua_kelas.*', 'users.name as nama_ketua_kelas', 'kelas.nama_kelas')
+                ->get();
+
+            return view('ketua_kelas.data_ketua_kelas', compact('data_ketua_kelas'));
+
+        } elseif (Gate::allows('walas')) {
+            $session = Auth::user()->id;
+            // Ambil data kelas yang diampu oleh walas dari tabel walas
+            $kelasWalas = DB::table('walas')
+                ->join('guru', 'walas.id_guru', '=', 'guru.id')
+                ->join('users', 'guru.id_user', '=', 'users.id')
+                ->join('kelas', 'walas.id_kelas', '=', 'kelas.id')
+                ->where('users.id', $session) // Filter by walas yang sedang login
+                ->select('kelas.id', 'kelas.nama_kelas')
+                ->first();
+
+            if ($kelasWalas) {
+                // Walas melihat hanya ketua kelas dari kelas yang diampunya
+                $data_ketua_kelas = DB::table('ketua_kelas')
+                    ->join('siswa', 'ketua_kelas.id_siswa', '=', 'siswa.id')
+                    ->join('users', 'siswa.id_user', '=', 'users.id')
+                    ->join('kelas', 'siswa.id_kelas', '=', 'kelas.id')
+                    ->where('kelas.id', $kelasWalas->id)  // Filter berdasarkan kelas walas
+                    ->select('ketua_kelas.*', 'users.name as nama_ketua_kelas', 'kelas.nama_kelas')
+                    ->get();
+
+                return view('ketua_kelas.data_ketua_kelas', compact('data_ketua_kelas'));
+            } else {
+                return redirect('/home')->with('error', 'Anda tidak memiliki kelas yang diampu.');
+            }
+
+        } else {
+            return redirect('/home')->with('error', 'Anda Tidak Memiliki Akses');
+        }
     }
 
     public function form_tambah_ketua_kelas(){

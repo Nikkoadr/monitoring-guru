@@ -49,6 +49,7 @@
                                             <td>{{ $user->email }}</td>
                                             <td>
                                                 <a href="/form_edit_user_{{ $user->id }}" class="btn btn-info float-right m-1"><i class="fa-solid fa-pen-to-square"></i></a>
+                                                <a href="/form_edit_password_user_{{ $user->id }}" class="btn btn-warning float-right m-1"><i class="fa-solid fa-key"></i></a>
                                                 <button class="btn btn-danger float-right m-1" onclick="confirmDelete({{ $user->id }})"><i class="fa-solid fa-trash-can"></i></button>
                                             </td>
                                         </tr>

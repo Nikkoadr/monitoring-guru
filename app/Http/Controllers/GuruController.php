@@ -5,10 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
+use Illuminate\Support\Facades\Gate;
 
 class GuruController extends Controller
 {
-        /**
+    /**
      * Create a new controller instance.
      *
      * @return void
@@ -24,11 +25,15 @@ class GuruController extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function index(){
-        $data_guru = DB::table('guru')
-            ->join('users', 'guru.id_user', '=', 'users.id')
-            ->select('guru.*', 'users.name as nama_guru')
-            ->get();
-        return view('guru.data_guru', compact('data_guru'));
+        if (Gate::allows('admin')) {
+            $data_guru = DB::table('guru')
+                ->join('users', 'guru.id_user', '=', 'users.id')
+                ->select('guru.*', 'users.name as nama_guru')
+                ->get();
+            return view('guru.data_guru', compact('data_guru'));
+        }else{
+            return redirect('/home')->with('error', 'Anda Tidak Memiliki Akses');
+        }
     }
     public function form_tambah_guru(){
         return view('guru.form_tambah_guru');

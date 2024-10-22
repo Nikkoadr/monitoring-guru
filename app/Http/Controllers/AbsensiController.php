@@ -7,21 +7,41 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Gate;
 
 class AbsensiController extends Controller
 {
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
     public function presensi_siswa($id)
     {
-        $user = Auth::user();
-        $data_kbm = DB::table('kbm')->where('id', $id)->first();
-        $kelas = DB::table('kelas')->where('id', $data_kbm->id_kelas)->first();
-        $guru = DB::table('guru')
-            ->join('users', 'guru.id_user', '=', 'users.id')
-            ->where('guru.id', $data_kbm->id_guru)
-            ->select('users.name as nama_guru', 'guru.*')
-            ->first();
-        $mapel = DB::table('mapel')->where('id', $data_kbm->id_mapel)->first();
-        return view('absensi.presensi_siswa', compact('user','data_kbm', 'kelas', 'guru', 'mapel'));
+        if (Gate::allows('siswa'||'km_kelas')) {
+            $user = Auth::user();
+            $data_kbm = DB::table('kbm')->where('id', $id)->first();
+            $kelas = DB::table('kelas')->where('id', $data_kbm->id_kelas)->first();
+            $guru = DB::table('guru')
+                ->join('users', 'guru.id_user', '=', 'users.id')
+                ->where('guru.id', $data_kbm->id_guru)
+                ->select('users.name as nama_guru', 'guru.*')
+                ->first();
+            $mapel = DB::table('mapel')->where('id', $data_kbm->id_mapel)->first();
+            return view('absensi.presensi_siswa', compact('user','data_kbm', 'kelas', 'guru', 'mapel'));
+        }else{
+            return redirect('/home')->with('error', 'Anda Tidak Memiliki Akses');
+        }
     }
 
     public function distance($lat1, $lon1, $lat2, $lon2)

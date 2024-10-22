@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Mapel;
+use Illuminate\Support\Facades\Gate;
 
 class MapelController extends Controller
 {
@@ -25,9 +26,12 @@ class MapelController extends Controller
      */
     public function index()
     {
+        if (Gate::allows('admin')) {
         $data_mapel = Mapel::with('guru.user')->get();
-
         return view('mapel.data_mapel', compact('data_mapel'));
+        }else{
+            return redirect('/home')->with('error', 'Anda Tidak Memiliki Akses');
+        }
     }
 
     public function form_tambah_mapel()

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
+use Illuminate\Support\Facades\Gate;
 
 class WalasController extends Controller
 {
@@ -17,17 +18,26 @@ class WalasController extends Controller
     {
         $this->middleware('auth');
     }
+
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
     
     public function index()
     {
-        $data_walas = DB::table('walas')
-            ->join('guru', 'walas.id_guru', '=', 'guru.id')
-            ->join('users', 'guru.id_user', '=', 'users.id')
-            ->join('kelas', 'walas.id_kelas', '=', 'kelas.id')
-            ->select('walas.*', 'users.name as nama_walas', 'kelas.nama_kelas')
-            ->get();
-
-        return view('walas.data_walas', compact('data_walas'));
+        if (Gate::allows('admin')) {
+            $data_walas = DB::table('walas')
+                ->join('guru', 'walas.id_guru', '=', 'guru.id')
+                ->join('users', 'guru.id_user', '=', 'users.id')
+                ->join('kelas', 'walas.id_kelas', '=', 'kelas.id')
+                ->select('walas.*', 'users.name as nama_walas', 'kelas.nama_kelas')
+                ->get();
+            return view('walas.data_walas', compact('data_walas'));
+            }else{
+            return redirect('/home')->with('error', 'Anda Tidak Memiliki Akses');
+            }
     }
 
     public function form_tambah_walas()

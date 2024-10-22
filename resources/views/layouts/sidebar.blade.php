@@ -53,7 +53,7 @@
                 </li>
                 @can('admin')
                 <li class="nav-item menu-open">
-                    <a href="" class="nav-link {{ request()->is('data_guru') ? 'active' : '' }}{{ request()->is('data_user') ? 'active' : '' }}{{ request()->is('data_mapel') ? 'active' : '' }}{{ request()->is('data_role') ? 'active' : '' }}{{ request()->is('data_jurusan') ? 'active' : '' }}{{ request()->is('data_kelas') ? 'active' : '' }}{{ request()->is('data_siswa') ? 'active' : '' }}">
+                    <a href="" class="nav-link {{ in_array(request()->path(), ['data_guru', 'data_user', 'data_mapel', 'data_role', 'data_jurusan', 'data_kelas', 'data_siswa', 'data_ketua_kelas', 'data_walas']) ? 'active' : '' }}">
                     <i class="nav-icon fas fa-database"></i>
                     <p>
                         Database
@@ -133,6 +133,34 @@
                     </p>
                     </a>
                 </li>
+                @endcan
+                @can('walas')
+                <li class="nav-item menu-open">
+                    <a href="" class="nav-link {{ in_array(request()->path(), ['data_guru', 'data_user', 'data_mapel', 'data_role', 'data_jurusan', 'data_kelas', 'data_siswa', 'data_ketua_kelas', 'data_walas']) ? 'active' : '' }}">
+                    <i class="nav-icon fas fa-database"></i>
+                    <p>
+                        Database
+                        <i class="right fas fa-angle-left"></i>
+                    </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                        <a href="/data_ketua_kelas" class="nav-link {{ request()->is('data_ketua_kelas') ? 'active' : '' }}">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Data Ketua kelas</p>
+                        </a>
+                    </li>
+
+                    </ul>
+                </li>
+                    <li class="nav-item">
+                        <a href="/laporan" class="nav-link {{ request()->is('laporan') ? 'active' : '' }}">
+                        <i class="nav-icon fa-regular fa-folder-open"></i>
+                        <p>
+                            Laporan
+                        </p>
+                        </a>
+                    </li>
                 @endcan
                 </ul>
             </nav>

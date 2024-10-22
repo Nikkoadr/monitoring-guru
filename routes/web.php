@@ -23,6 +23,9 @@ Route::get('/', function () {
 Auth::routes(['register' => false]);
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
+Route::get('/get_user', [GuruController::class, 'get_user']); //search users menggunakan ajax
+Route::get('/get_guru', [MapelController::class, 'get_guru']);//search guru menggunakan ajax
+Route::get('/get_kelas_by_jurusan_{id_jurusan}', [SiswaController::class, 'get_kelas_by_jurusan']);
 
 Route::get('/kbm', [KbmController::class, 'index']);
 Route::get('/form_tambah_kbm', [KbmController::class, 'form_tambah_kbm']);
@@ -47,12 +50,13 @@ Route::get('/data_user', [UserController::class, 'index']);
 Route::get('/form_tambah_user', [UserController::class, 'form_tambah_user']);
 Route::post('/post_user', [UserController::class, 'post_user']);
 Route::get('/form_edit_user_{id}', [UserController::class, 'form_edit_user']);
+Route::get('/form_edit_password_user_{id}', [UserController::class, 'form_edit_password_user']);
+Route::put('/update_password_user_{id}', [UserController::class, 'update_password_user']);
 Route::put('/update_edit_user_{id}', [UserController::class, 'update_user']);
 Route::get('/hapus_user_{id}', [UserController::class, 'hapus_user']);
 
 Route::get('/data_guru', [GuruController::class, 'index']);
 Route::get('/form_tambah_guru', [GuruController::class, 'form_tambah_guru']);
-Route::get('/get_user', [GuruController::class, 'get_user']); //search users menggunakan ajax
 Route::post('/post_guru', [GuruController::class, 'post_guru']);
 Route::get('/form_edit_guru_{id}', [GuruController::class, 'post_guru']);
 Route::post('/update_edit_guru_{id}', [GuruController::class, 'post_guru']);
@@ -60,7 +64,6 @@ Route::get('/hapus_guru_{id}', [GuruController::class, 'hapus_guru']);
 
 Route::get('/data_mapel', [MapelController::class, 'index']);
 Route::get('/form_tambah_mapel', [MapelController::class, 'form_tambah_mapel']);
-Route::get('/get_guru', [MapelController::class, 'get_guru']);//search guru menggunakan ajax
 Route::post('/post_mapel', [MapelController::class, 'post_mapel']);
 Route::get('/form_edit_mapel_{id}', [MapelController::class, 'form_edit_mapel']);
 Route::get('/form_tambah_guru_pengampu_{id}', [MapelController::class, 'form_tambah_guru_pengampu']);
@@ -99,7 +102,6 @@ Route::get('/hapus_ketua_kelas_{id}', [Ketua_kelasController::class, 'hapus_ketu
 
 Route::get('/data_siswa', [SiswaController::class, 'index']);
 Route::get('/form_tambah_siswa', [SiswaController::class, 'form_tambah_siswa']);
-Route::get('/get_kelas_by_jurusan_{id_jurusan}', [SiswaController::class, 'get_kelas_by_jurusan']);
 Route::post('/post_siswa', [SiswaController::class, 'post_siswa']);
 Route::get('/form_edit_siswa_{id}', [SiswaController::class, 'form_edit_siswa']);
 Route::put('/update_siswa_{id}', [SiswaController::class, 'update_siswa']);
