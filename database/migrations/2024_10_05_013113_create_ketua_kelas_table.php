@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('id_siswa')->nullable()->index()->references('id')->on('siswa');
             $table->foreignId('id_kelas')->nullable()->index()->references('id')->on('kelas');
+            $table->string('keterangan')->nullable();
             $table->timestamps();
         });
     }

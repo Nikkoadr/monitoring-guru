@@ -26,7 +26,6 @@ class Ketua_kelasController extends Controller{
             ->select('ketua_kelas.*', 'users.name as nama_ketua_kelas', 'kelas.nama_kelas')
             ->get();
 
-
         return view('ketua_kelas.data_ketua_kelas', compact('data_ketua_kelas'));
     }
 
@@ -39,24 +38,21 @@ class Ketua_kelasController extends Controller{
         $id_kelas = $request->id_kelas;
         $query = $request->q;
 
-        // Ambil data siswa dari tabel 'siswa' yang berelasi dengan tabel 'users'
         $siswa = Siswa::where('id_kelas', $id_kelas)
                     ->whereHas('user', function ($queryBuilder) use ($query) {
                         $queryBuilder->where('name', 'LIKE', "%{$query}%");
                     })
-                    ->with('user:id,name') // Mengambil relasi user dengan kolom id dan name saja
+                    ->with('user:id,name')
                     ->get();
 
-        // Jika tidak ada siswa di kelas yang dipilih
         if ($siswa->isEmpty()) {
             return response()->json(['message' => 'Siswa tidak ada di kelas Anda.'], 404);
         }
 
-        // Return data dalam format JSON dengan ID siswa
         return response()->json($siswa->map(function ($s) {
             return [
-                'id' => $s->id,  // Mengembalikan id dari tabel 'siswa'
-                'name' => $s->user->name,  // Nama dari tabel 'users'
+                'id' => $s->id,
+                'name' => $s->user->name,
             ];
         }));
     }
@@ -65,8 +61,9 @@ class Ketua_kelasController extends Controller{
         $data = [
             'id_kelas' => $request->id_kelas,
             'id_siswa' => $request->id_siswa,
+            'keterangan' => $request->keterangan,
         ];
         DB::table('ketua_kelas')->insert($data);
-        return redirect('/data_ketua_kelas')->with('success', 'Data Berhasilr');
+        return redirect('/data_ketua_kelas')->with('success', 'Data Berhasil Tambah');
     }
 }

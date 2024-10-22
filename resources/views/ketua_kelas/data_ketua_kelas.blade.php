@@ -37,6 +37,7 @@
                                         <th>No</th>
                                         <th>Nama Ketua kelas</th>
                                         <th>Nama Kelas</th>
+                                        <th>Keterangan</th>
                                         <th>Menu</th>
                                     </thead>
                                     <tbody>
@@ -45,6 +46,7 @@
                                             <td>{{ $loop->iteration }}</td>
                                             <td>{{ $ketua_kelas->nama_ketua_kelas }}</td>
                                             <td>{{ $ketua_kelas->nama_kelas }}</td>
+                                            <td>{{ $ketua_kelas->keterangan }}</td>
                                             <td><a href="/form_edit_ketua_kelas_{{ $ketua_kelas->id }}" class="btn btn-info float-right m-1"><i class="fa-solid fa-pen-to-square"></i></a>
                                             <button class="btn btn-danger float-right m-1" onclick="confirmDelete({{ $ketua_kelas->id }})">Hapus</button>
                                             </td>

@@ -46,6 +46,10 @@
                                             <input type="hidden" id="siswa_id" name="id_siswa"> <!-- hidden input untuk menyimpan ID siswa -->
                                             <div id="suggestions" class="autocomplete-list"></div> <!-- untuk menampilkan hasil autocomplete -->
                                         </div>
+                                        <div class="form-grup">
+                                            <label for="keterangan">Keterangan:</label>
+                                            <input type="text" class="form-control" id="keterangan" name="keterangan" placeholder="KM, Bendahara, Sekertaris. Pilih salah satu">
+                                        </div>
 
                                         <button class="btn btn-primary mt-2 float-right" type="submit">Simpan</button>
                                     </form>
