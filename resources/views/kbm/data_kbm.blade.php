@@ -83,10 +83,10 @@
                                                     <a href="/form_edit_kbm_{{ $kbm->id }}" class="btn btn-info m-1"><i class="fa-solid fa-pen-to-square"></i></a>
                                                     <button class="btn btn-danger m-1" onclick="confirmDelete({{ $kbm->id }})"><i class="fa-solid fa-trash-can"></i></button>
                                                 </td>
-                                            @elseif($user->id_role == '3')
+                                            @elseif($user->id_role == '3' || $user->id_role == '2')
                                                 @if ($kbm->jam_keluar == null)
                                                 <td class="text-center">
-                                                <span class="badge badge-warning">Belum Selesai</span>
+                                                <a href="/lihat_presensi_{{ $kbm->id }}" class="btn btn-info m-1"><i class="fa-solid fa-eye"></i></a>
                                                 </td>
                                                 @else
                                                 <td>

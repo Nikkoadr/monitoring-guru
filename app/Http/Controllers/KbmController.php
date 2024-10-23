@@ -40,11 +40,10 @@ class KbmController extends Controller
             ->select('kbm.*', 'mapel.nama_mapel', 'users.name as nama_guru', 'kelas.nama_kelas')
             ->whereDate('kbm.tanggal', $hari_ini)
             ->get();
-    } elseif ($user->id_role == 2) {
+    }elseif ($user->id_role == 3) {
         $guru = DB::table('guru')
             ->where('id_user', $user->id)
             ->first();
-
         if ($guru) {
             $data_kbm = DB::table('kbm')
                 ->join('mapel', 'kbm.id_mapel', '=', 'mapel.id')
@@ -55,28 +54,6 @@ class KbmController extends Controller
                 ->where('kbm.id_guru', $guru->id)
                 ->whereDate('kbm.tanggal', $hari_ini)
                 ->get();
-        } else {
-            $data_kbm = collect();
-        }
-    } elseif ($user->id_role == 3) {
-        $guru = DB::table('guru')
-            ->where('id_user', $user->id)
-            ->first();
-        $wali_kelas = DB::table('walas')
-            ->where('id_guru', $guru->id)
-            ->first();
-        if ($wali_kelas) {
-            $data_kbm = DB::table('kbm')
-                ->join('mapel', 'kbm.id_mapel', '=', 'mapel.id')
-                ->join('guru', 'kbm.id_guru', '=', 'guru.id')
-                ->join('users', 'guru.id_user', '=', 'users.id')
-                ->join('kelas', 'kbm.id_kelas', '=', 'kelas.id')
-                ->select('kbm.*', 'mapel.nama_mapel', 'users.name as nama_guru', 'kelas.nama_kelas')
-                ->where('kbm.id_kelas', $wali_kelas->id_kelas)
-                ->whereDate('kbm.tanggal', $hari_ini)
-                ->get();
-        } else {
-            $data_kbm = collect();
         }
     } elseif ($user->id_role == 4 || $user->id_role == 5) {
         $siswa = DB::table('siswa')
