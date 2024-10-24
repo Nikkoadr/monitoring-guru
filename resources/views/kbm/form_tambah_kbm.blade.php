@@ -53,7 +53,7 @@
                                         <option value="5">5</option>
                                     </select>
                                     <label class="form-label" for="id_kelas">Kelas:</label>
-                                    @if (Gate::allows('km_kelas'))
+                                    @if ($isKmKelas)
                                         <select class="form-control" name="id_kelas" id="id_kelas">
                                             <option value="{{ $data_kelas->id }}">{{ $data_kelas->nama_kelas }}</option>
                                         </select>

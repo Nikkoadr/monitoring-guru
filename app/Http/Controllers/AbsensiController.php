@@ -26,9 +26,14 @@ class AbsensiController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function presensi_siswa($id)
-    {
-        if (Gate::allows('siswa'||'km_kelas')) {
+    public function presensi_siswa($id){
+        $user = Auth::user();
+        $isKmKelas = DB::table('ketua_kelas')
+        ->join('siswa', 'ketua_kelas.id_siswa', '=', 'siswa.id')
+        ->where('siswa.id_user', $user->id)
+        ->exists();
+        
+        if (Gate::allows('siswa') || $isKmKelas) {
             $user = Auth::user();
             $data_kbm = DB::table('kbm')->where('id', $id)->first();
             $kelas = DB::table('kelas')->where('id', $data_kbm->id_kelas)->first();
@@ -92,4 +97,8 @@ class AbsensiController extends Controller
         return redirect('/kbm')->with('success', 'Presensi Anda Berhasil');
     }
 
+    public function lihat_presensi_siswa($id){
+
+
+}
 }

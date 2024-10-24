@@ -86,10 +86,14 @@ class KbmController extends Controller
 
     public function form_tambah_kbm() {
         $user = Auth::user();
+        $isKmKelas = DB::table('ketua_kelas')
+        ->join('siswa', 'ketua_kelas.id_siswa', '=', 'siswa.id')
+        ->where('siswa.id_user', $user->id)
+        ->exists();
         $tanggal_sekarang = Carbon::now()->format('Y-m-d');
         $jam_sekarang = Carbon::now()->format('H:i');
 
-        if (Gate::allows('km_kelas')) {
+        if ($isKmKelas) {
             $data_kelas = DB::table('kelas')
                 ->join('siswa', 'kelas.id', '=', 'siswa.id_kelas')
                 ->select('kelas.*')
@@ -98,7 +102,7 @@ class KbmController extends Controller
 
             $data_mapel = DB::table('mapel')->get();
 
-            return view('kbm.form_tambah_kbm', compact('user', 'data_kelas','data_mapel', 'tanggal_sekarang', 'jam_sekarang'));
+            return view('kbm.form_tambah_kbm', compact('user', 'data_kelas','data_mapel', 'tanggal_sekarang', 'jam_sekarang','isKmKelas'));
 
         } elseif (Gate::allows('admin')) {
             $data_kelas = DB::table('kelas')->get();
@@ -145,12 +149,12 @@ class KbmController extends Controller
 
 public function tambah_kbm(Request $request) {
     $request->validate([
-        'jam_masuk' => 'required',
         'tanggal' => 'required',
+        'jam_masuk' => 'required',
+        'jam_ke' => 'required',
         'id_mapel' => 'required',
         'id_guru' => 'required',
         'id_kelas' => 'required',
-        'jam_ke' => 'required',
         'foto_masuk' => 'required',
         'keterangan' => 'required',
     ]);

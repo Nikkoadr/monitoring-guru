@@ -25,6 +25,16 @@ class Ketua_kelasController extends Controller{
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function index(){
+        $user = Auth::user();
+        $isKmKelas = DB::table('ketua_kelas')
+                ->join('siswa', 'ketua_kelas.id_siswa', '=', 'siswa.id')
+                ->where('siswa.id_user', $user->id)
+                ->exists();
+
+        $isWalas = DB::table('walas')
+                    ->join('guru', 'walas.id_guru', '=', 'guru.id')
+                    ->where('guru.id_user', $user->id)
+                    ->exists();
         if (Gate::allows('admin')) {
             $data_ketua_kelas = DB::table('ketua_kelas')
                 ->join('siswa', 'ketua_kelas.id_siswa', '=', 'siswa.id')
@@ -34,9 +44,9 @@ class Ketua_kelasController extends Controller{
                 ->get();
             return view('ketua_kelas.data_ketua_kelas', compact('data_ketua_kelas'));
 
-        } elseif (Gate::allows('walas')) {
+        } elseif ($isWalas) {
             $session = Auth::user()->id;
-            $kelasWalas = DB::table('walas')
+            $kelas_yang_diampu = DB::table('walas')
                 ->join('guru', 'walas.id_guru', '=', 'guru.id')
                 ->join('users', 'guru.id_user', '=', 'users.id')
                 ->join('kelas', 'walas.id_kelas', '=', 'kelas.id')
@@ -44,12 +54,12 @@ class Ketua_kelasController extends Controller{
                 ->select('kelas.id', 'kelas.nama_kelas')
                 ->first();
 
-            if ($kelasWalas) {
+            if ($kelas_yang_diampu) {
                 $data_ketua_kelas = DB::table('ketua_kelas')
                     ->join('siswa', 'ketua_kelas.id_siswa', '=', 'siswa.id')
                     ->join('users', 'siswa.id_user', '=', 'users.id')
                     ->join('kelas', 'siswa.id_kelas', '=', 'kelas.id')
-                    ->where('kelas.id', $kelasWalas->id)
+                    ->where('kelas.id', $kelas_yang_diampu->id)
                     ->select('ketua_kelas.*', 'users.name as nama_ketua_kelas', 'kelas.nama_kelas')
                     ->get();
 

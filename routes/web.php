@@ -36,6 +36,7 @@ Route::post('/tambah_kbm', [KbmController::class, 'tambah_kbm']);
 Route::get('/form_selesai_kbm_{id}', [KbmController::class, 'form_selesai_kbm']);
 Route::put('/update_selesai_kbm_{id}', [KbmController::class, 'update_selesai_kbm']);
 Route::get('/hapus_kbm_{id}', [KbmController::class, 'hapus_kbm']);
+
 Route::get('/presensi_siswa_{id}', [AbsensiController::class, 'presensi_siswa']);
 Route::post('/tambah_presensi', [AbsensiController::class, 'tambah_presensi']);
 
