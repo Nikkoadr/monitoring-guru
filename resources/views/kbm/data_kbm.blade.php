@@ -29,7 +29,7 @@
                         <div class="card">
                             <div class="card-header">
                                 <h3 class="card-title">Data Kegiatan Belajar Mengajar</h3>
-                                @if($user->id_role == '1' || $user->id_role == '4')
+                                @if($user->id_role == '1' || $isKmKelas)
                                 <a href="/form_tambah_kbm" class="btn btn-primary float-right">Tambah KBM</a>
                                 @endif
                             </div>
@@ -83,7 +83,7 @@
                                                     <a href="/form_edit_kbm_{{ $kbm->id }}" class="btn btn-info m-1"><i class="fa-solid fa-pen-to-square"></i></a>
                                                     <button class="btn btn-danger m-1" onclick="confirmDelete({{ $kbm->id }})"><i class="fa-solid fa-trash-can"></i></button>
                                                 </td>
-                                            @elseif($user->id_role == '3' || $user->id_role == '2')
+                                            @elseif($user->id_role == '2' || $isWalas)
                                                 @if ($kbm->jam_keluar == null)
                                                 <td class="text-center">
                                                 <a href="/lihat_presensi_{{ $kbm->id }}" class="btn btn-info m-1"><i class="fa-solid fa-eye"></i></a>
@@ -93,7 +93,7 @@
                                                     <span class="badge badge-success">Selesai</span>
                                                 </td>
                                                 @endif
-                                            @elseif($user->id_role == '4')
+                                            @elseif($isKmKelas)
                                                 @if ($kbm->jam_keluar == null)
                                                 <td class="text-center">
                                                     <a href="/presensi_siswa_{{ $kbm->id }}" class=" btn btn-info m-1"><i class="fa-solid fa-hand-point-up"></i></i></a>
@@ -104,7 +104,7 @@
                                                     <span class="badge badge-success">Selesai</span>
                                                 </td>
                                                 @endif
-                                            @elseif($user->id_role == '5')
+                                            @elseif($user->id_role == '4')
                                                 @if ($kbm->jam_keluar == null)
                                                 <td class="text-center">
                                                     <a href="/absen_kbm_{{ $kbm->id }}" class=" btn btn-info m-1"><i class="fa-solid fa-hand-point-up"></i></i></a>

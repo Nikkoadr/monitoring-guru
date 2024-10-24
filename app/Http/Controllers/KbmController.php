@@ -30,6 +30,16 @@ class KbmController extends Controller
     public function index()
 {
     $user = Auth::user();
+    $isKmKelas = DB::table('ketua_kelas')
+            ->join('siswa', 'ketua_kelas.id_siswa', '=', 'siswa.id')
+            ->where('siswa.id_user', $user->id)
+            ->exists();
+
+    $isWalas = DB::table('walas')
+                ->join('guru', 'walas.id_guru', '=', 'guru.id')
+                ->where('guru.id_user', $user->id)
+                ->exists();
+
     $hari_ini = now()->toDateString();
     if ($user->id_role == 1) {
         $data_kbm = DB::table('kbm')
@@ -40,7 +50,7 @@ class KbmController extends Controller
             ->select('kbm.*', 'mapel.nama_mapel', 'users.name as nama_guru', 'kelas.nama_kelas')
             ->whereDate('kbm.tanggal', $hari_ini)
             ->get();
-    }elseif ($user->id_role == 3) {
+    }elseif ($user->id_role == 2) {
         $guru = DB::table('guru')
             ->where('id_user', $user->id)
             ->first();
@@ -55,7 +65,7 @@ class KbmController extends Controller
                 ->whereDate('kbm.tanggal', $hari_ini)
                 ->get();
         }
-    } elseif ($user->id_role == 4 || $user->id_role == 5) {
+    } elseif ($user->id_role == 4 || $isKmKelas) {
         $siswa = DB::table('siswa')
             ->where('id_user', $user->id)
             ->first();
@@ -69,14 +79,9 @@ class KbmController extends Controller
                 ->where('kbm.id_kelas', $siswa->id_kelas)
                 ->whereDate('kbm.tanggal', $hari_ini)
                 ->get();
-        } else {
-            $data_kbm = collect();
         }
-    } else {
-        $data_kbm = collect();
     }
-
-    return view('kbm.data_kbm', compact('data_kbm','user'));
+    return view('kbm.data_kbm', compact('data_kbm','user','isKmKelas','isWalas'));
 }
 
     public function form_tambah_kbm() {

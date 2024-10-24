@@ -29,14 +29,11 @@ class DatabaseSeeder extends Seeder
         ]);
 
         Role::create([
-            'nama_role' => 'Wali Kelas',
+            'nama_role' => 'Guru',
         ]);
 
         Role::create([
-            'nama_role' => 'Guru Mapel',
-        ]);
-        Role::create([
-            'nama_role' => 'Ketua Kelas',
+            'nama_role' => 'Karyawan',
         ]);
         Role::create([
             'nama_role' => 'Siswa',
