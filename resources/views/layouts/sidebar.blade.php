@@ -143,7 +143,7 @@
                 @endphp
                 @if($isWalas)
                 <li class="nav-item menu-open">
-                    <a href="" class="nav-link {{ in_array(request()->path(), ['data_guru', 'data_user', 'data_mapel', 'data_role', 'data_jurusan', 'data_kelas', 'data_siswa', 'data_ketua_kelas', 'data_walas']) ? 'active' : '' }}">
+                    <a href="" class="nav-link {{ in_array(request()->path(), ['data_guru', 'data_user', 'data_mapel', 'data_role', 'data_jurusan', 'data_kelas', 'data_siswa', 'data_ketua_kelas', 'data_walas', 'data_ketua_kelas', 'data_walas']) ? 'active' : '' }}">
                     <i class="nav-icon fas fa-database"></i>
                     <p>
                         Database
