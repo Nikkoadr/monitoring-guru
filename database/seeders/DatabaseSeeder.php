@@ -3,16 +3,9 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\Jurusan;
-use App\Models\Kelas;
 use App\Models\Role;
-use App\Models\Siswa;
-use App\Models\Guru;
-use App\Models\Guru_mapel;
-use App\Models\Kbm;
-use App\Models\Mapel;
 use App\Models\Status_hadir;
 
 class DatabaseSeeder extends Seeder

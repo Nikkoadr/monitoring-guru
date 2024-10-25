@@ -16,6 +16,7 @@ return new class extends Migration
             $table->date('tanggal')->nullable();
             $table->foreignId('id_kbm')->nullable()->index()->references('id')->on('kbm');
             $table->foreignId('id_siswa')->nullable()->index()->references('id')->on('siswa');
+            $table->foreignId('id_kelas')->nullable()->index()->references('id')->on('kelas');
             $table->foreignId('id_status_hadir')->nullable()->index()->references('id')->on('status_hadir');
             $table->string('jam_hadir')->nullable();
             $table->string('foto')->nullable();

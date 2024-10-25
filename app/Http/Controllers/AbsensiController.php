@@ -70,35 +70,71 @@ class AbsensiController extends Controller
         $tanggal_sekarang = Carbon::now()->format('Y-m-d');
         $jam_sekarang = Carbon::now()->format('H:i');
 
+        // Cek apakah siswa sudah absen pada id_kbm ini
+        $absensiExists = DB::table('absensi_siswa')
+            ->where('id_siswa', $siswa->id)
+            ->where('id_kbm', $request->id_kbm)
+            ->exists();
+
+        if ($absensiExists) {
+            return redirect('/kbm')->with('error', 'Anda sudah melakukan absensi pada mata pelajaran ini.');
+        }
+
         [$latitudeUser, $longitudeUser] = explode(",", $request->lokasi);
         $radius = round($this->distance(
-        -6.362998, 108.113522, 
-        $latitudeUser, $longitudeUser
+            -6.362998, 108.113522, 
+            $latitudeUser, $longitudeUser
         )["meters"]);
 
         if ($radius > 100) {
             return redirect('/kbm')->with('error', 'Jarak Anda terlalu jauh dari Sekolah');
-        }
+        } else {
             $data = [
-            'tanggal' => $tanggal_sekarang,
-            'id_siswa' => $siswa->id,
-            'id_kbm' => $request->id_kbm,
-            'id_status_hadir' => 1,
-            'jam_hadir' => $jam_sekarang,
-            'lokasi' => $request->lokasi,
-        ];
+                'tanggal' => $tanggal_sekarang,
+                'id_siswa' => $siswa->id,
+                'id_kbm' => $request->id_kbm,
+                'id_kelas' => $request->id_kelas,
+                'id_status_hadir' => 1,
+                'jam_hadir' => $jam_sekarang,
+                'lokasi' => $request->lokasi,
+            ];
+
             if ($request->has('foto')) {
-            $foto_base64 = base64_decode(explode("base64,", $request->foto)[1]);
-            $nama_foto = uniqid() . '.png';
-            Storage::disk(env('STORAGE_DISK'))->put('foto_absensi_siswa/' . $nama_foto, $foto_base64);
-            $data['foto'] = $nama_foto;
+                $foto_base64 = base64_decode(explode("base64,", $request->foto)[1]);
+                $nama_foto = uniqid() . '.png';
+                Storage::disk(env('STORAGE_DISK'))->put('foto_absensi_siswa/' . $nama_foto, $foto_base64);
+                $data['foto'] = $nama_foto;
+            }
+
+            DB::table('absensi_siswa')->insert($data);
         }
-        DB::table('absensi_siswa')->insert($data);
+
         return redirect('/kbm')->with('success', 'Presensi Anda Berhasil');
     }
 
     public function lihat_presensi_siswa($id){
+        // Dapatkan kelas dari absensi_siswa berdasarkan id_kbm
+        $kelasId = DB::table('absensi_siswa')->where('id_kbm', $id)->value('id_kelas');
 
+        $data_absensi = DB::table('siswa')
+            ->join('users', 'siswa.id_user', '=', 'users.id')
+            ->join('kelas', 'siswa.id_kelas', '=', 'kelas.id')
+            ->leftJoin('absensi_siswa', function($join) use ($id) {
+                $join->on('siswa.id', '=', 'absensi_siswa.id_siswa')
+                    ->where('absensi_siswa.id_kbm', $id);
+            })
+            ->leftJoin('status_hadir', 'absensi_siswa.id_status_hadir', '=', 'status_hadir.id')
+            ->where('siswa.id_kelas', $kelasId) // Filter siswa berdasarkan kelas yang dipilih
+            ->select(
+                'absensi_siswa.*', // Semua kolom dari tabel absensi_siswa
+                'users.name as nama_siswa', // Kolom name dari tabel users
+                'kelas.nama_kelas', // Kolom nama_kelas dari tabel kelas
+                DB::raw('IFNULL(status_hadir.status_hadir, "Tidak Hadir") as status_hadir'), // Status default jika null
+                DB::raw('IFNULL(absensi_siswa.foto, "default.jpeg") as foto'), // Foto default jika null
+                DB::raw('IFNULL(absensi_siswa.jam_hadir, "00:00:00") as jam_hadir') // Jam hadir default jika null
+            )
+            ->get();
 
-}
+        return view('absensi.lihat_presensi_siswa', compact('data_absensi'));
+    }
 }

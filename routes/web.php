@@ -39,6 +39,7 @@ Route::get('/hapus_kbm_{id}', [KbmController::class, 'hapus_kbm']);
 
 Route::get('/presensi_siswa_{id}', [AbsensiController::class, 'presensi_siswa']);
 Route::post('/tambah_presensi', [AbsensiController::class, 'tambah_presensi']);
+Route::get('/lihat_presensi_siswa_{id}', [AbsensiController::class, 'lihat_presensi_siswa']);
 
 Route::get('/data_role', [RoleController::class, 'index']);
 Route::get('/form_tambah_role', [RoleController::class, 'form_tambah_role']);

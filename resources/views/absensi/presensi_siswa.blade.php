@@ -64,6 +64,7 @@
                                     <form action="/tambah_presensi" method="post">
                                     @csrf
                                     <input type="hidden" name="id_kbm" value="{{ $data_kbm->id }}">
+                                    <input type="hidden" name="id_kelas" id="id_kelas" value="{{ $data_kbm->id_kelas }}" required>
                                     <input type="hidden" name="foto" id="foto_data" required>
                                     <input type="hidden" name="lokasi" id="lokasi" required>
                                     <button class="btn btn-primary mt-2 float-right" type="submit">Absen</button>

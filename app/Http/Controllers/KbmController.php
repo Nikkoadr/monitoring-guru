@@ -93,7 +93,11 @@ class KbmController extends Controller
         $tanggal_sekarang = Carbon::now()->format('Y-m-d');
         $jam_sekarang = Carbon::now()->format('H:i');
 
-        if ($isKmKelas) {
+        if(Gate::allows('admin')) {
+            $data_kelas = DB::table('kelas')->get();
+            $data_mapel = DB::table('mapel')->get();
+            return view('kbm.form_tambah_kbm', compact('user', 'data_kelas', 'data_mapel', 'tanggal_sekarang', 'jam_sekarang','isKmKelas'));
+        }elseif ($isKmKelas) {
             $data_kelas = DB::table('kelas')
                 ->join('siswa', 'kelas.id', '=', 'siswa.id_kelas')
                 ->select('kelas.*')
@@ -101,14 +105,7 @@ class KbmController extends Controller
                 ->first();
 
             $data_mapel = DB::table('mapel')->get();
-
             return view('kbm.form_tambah_kbm', compact('user', 'data_kelas','data_mapel', 'tanggal_sekarang', 'jam_sekarang','isKmKelas'));
-
-        } elseif (Gate::allows('admin')) {
-            $data_kelas = DB::table('kelas')->get();
-            $data_mapel = DB::table('mapel')->get();
-
-            return view('kbm.form_tambah_kbm', compact('user', 'data_kelas', 'data_mapel', 'tanggal_sekarang', 'jam_sekarang'));
         }
     }
 
