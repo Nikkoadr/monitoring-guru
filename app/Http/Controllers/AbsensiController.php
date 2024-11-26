@@ -113,9 +113,13 @@ class AbsensiController extends Controller
     }
 
     public function lihat_presensi_siswa($id){
-        // Dapatkan kelas dari absensi_siswa berdasarkan id_kbm
-        $kelasId = DB::table('absensi_siswa')->where('id_kbm', $id)->value('id_kelas');
+    $id_kelas = DB::table('kbm')
+        ->where('id', $id)
+        ->value('id_kelas');
 
+    if (!$id_kelas) {
+        return redirect()->back()->with('error', 'Kelas tidak ditemukan.');
+    }
         $data_absensi = DB::table('siswa')
             ->join('users', 'siswa.id_user', '=', 'users.id')
             ->join('kelas', 'siswa.id_kelas', '=', 'kelas.id')
@@ -124,14 +128,14 @@ class AbsensiController extends Controller
                     ->where('absensi_siswa.id_kbm', $id);
             })
             ->leftJoin('status_hadir', 'absensi_siswa.id_status_hadir', '=', 'status_hadir.id')
-            ->where('siswa.id_kelas', $kelasId) // Filter siswa berdasarkan kelas yang dipilih
+            ->where('siswa.id_kelas', $id_kelas)
             ->select(
-                'absensi_siswa.*', // Semua kolom dari tabel absensi_siswa
-                'users.name as nama_siswa', // Kolom name dari tabel users
-                'kelas.nama_kelas', // Kolom nama_kelas dari tabel kelas
-                DB::raw('IFNULL(status_hadir.status_hadir, "Tidak Hadir") as status_hadir'), // Status default jika null
-                DB::raw('IFNULL(absensi_siswa.foto, "default.jpeg") as foto'), // Foto default jika null
-                DB::raw('IFNULL(absensi_siswa.jam_hadir, "00:00:00") as jam_hadir') // Jam hadir default jika null
+                'absensi_siswa.*',
+                'users.name as nama_siswa',
+                'kelas.nama_kelas',
+                DB::raw('IFNULL(status_hadir.status_hadir, "Tidak Hadir") as status_hadir'),
+                DB::raw('IFNULL(absensi_siswa.foto, "default.jpeg") as foto'),
+                DB::raw('IFNULL(absensi_siswa.jam_hadir, "00:00:00") as jam_hadir')
             )
             ->get();
 

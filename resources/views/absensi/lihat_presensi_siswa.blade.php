@@ -50,7 +50,14 @@
                                             <td><img width="100px" src="{{ asset('/storage/foto_absensi_siswa/'.$absensi->foto) }}" alt="foto_presensi"></td>
                                             <td>{{ $absensi->jam_hadir }}</td>
                                             <td>{{ $absensi->status_hadir }}</td>
-                                            <td></td>
+                                            <td>
+                                                <button class="btn btn-success float-right m-1" ">Hadir</button>
+                                                <button class="btn btn-info float-right m-1" ">Alfa</button>
+                                                <button class="btn btn-primary float-right m-1" ">Izin</button>
+                                                <button class="btn btn-warning float-right m-1" ">Sakit</button>
+                                                <button class="btn btn-danger float-right m-1" ">Bolos</button>
+                                                
+                                            </td>
                                         </th>
                                         @endforeach
                                         
