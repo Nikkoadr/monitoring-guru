@@ -43,7 +43,7 @@
                                     </thead>
                                     <tbody>
                                         @foreach ($data_absensi as $absensi)
-                                            <tr>
+                                        <tr>
                                             <td>{{ $loop->iteration }}</td>
                                             <td>{{ $absensi->nama_kelas }}</td>
                                             <td>{{ $absensi->nama_siswa }}</td>
@@ -51,16 +51,16 @@
                                             <td>{{ $absensi->jam_hadir }}</td>
                                             <td>{{ $absensi->status_hadir }}</td>
                                             <td>
-                                                <button class="btn btn-success float-right m-1" ">Hadir</button>
-                                                <button class="btn btn-info float-right m-1" ">Alfa</button>
-                                                <button class="btn btn-primary float-right m-1" ">Izin</button>
-                                                <button class="btn btn-warning float-right m-1" ">Sakit</button>
-                                                <button class="btn btn-danger float-right m-1" ">Bolos</button>
-                                                
+                                                <select class="form-select form-control status-selector" data-id="{{ $absensi->id }}">
+                                                    <option value="1" {{ $absensi->status_hadir === 'Hadir' ? 'selected' : '' }}>Hadir</option>
+                                                    <option value="2" {{ $absensi->status_hadir === 'Alfa' ? 'selected' : '' }}>Alfa</option>
+                                                    <option value="3" {{ $absensi->status_hadir === 'Izin' ? 'selected' : '' }}>Izin</option>
+                                                    <option value="4" {{ $absensi->status_hadir === 'Sakit' ? 'selected' : '' }}>Sakit</option>
+                                                    <option value="5" {{ $absensi->status_hadir === 'Bolos' ? 'selected' : '' }}>Bolos</option>
+                                                </select>
                                             </td>
                                         </th>
                                         @endforeach
-                                        
                                     </tbody>
                                 </table>
                             </div>
@@ -133,5 +133,46 @@ $("#table_presensi_siswa").DataTable({
             }
         });
     }
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const selectors = document.querySelectorAll('.status-selector');
+
+    selectors.forEach(selector => {
+        selector.addEventListener('change', function () {
+            const id_siswa = selector.getAttribute('data-id');
+            const id_status_hadir = this.value;
+            console.log('absensi_siswa_id:', id_siswa);
+            console.log('New Status:', id_status_hadir);
+
+            // Kirim data ke server menggunakan fetch
+            fetch('/update-status-absensi', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                },
+                body: JSON.stringify({
+                    id_siswa: id_siswa,
+                    id_status_hadir: id_status_hadir
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Gagal memperbarui status');
+                }
+                return response.json();
+            })
+            .then(data => {
+                alert(data.message);
+            })
+            .catch(error => {
+                console.error('Terjadi kesalahan:', error);
+                alert('Gagal memperbarui status. Silakan coba lagi.');
+            });
+        });
+    });
+});
 </script>
 @endsection

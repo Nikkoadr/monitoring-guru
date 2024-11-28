@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Absensi_siswa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -117,9 +118,6 @@ class AbsensiController extends Controller
         ->where('id', $id)
         ->value('id_kelas');
 
-    if (!$id_kelas) {
-        return redirect()->back()->with('error', 'Kelas tidak ditemukan.');
-    }
         $data_absensi = DB::table('siswa')
             ->join('users', 'siswa.id_user', '=', 'users.id')
             ->join('kelas', 'siswa.id_kelas', '=', 'kelas.id')
@@ -138,7 +136,22 @@ class AbsensiController extends Controller
                 DB::raw('IFNULL(absensi_siswa.jam_hadir, "00:00:00") as jam_hadir')
             )
             ->get();
-
+            dd($data_absensi);
         return view('absensi.lihat_presensi_siswa', compact('data_absensi'));
     }
+
+    public function updateStatus(Request $request) {
+    $request->validate([
+        'id' => 'required|integer',
+        'status_hadir' => 'required|string',
+    ]);
+    dd($request->all());
+
+    $absensi = Absensi_siswa::findOrFail($request->id);
+    $absensi->status_hadir = $request->status_hadir;
+    $absensi->save();
+
+    return response()->json(['message' => 'Status berhasil diperbarui.']);
+}
+
 }

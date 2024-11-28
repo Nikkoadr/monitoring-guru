@@ -25,6 +25,7 @@ Auth::routes(['register' => false]);
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/get_user', [GuruController::class, 'get_user']); //search users menggunakan ajax
 Route::get('/get_guru', [MapelController::class, 'get_guru']);//search guru menggunakan ajax
+Route::post('/update-status-absensi', [AbsensiController::class, 'updateStatus']);
 Route::get('/get_kelas_by_jurusan_{id_jurusan}', [SiswaController::class, 'get_kelas_by_jurusan']);
 
 Route::get('/kbm', [KbmController::class, 'index']);

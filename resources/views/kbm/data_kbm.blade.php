@@ -80,6 +80,7 @@
                                             
                                             @if($user->id_role == '1')
                                                 <td class="text-center">
+                                                    <a href="/lihat_presensi_siswa_{{ $kbm->id }}" class="btn btn-info m-1"><i class="fa-solid fa-eye"></i></a>
                                                     <a href="/form_edit_kbm_{{ $kbm->id }}" class="btn btn-info m-1"><i class="fa-solid fa-pen-to-square"></i></a>
                                                     <button class="btn btn-danger m-1" onclick="confirmDelete({{ $kbm->id }})"><i class="fa-solid fa-trash-can"></i></button>
                                                 </td>
