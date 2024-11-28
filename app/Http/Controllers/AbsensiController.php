@@ -129,29 +129,53 @@ class AbsensiController extends Controller
             ->where('siswa.id_kelas', $id_kelas)
             ->select(
                 'absensi_siswa.*',
+                'siswa.id as id_siswa',
                 'users.name as nama_siswa',
                 'kelas.nama_kelas',
-                DB::raw('IFNULL(status_hadir.status_hadir, "Tidak Hadir") as status_hadir'),
+                DB::raw('IFNULL(status_hadir.status_hadir, "Alfa") as status_hadir'),
                 DB::raw('IFNULL(absensi_siswa.foto, "default.jpeg") as foto'),
-                DB::raw('IFNULL(absensi_siswa.jam_hadir, "00:00:00") as jam_hadir')
+                DB::raw('IFNULL(absensi_siswa.jam_hadir, "00:00:00") as jam_hadir'),
+
             )
             ->get();
-            dd($data_absensi);
-        return view('absensi.lihat_presensi_siswa', compact('data_absensi'));
+        return view('absensi.lihat_presensi_siswa', compact('data_absensi', 'id_kelas','id'));
     }
 
-    public function updateStatus(Request $request) {
+public function updateStatus(Request $request)
+{
     $request->validate([
-        'id' => 'required|integer',
-        'status_hadir' => 'required|string',
+        'id_kbm' => 'required|integer',
+        'id_kelas' => 'required|integer',
+        'id_siswa' => 'required|integer',
+        'id_status_hadir' => 'required|integer',
     ]);
-    dd($request->all());
 
-    $absensi = Absensi_siswa::findOrFail($request->id);
-    $absensi->status_hadir = $request->status_hadir;
-    $absensi->save();
+    // Cari atau buat data absensi
+    $absensi = Absensi_siswa::updateOrCreate(
+        [
+            'id_kbm' => $request->id_kbm,
+            'id_siswa' => $request->id_siswa,
+        ],
+        [
+            'id_kelas' => $request->id_kelas,
+            'id_status_hadir' => $request->id_status_hadir,
+            'jam_hadir' => now()->format('H:i:s'),
+            'tanggal' => now()->format('Y-m-d'),
+        ]
+    );
 
-    return response()->json(['message' => 'Status berhasil diperbarui.']);
+    $status_hadir = DB::table('status_hadir')
+        ->where('id', $request->id_status_hadir)
+        ->value('status_hadir');
+
+    $status_hadir = $status_hadir ?? 'Status Tidak Diketahui';
+
+    return response()->json([
+        'message' => 'Status berhasil disimpan atau diperbarui.',
+        'jam_hadir' => $absensi->jam_hadir,
+        'status_hadir' => $status_hadir,
+    ]);
 }
+
 
 }

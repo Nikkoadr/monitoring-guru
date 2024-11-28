@@ -48,15 +48,15 @@
                                             <td>{{ $absensi->nama_kelas }}</td>
                                             <td>{{ $absensi->nama_siswa }}</td>
                                             <td><img width="100px" src="{{ asset('/storage/foto_absensi_siswa/'.$absensi->foto) }}" alt="foto_presensi"></td>
-                                            <td>{{ $absensi->jam_hadir }}</td>
-                                            <td>{{ $absensi->status_hadir }}</td>
+                                            <td class="jam-hadir">{{ $absensi->jam_hadir }}</td>
+                                            <td class="status-hadir">{{ $absensi->status_hadir }}</td>
                                             <td>
-                                                <select class="form-select form-control status-selector" data-id="{{ $absensi->id }}">
-                                                    <option value="1" {{ $absensi->status_hadir === 'Hadir' ? 'selected' : '' }}>Hadir</option>
-                                                    <option value="2" {{ $absensi->status_hadir === 'Alfa' ? 'selected' : '' }}>Alfa</option>
-                                                    <option value="3" {{ $absensi->status_hadir === 'Izin' ? 'selected' : '' }}>Izin</option>
-                                                    <option value="4" {{ $absensi->status_hadir === 'Sakit' ? 'selected' : '' }}>Sakit</option>
-                                                    <option value="5" {{ $absensi->status_hadir === 'Bolos' ? 'selected' : '' }}>Bolos</option>
+                                                <select class="form-select form-control status-selector" data-id_siswa="{{ $absensi->id_siswa }}">
+                                                    <option value="2" {{ $absensi->id_status_hadir == 2 ? 'selected' : '' }}>Alfa</option>
+                                                    <option value="1" {{ $absensi->id_status_hadir == 1 ? 'selected' : '' }}>Hadir</option>
+                                                    <option value="3" {{ $absensi->id_status_hadir == 3 ? 'selected' : '' }}>Izin</option>
+                                                    <option value="4" {{ $absensi->id_status_hadir == 4 ? 'selected' : '' }}>Sakit</option>
+                                                    <option value="5" {{ $absensi->id_status_hadir == 5 ? 'selected' : '' }}>Bolos</option>
                                                 </select>
                                             </td>
                                         </th>
@@ -141,10 +141,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
     selectors.forEach(selector => {
         selector.addEventListener('change', function () {
-            const id_siswa = selector.getAttribute('data-id');
+            const id_kbm = '{{ $id }}'; // Pastikan id_kbm dikirim dari controller ke view
+            const id_kelas = '{{ $id_kelas }}'; // Pastikan id_kbm dikirim dari controller ke view
+            const id_siswa = this.getAttribute('data-id_siswa');
             const id_status_hadir = this.value;
-            console.log('absensi_siswa_id:', id_siswa);
-            console.log('New Status:', id_status_hadir);
+
+            console.log('id_kbm:', id_kbm);
+            console.log('id_kelas:', id_kelas);
+            console.log('id_siswa:', id_siswa);
+            console.log('id_status_hadir:', id_status_hadir);
 
             // Kirim data ke server menggunakan fetch
             fetch('/update-status-absensi', {
@@ -154,6 +159,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     'X-CSRF-TOKEN': '{{ csrf_token() }}',
                 },
                 body: JSON.stringify({
+                    id_kbm: id_kbm,
+                    id_kelas: id_kelas,
                     id_siswa: id_siswa,
                     id_status_hadir: id_status_hadir
                 })
@@ -165,11 +172,39 @@ document.addEventListener('DOMContentLoaded', function () {
                 return response.json();
             })
             .then(data => {
-                alert(data.message);
+                var Toast = Swal.mixin({
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 5000
+                    });
+                        Toast.fire({
+                        icon: 'success',
+                        title: 'Absensi berhasil diperbarui'
+                        })
+
+                // Perbarui kolom terkait di baris yang sama
+                const row = selector.closest('tr'); // Cari baris tabel terkait
+                const jamHadirCell = row.querySelector('.jam-hadir'); // Kolom jam hadir
+                const statusHadirCell = row.querySelector('.status-hadir'); // Kolom status hadir
+
+                // Perbarui teks berdasarkan respons
+                if (jamHadirCell) {
+                    jamHadirCell.textContent = data.jam_hadir; // Update jam hadir
+                }
+                if (statusHadirCell) {
+                    statusHadirCell.textContent = data.status_hadir; // Update status hadir
+                }
             })
             .catch(error => {
                 console.error('Terjadi kesalahan:', error);
-                alert('Gagal memperbarui status. Silakan coba lagi.');
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal',
+                    text: 'Gagal memperbarui status. Silakan coba lagi.',
+                    timer: 2000,
+                    showConfirmButton: false
+                });
             });
         });
     });
