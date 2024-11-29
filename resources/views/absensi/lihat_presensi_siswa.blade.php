@@ -39,7 +39,7 @@
                                         <th>Foto</th>
                                         <th>Jam Masuk</th>
                                         <th>Status</th>
-                                        <th>Menu</th>
+                                        <th class="text-center" >Menu</th>
                                     </thead>
                                     <tbody>
                                         @foreach ($data_absensi as $absensi)
@@ -51,15 +51,20 @@
                                             <td class="jam-hadir">{{ $absensi->jam_hadir }}</td>
                                             <td class="status-hadir">{{ $absensi->status_hadir }}</td>
                                             <td>
-                                                <select class="form-select form-control status-selector" data-id_siswa="{{ $absensi->id_siswa }}">
-                                                    <option value="2" {{ $absensi->id_status_hadir == 2 ? 'selected' : '' }}>Alfa</option>
-                                                    <option value="1" {{ $absensi->id_status_hadir == 1 ? 'selected' : '' }}>Hadir</option>
-                                                    <option value="3" {{ $absensi->id_status_hadir == 3 ? 'selected' : '' }}>Izin</option>
-                                                    <option value="4" {{ $absensi->id_status_hadir == 4 ? 'selected' : '' }}>Sakit</option>
-                                                    <option value="5" {{ $absensi->id_status_hadir == 5 ? 'selected' : '' }}>Bolos</option>
+                                            <form action="/update_status_absensi" method="POST" id="form_{{ $absensi->id_siswa }}">
+                                                @csrf
+                                                <input type="hidden" name="id_kbm" value="{{ $id }}">
+                                                <input type="hidden" name="id_kelas" value="{{ $id_kelas }}">
+                                                <input type="hidden" name="id_siswa" value="{{ $absensi->id_siswa }}">
+                                                <select name="id_status_hadir" class="form-control" id="id_status_hadir_{{ $absensi->id_siswa }}" onchange="this.form.submit()">
+                                                    <option value="" {{ $absensi->id_status_hadir == null ? 'selected' : '' }}>Pilih Status Hadir</option>
+                                                    @foreach ($status_hadir as $status)
+                                                        <option value="{{ $status->id }}" {{ $absensi->id_status_hadir == $status->id ? 'selected' : '' }}>{{ $status->status_hadir }}</option>
+                                                    @endforeach
                                                 </select>
+                                            </form>
                                             </td>
-                                        </th>
+                                        </tr>
                                         @endforeach
                                     </tbody>
                                 </table>
@@ -116,6 +121,7 @@ $("#table_presensi_siswa").DataTable({
         })
     @endif
 </script>
+
 <script>
     function confirmDelete(roleId) {
         Swal.fire({
@@ -133,81 +139,5 @@ $("#table_presensi_siswa").DataTable({
             }
         });
     }
-</script>
-
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    const selectors = document.querySelectorAll('.status-selector');
-
-    selectors.forEach(selector => {
-        selector.addEventListener('change', function () {
-            const id_kbm = '{{ $id }}'; // Pastikan id_kbm dikirim dari controller ke view
-            const id_kelas = '{{ $id_kelas }}'; // Pastikan id_kbm dikirim dari controller ke view
-            const id_siswa = this.getAttribute('data-id_siswa');
-            const id_status_hadir = this.value;
-
-            console.log('id_kbm:', id_kbm);
-            console.log('id_kelas:', id_kelas);
-            console.log('id_siswa:', id_siswa);
-            console.log('id_status_hadir:', id_status_hadir);
-
-            // Kirim data ke server menggunakan fetch
-            fetch('/update-status-absensi', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                },
-                body: JSON.stringify({
-                    id_kbm: id_kbm,
-                    id_kelas: id_kelas,
-                    id_siswa: id_siswa,
-                    id_status_hadir: id_status_hadir
-                })
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Gagal memperbarui status');
-                }
-                return response.json();
-            })
-            .then(data => {
-                var Toast = Swal.mixin({
-                        toast: true,
-                        position: 'top-end',
-                        showConfirmButton: false,
-                        timer: 5000
-                    });
-                        Toast.fire({
-                        icon: 'success',
-                        title: 'Absensi berhasil diperbarui'
-                        })
-
-                // Perbarui kolom terkait di baris yang sama
-                const row = selector.closest('tr'); // Cari baris tabel terkait
-                const jamHadirCell = row.querySelector('.jam-hadir'); // Kolom jam hadir
-                const statusHadirCell = row.querySelector('.status-hadir'); // Kolom status hadir
-
-                // Perbarui teks berdasarkan respons
-                if (jamHadirCell) {
-                    jamHadirCell.textContent = data.jam_hadir; // Update jam hadir
-                }
-                if (statusHadirCell) {
-                    statusHadirCell.textContent = data.status_hadir; // Update status hadir
-                }
-            })
-            .catch(error => {
-                console.error('Terjadi kesalahan:', error);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Gagal',
-                    text: 'Gagal memperbarui status. Silakan coba lagi.',
-                    timer: 2000,
-                    showConfirmButton: false
-                });
-            });
-        });
-    });
-});
 </script>
 @endsection

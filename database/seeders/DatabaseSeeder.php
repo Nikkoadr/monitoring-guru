@@ -61,7 +61,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         Status_hadir::create([
-            'status_hadir' => 'Tidak Hadir',
+            'status_hadir' => 'Alfa',
         ]);
 
         Status_hadir::create([

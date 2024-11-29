@@ -113,15 +113,19 @@ class AbsensiController extends Controller
         return redirect('/kbm')->with('success', 'Presensi Anda Berhasil');
     }
 
-    public function lihat_presensi_siswa($id){
-    $id_kelas = DB::table('kbm')
-        ->where('id', $id)
-        ->value('id_kelas');
+    public function lihat_presensi_siswa($id)
+    {
+        $id_kelas = DB::table('kbm')
+            ->where('id', $id)
+            ->value('id_kelas');
+
+        $status_hadir = DB::table('status_hadir')
+            ->get();
 
         $data_absensi = DB::table('siswa')
             ->join('users', 'siswa.id_user', '=', 'users.id')
             ->join('kelas', 'siswa.id_kelas', '=', 'kelas.id')
-            ->leftJoin('absensi_siswa', function($join) use ($id) {
+            ->leftJoin('absensi_siswa', function ($join) use ($id) {
                 $join->on('siswa.id', '=', 'absensi_siswa.id_siswa')
                     ->where('absensi_siswa.id_kbm', $id);
             })
@@ -132,50 +136,40 @@ class AbsensiController extends Controller
                 'siswa.id as id_siswa',
                 'users.name as nama_siswa',
                 'kelas.nama_kelas',
-                DB::raw('IFNULL(status_hadir.status_hadir, "Alfa") as status_hadir'),
-                DB::raw('IFNULL(absensi_siswa.foto, "default.jpeg") as foto'),
-                DB::raw('IFNULL(absensi_siswa.jam_hadir, "00:00:00") as jam_hadir'),
-
+                DB::raw('COALESCE(status_hadir.status_hadir, "Alfa") as status_hadir'),
+                DB::raw('COALESCE(absensi_siswa.foto, "default.jpeg") as foto'),
+                DB::raw('COALESCE(absensi_siswa.jam_hadir, "00:00") as jam_hadir')
             )
             ->get();
-        return view('absensi.lihat_presensi_siswa', compact('data_absensi', 'id_kelas','id'));
+        return view('absensi.lihat_presensi_siswa', compact('data_absensi', 'id_kelas', 'id', 'status_hadir'));
     }
 
-public function updateStatus(Request $request)
-{
-    $request->validate([
-        'id_kbm' => 'required|integer',
-        'id_kelas' => 'required|integer',
-        'id_siswa' => 'required|integer',
-        'id_status_hadir' => 'required|integer',
-    ]);
+    public function updateStatus(Request $request)
+    {
+        $request->validate([
+            'id_kbm' => 'required|integer',
+            'id_kelas' => 'required|integer',
+            'id_siswa' => 'required|integer',
+            'id_status_hadir' => 'required|integer',
+        ]);
 
-    // Cari atau buat data absensi
-    $absensi = Absensi_siswa::updateOrCreate(
-        [
-            'id_kbm' => $request->id_kbm,
-            'id_siswa' => $request->id_siswa,
-        ],
-        [
-            'id_kelas' => $request->id_kelas,
-            'id_status_hadir' => $request->id_status_hadir,
-            'jam_hadir' => now()->format('H:i:s'),
-            'tanggal' => now()->format('Y-m-d'),
-        ]
-    );
+        Absensi_siswa::updateOrCreate(
+            [
+                'id_kbm' => $request->id_kbm,
+                'id_siswa' => $request->id_siswa,
+            ],
+            [
+                'id_kelas' => $request->id_kelas,
+                'id_status_hadir' => $request->id_status_hadir,
+                'jam_hadir' => now()->format('H:i'),
+                'tanggal' => now()->format('Y-m-d'),
+            ]
+        );
 
-    $status_hadir = DB::table('status_hadir')
-        ->where('id', $request->id_status_hadir)
-        ->value('status_hadir');
+        $status_hadir = DB::table('status_hadir')
+            ->where('id', $request->id_status_hadir)
+            ->value('status_hadir');
 
-    $status_hadir = $status_hadir ?? 'Status Tidak Diketahui';
-
-    return response()->json([
-        'message' => 'Status berhasil disimpan atau diperbarui.',
-        'jam_hadir' => $absensi->jam_hadir,
-        'status_hadir' => $status_hadir,
-    ]);
-}
-
-
+        return redirect('/lihat_presensi_siswa_' . $request->id_kbm)->with('success', 'Status Hadir ' . $status_hadir . ' Berhasil Diubah');
+    }
 }
