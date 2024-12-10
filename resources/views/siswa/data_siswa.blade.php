@@ -48,7 +48,9 @@
                                             <td>{{ $siswa->nama_jurusan }}</td>
                                             <td>{{ $siswa->nama_kelas }}</td>
                                             <td>
+                                                @if(Gate::check('admin'))
                                                 <a href="/form_edit_siswa_{{ $siswa->id }}" class="btn btn-info float-right m-1"><i class="fa-solid fa-pen-to-square"></i></a>
+                                                @endif
                                                 <button class="btn btn-danger float-right m-1" onclick="confirmDelete({{ $siswa->id }})"><i class="fa-solid fa-trash-can"></i></button>
                                             </td>
                                         </tr>

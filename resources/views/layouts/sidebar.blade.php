@@ -151,13 +151,20 @@
                     </p>
                     </a>
                     <ul class="nav nav-treeview">
-                    <li class="nav-item">
-                        <a href="/data_ketua_kelas" class="nav-link {{ request()->is('data_ketua_kelas') ? 'active' : '' }}">
-                        <i class="far fa-circle nav-icon"></i>
-                        <p>Data Ketua kelas</p>
-                        </a>
-                    </li>
-
+                        <li class="nav-item">
+                            <a href="/data_siswa" class="nav-link {{ request()->is('data_siswa') ? 'active' : '' }}">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Data Siswa</p>
+                            </a>
+                        </li>
+                    </ul>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="/data_ketua_kelas" class="nav-link {{ request()->is('data_ketua_kelas') ? 'active' : '' }}">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Data Ketua kelas</p>
+                            </a>
+                        </li>
                     </ul>
                 </li>
                     <li class="nav-item">

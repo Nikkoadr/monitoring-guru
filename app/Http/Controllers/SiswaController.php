@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use App\Models\kelas;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Auth;
 
 class SiswaController extends Controller
 {
@@ -27,6 +28,11 @@ class SiswaController extends Controller
      */
     public function index()
     {
+        $user = Auth::user();
+        $isWalas = DB::table('walas')
+            ->join('guru', 'walas.id_guru', '=', 'guru.id')
+            ->where('guru.id_user', $user->id)
+            ->exists();
         if (Gate::allows('admin')) {
         $data_siswa = DB::table('siswa')
             ->join('users', 'siswa.id_user', '=', 'users.id')
@@ -35,17 +41,66 @@ class SiswaController extends Controller
             ->select('siswa.*', 'users.name as nama_siswa', 'kelas.nama_kelas', 'jurusan.nama_jurusan')
             ->get();
             return view('siswa.data_siswa', compact('data_siswa'));
-            }else{
+            }elseif($isWalas){
+                $id_kelas = DB::table('walas')->value('id_kelas');
+                $data_siswa = DB::table('siswa')
+                    ->join('users', 'siswa.id_user', '=', 'users.id')
+                    ->join('kelas', 'siswa.id_kelas', '=', 'kelas.id')
+                    ->join('jurusan', 'siswa.id_jurusan', '=', 'jurusan.id')
+                    ->join('walas', 'kelas.id', '=', 'walas.id_kelas')
+                    ->select('siswa.*', 'users.name as nama_siswa', 'kelas.nama_kelas', 'jurusan.nama_jurusan')
+                    ->where('walas.id_kelas', $id_kelas)
+                    ->get();
+
+                return view('siswa.data_siswa', compact('data_siswa'));
+
+            }
+            else{
             return redirect('/home')->with('error', 'Anda Tidak Memiliki Akses');
             }
     }
 
-    public function form_tambah_siswa()
-    {
+public function form_tambah_siswa()
+{
+    $user = Auth::user();  // Ambil user yang sedang login
+
+    // Periksa apakah user adalah Wali Kelas
+    $isWalas = DB::table('walas')
+        ->join('guru', 'walas.id_guru', '=', 'guru.id')
+        ->where('guru.id_user', $user->id)
+        ->exists();
+
+    $data_jurusan = collect();
+    $data_kelas = collect();
+
+    if (Gate::allows('admin')) {
         $data_jurusan = DB::table('jurusan')->get();
         $data_kelas = DB::table('kelas')->get();
-        return view('siswa.form_tambah_siswa', compact('data_jurusan', 'data_kelas'));
+    return view('siswa.form_tambah_siswa', compact('data_jurusan', 'data_kelas'));
+    } 
+    elseif ($isWalas) {
+        $guru = DB::table('guru')->where('id_user', $user->id)->first();
+        $data_jurusan = DB::table('jurusan')
+            ->whereIn('jurusan.id', function ($query) use ($guru) {
+                $query->select('kelas.id_jurusan')
+                    ->from('kelas')
+                    ->join('walas', 'kelas.id', '=', 'walas.id_kelas')
+                    ->where('walas.id_guru', $guru->id);
+            })
+            ->first();
+            
+        $data_kelas = DB::table('kelas')
+            ->join('walas', 'kelas.id', '=', 'walas.id_kelas')
+            ->where('walas.id_guru', $guru->id)
+            ->select('kelas.*')
+            ->first();
+        return view('siswa.form_tambah_siswa_from_walas', compact('data_jurusan', 'data_kelas'));
+    } else {
+        return redirect('/home')->with('error', 'Anda Tidak Memiliki Akses');
     }
+
+
+}
 
     public function get_user(Request $request)
     {
