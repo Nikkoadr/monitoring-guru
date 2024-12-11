@@ -25,7 +25,7 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-                                <h3 class="card-title">Form Tambah Kelas</h3>
+                                <h3 class="card-title">Form Siswa Baru</h3>
                             </div>
                             <div class="card-body">
                                 <form action="/post_siswa" method="post">
