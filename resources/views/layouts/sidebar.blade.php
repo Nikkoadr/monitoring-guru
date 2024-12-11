@@ -48,6 +48,16 @@
                     </p>
                     </a>
                 </li>
+                @can('siswa')
+                <li class="nav-item">
+                    <a href="req_izin_siswa" class="nav-link {{ request()->is('req_izin_siswa') ? 'active' : '' }}">
+                    <i class="nav-icon fa-solid fa-circle-info"></i>
+                    <p>
+                        Izin Siswa
+                    </p>
+                    </a>
+                </li>
+                @endcan
                 @can('admin')
                 <li class="nav-item menu-open">
                     <a href="" class="nav-link {{ in_array(request()->path(), ['data_guru', 'data_user', 'data_mapel', 'data_role', 'data_jurusan', 'data_kelas', 'data_siswa', 'data_ketua_kelas', 'data_walas']) ? 'active' : '' }}">
