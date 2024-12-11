@@ -34,7 +34,7 @@ class Izin_siswaController extends Controller
             'jam' => now()->format('H:i'),
             'id_siswa' => $id_siswa,
             'alasan' => $request->alasan,
-            'status' => 'Belum Disetujui',
+            'status' => '1',
         ]);
         return redirect('/req_izin_siswa')->with('success', 'Data Izin Siswa Bereah Tambah');
     }

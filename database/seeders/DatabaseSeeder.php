@@ -7,6 +7,7 @@ use Illuminate\Database\Seeder;
 use App\Models\Jurusan;
 use App\Models\Role;
 use App\Models\Status_hadir;
+use App\Models\Status_izin;
 
 class DatabaseSeeder extends Seeder
 {
@@ -74,6 +75,20 @@ class DatabaseSeeder extends Seeder
 
         Status_hadir::create([
             'status_hadir' => 'Bolos',
+        ]);
+        
+
+        Status_izin::create([
+            'status_izin' => 'Belum Disetujui',
+        ]);
+
+        Status_izin::create([
+            'status_izin' => 'Disetujui',
+            
+        ]);
+
+        Status_izin::create([
+            'status_izin' => 'Ditolak',
         ]);
 
         User::create([

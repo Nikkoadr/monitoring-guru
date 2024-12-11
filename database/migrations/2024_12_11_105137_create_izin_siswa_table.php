@@ -17,7 +17,7 @@ return new class extends Migration
             $table->time('jam')->nullable();
             $table->foreignId('id_siswa')->nullable()->index()->references('id')->on('siswa');
             $table->string('alasan')->nullable();
-            $table->string('status')->nullable();
+            $table->foreignId('id_status_izin')->nullable()->index()->references('id')->on('status_izin');
             $table->timestamps();
         });
     }
