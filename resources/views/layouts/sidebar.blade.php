@@ -5,7 +5,6 @@
             <img src="{{ asset('assets/dist/img/AdminLTELogo.png') }}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
             <span class="brand-text font-weight-light">SMKMUHKDH</span>
             </a>
-
             <!-- Sidebar -->
             <div class="sidebar">
             <!-- Sidebar user panel (optional) -->
@@ -17,7 +16,6 @@
                 <a href="#" class="d-block">{{ Auth::user()->name }}</a>
                 </div>
             </div>
-
             <!-- SidebarSearch Form -->
             <div class="form-inline">
                 <div class="input-group" data-widget="sidebar-search">
@@ -29,7 +27,6 @@
                 </div>
                 </div>
             </div>
-
             <!-- Sidebar Menu -->
             <nav class="mt-2">
                 <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
@@ -135,7 +132,6 @@
                 </li>
                 @endcan
                 @php
-                    // Cek apakah user adalah walas
                     $isWalas = DB::table('walas')
                                 ->join('guru', 'walas.id_guru', '=', 'guru.id')
                                 ->where('guru.id_user', Auth::user()->id)

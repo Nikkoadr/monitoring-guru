@@ -39,18 +39,21 @@
                                                 @endforeach
                                             </select>
                                         </div>
-
                                         <div class="form-group">
                                             <label for="siswa">Nama Siswa:</label>
                                             <input type="text" class="form-control" id="siswa" name="siswa">
-                                            <input type="hidden" id="siswa_id" name="id_siswa"> <!-- hidden input untuk menyimpan ID siswa -->
-                                            <div id="suggestions" class="autocomplete-list"></div> <!-- untuk menampilkan hasil autocomplete -->
+                                            <input type="hidden" id="siswa_id" name="id_siswa">
+                                            <div id="suggestions" class="autocomplete-list"></div>
                                         </div>
                                         <div class="form-grup">
                                             <label for="keterangan">Keterangan:</label>
-                                            <input type="text" class="form-control" id="keterangan" name="keterangan" placeholder="KM, Bendahara, Sekertaris. Pilih salah satu">
+                                            <select name="keterangan" id="keterangan">
+                                                <option value="Ketua Kelas">Ketua Kelas</option>
+                                                <option value="Wakil Ketua Kelas">Wakil Ketua Kelas</option>
+                                                <option value="Bendahara">Bendahara</option>
+                                                <option value="Sekretaris">Sekretaris</option>
+                                            </select>
                                         </div>
-
                                         <button class="btn btn-primary mt-2 float-right" type="submit">Simpan</button>
                                     </form>
                                 </div>
