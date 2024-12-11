@@ -47,7 +47,7 @@
                                         </div>
                                         <div class="form-grup">
                                             <label for="keterangan">Keterangan:</label>
-                                            <select name="keterangan" id="keterangan">
+                                            <select class="form-control" name="keterangan" id="keterangan">
                                                 <option value="Ketua Kelas">Ketua Kelas</option>
                                                 <option value="Wakil Ketua Kelas">Wakil Ketua Kelas</option>
                                                 <option value="Bendahara">Bendahara</option>
