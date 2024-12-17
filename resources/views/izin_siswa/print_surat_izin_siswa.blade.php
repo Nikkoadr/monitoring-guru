@@ -109,12 +109,11 @@
 
         <!-- Garis Pembatas -->
         <div class="divider"></div>
-
         <!-- Isi Surat -->
         <div class="content">
-            <h2 style="text-align: center">SURAT IZIN KELUAR SEKOLAH SEMENTARA</h2>
+            <p style="text-align: center"><b>SURAT IZIN KELUAR SEKOLAH SEMENTARA</b></p>
             <p>Dengan ini kami sampaikan bahwa:</p>
-                <table style="margin-left: 80px">
+                <table style="margin-left: 100px;">
                     <tr>
                         <td><b>Nama Siswa</b></td>
                         <td>:</td>
@@ -145,14 +144,19 @@
                         <td>:</td>
                         <td>{{ $data_izin_siswa->jam_kembali }} WIB</td>
                     </tr>
+                    <tr>
+                        <td><b>Status Izin</b></td>
+                        <td>:</td>
+                        <td>{{ $data_izin_siswa->status_izin }}</td>
+                    </tr>
                 </table>
             <p>Telah diberikan izin untuk keluar dari lingkungan sekolah sementara waktu dalam rangka keperluan yang telah disebutkan di atas.</p>
-            <p>Demikian surat izin ini dibuat dengan sebenar-benarnya dan diberikan untuk dapat digunakan sebagaimana mestinya. Atas perhatian dan pengertiannya, kami ucapkan terima kasih.</p>
+            <p>Demikian surat izin ini dibuat dengan sebenar-benarnya dan diberikan untuk dapat digunakan sebagaimana mestinya.</p>
         </div>
         <div class="footer">
             <div>
                 <p>
-                    {!! QrCode::size(100)->backgroundColor(255,255,255)->generate('https://absensi.smkmuhkandanghaur.sch.id/scan/izin/'.$data_izin_siswa->id) !!}
+                    {!! QrCode::size(80)->backgroundColor(255,255,255)->generate('https://absensi.smkmuhkandanghaur.sch.id/scan/izin/'.$data_izin_siswa->id) !!}
                 </p>
             </div>
         </div>
