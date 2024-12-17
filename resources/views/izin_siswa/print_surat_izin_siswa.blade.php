@@ -16,9 +16,9 @@
             width: 100%;
             max-width: 21cm;
             margin: 0 auto;
-            padding: 20px;
+            padding: 10px;
             text-align: center;
-            border: 1px solid #000; /* Tambahkan border untuk tampilan seperti kertas */
+            border: none; /* Hilangkan border untuk cetak */
         }
 
         /* Header Section */
@@ -40,7 +40,7 @@
 
         .title h1, .title h2 {
             margin: 5px 0;
-            color: #0073e6; /* Warna biru untuk judul */
+            color: #0073e6;
         }
 
         .title h1 {
@@ -67,23 +67,55 @@
 
         /* Content Section */
         .content {
-            font-size: 14px;
+            font-size: 12px; /* Ukuran font lebih kecil */
             text-align: left;
-            line-height: 1.6;
+            line-height: 1.4;
         }
 
         .content p {
-            margin: 10px 0;
+            margin: 8px 0;
         }
 
-        .info {
-            margin-left: 30px;
+        table {
+            margin-left: 50px;
+            font-size: 12px;
         }
 
         /* Footer Section */
         .footer {
             text-align: end;
-            margin-right: 60px;
+            margin-right: 20px;
+        }
+
+        /* Print Styling */
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+
+            .container {
+                border: none;
+                margin: 0;
+                padding: 0;
+            }
+
+            @page {
+                size: A4;
+                margin: 2; /* Nol margin di seluruh halaman cetak */
+            }
+
+            .header img {
+                width: 80px;
+            }
+
+            .footer {
+                margin-right: 10px;
+            }
+
+            .content {
+                font-size: 11px; /* Sesuaikan ukuran font untuk cetak */
+            }
         }
     </style>
 </head>
@@ -91,9 +123,7 @@
     <div class="container">
         <!-- Header -->
         <div class="header">
-            <!-- Logo Kiri -->
             <img src="{{ asset('assets/dist/img/dikdasmenmuh.png') }}" alt="Logo Kiri">
-            <!-- Judul Tengah -->
             <div class="title">
                 <h1>MAJELIS PENDIDIKAN DASAR MENENGAH DAN PENDIDIKAN NON FORMAL</h1>
                 <h2>SMK MUHAMMADIYAH KANDANGHAUR</h2>
@@ -103,7 +133,6 @@
                 <p>Jl. Raya Karanganyar No. 28/A, Kec. Kandanghaur, Kab. Indramayu | Telp: 081122207770</p>
                 <p>Email: smkmuhkandanghaur@gmail.com | Website: smkmuhkandanghaur.sch.id</p>
             </div>
-            <!-- Logo Kanan -->
             <img style="width: 80px" src="{{ asset('assets/dist/img/logo.png') }}" alt="Logo Kanan">
         </div>
 
@@ -111,55 +140,59 @@
         <div class="divider"></div>
         <!-- Isi Surat -->
         <div class="content">
-            <p style="text-align: center"><b>SURAT IZIN KELUAR SEKOLAH SEMENTARA</b></p>
+            <h3 style="text-align: center"><b>SURAT IZIN KELUAR SEKOLAH SEMENTARA</b></h3>
             <p>Dengan ini kami sampaikan bahwa:</p>
-                <table style="margin-left: 100px;">
-                    <tr>
-                        <td><b>Nama Siswa</b></td>
-                        <td>:</td>
-                        <td>{{ $data_izin_siswa->nama_siswa }}</td>
-                    </tr>
-                    <tr>
-                        <td><b>Kelas</b></td>
-                        <td>:</td>
-                        <td>{{ $data_izin_siswa->nama_kelas }}</td>
-                    </tr>
-                    <tr>
-                        <td><b>Keperluan</b></td>
-                        <td>:</td>
-                        <td>{{ $data_izin_siswa->alasan }}</td>
-                    </tr>
-                    <tr>
-                        <td><b>Tanggal</b></td>
-                        <td>:</td>
-                        <td>{{ $data_izin_siswa->tanggal }}</td>
-                    </tr>
-                    <tr>
-                        <td><b>Waktu Keluar</b></td>
-                        <td>:</td>
-                        <td>{{ $data_izin_siswa->jam_keluar }} WIB</td>
-                    </tr>
-                    <tr>
-                        <td><b>Waktu Kembali</b></td>
-                        <td>:</td>
-                        <td>{{ $data_izin_siswa->jam_kembali }} WIB</td>
-                    </tr>
-                    <tr>
-                        <td><b>Status Izin</b></td>
-                        <td>:</td>
-                        <td>{{ $data_izin_siswa->status_izin }}</td>
-                    </tr>
-                </table>
+            <table>
+                <tr>
+                    <td><b>Nama Siswa</b></td>
+                    <td>:</td>
+                    <td>{{ $data_izin_siswa->nama_siswa }}</td>
+                </tr>
+                <tr>
+                    <td><b>Kelas</b></td>
+                    <td>:</td>
+                    <td>{{ $data_izin_siswa->nama_kelas }}</td>
+                </tr>
+                <tr>
+                    <td><b>Keperluan</b></td>
+                    <td>:</td>
+                    <td>{{ $data_izin_siswa->alasan }}</td>
+                </tr>
+                <tr>
+                    <td><b>Tanggal</b></td>
+                    <td>:</td>
+                    <td>{{ $data_izin_siswa->tanggal }}</td>
+                </tr>
+                <tr>
+                    <td><b>Waktu Keluar</b></td>
+                    <td>:</td>
+                    <td>{{ $data_izin_siswa->jam_keluar }} WIB</td>
+                </tr>
+                <tr>
+                    <td><b>Waktu Kembali</b></td>
+                    <td>:</td>
+                    <td>{{ $data_izin_siswa->jam_kembali }} WIB</td>
+                </tr>
+                <tr>
+                    <td><b>Status Izin</b></td>
+                    <td>:</td>
+                    <td>{{ $data_izin_siswa->status_izin }}</td>
+                </tr>
+            </table>
             <p>Telah diberikan izin untuk keluar dari lingkungan sekolah sementara waktu dalam rangka keperluan yang telah disebutkan di atas.</p>
             <p>Demikian surat izin ini dibuat dengan sebenar-benarnya dan diberikan untuk dapat digunakan sebagaimana mestinya.</p>
         </div>
+        <!-- Footer -->
         <div class="footer">
-            <div>
-                <p>
-                    {!! QrCode::size(80)->backgroundColor(255,255,255)->generate('https://absensi.smkmuhkandanghaur.sch.id/scan/izin/'.$data_izin_siswa->id) !!}
-                </p>
-            </div>
+            <p>
+                {!! QrCode::size(80)->backgroundColor(255,255,255)->generate('https://absensi.smkmuhkandanghaur.sch.id/scan/izin/'.$data_izin_siswa->id) !!}
+            </p>
         </div>
     </div>
 </body>
+<script>
+    window.onload = function() {
+        window.print();
+    };
+</script>
 </html>
