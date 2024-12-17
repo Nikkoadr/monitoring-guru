@@ -16,6 +16,7 @@ use App\Http\Controllers\KbmController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\AbsensiController;
 use App\Http\Controllers\Izin_siswaController;
+use App\Http\Controllers\KesiswaanController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -115,5 +116,10 @@ Route::get('/laporan', [HomeController::class, 'laporan'])->name('laporan');
 Route::get('/setting', [SettingController::class, 'index']);
 Route::post('/import_data', [SettingController::class, 'import_data']);
 
+Route::get('/data_kesiswaan', [KesiswaanController::class, 'index']);
+Route::get('/form_tambah_kesiswaan', [KesiswaanController::class, 'form_tambah_kesiswaan']);
+
+Route::get('/data_izin_siswa', [Izin_siswaController::class, 'data_izin_siswa']);
 Route::get('/req_izin_siswa', [Izin_siswaController::class, 'req_izin_siswa']);
 Route::post('/post_izin_siswa', [Izin_siswaController::class, 'post_izin_siswa']);
+Route::get('/print_izin_siswa_{id}', [Izin_siswaController::class, 'print_surat_izin_siswa']);

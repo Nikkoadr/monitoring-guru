@@ -57,7 +57,7 @@
                                     <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $izin_siswa->tanggal }}</td>
-                                    <td>{{ $izin_siswa->jam }}</td>
+                                    <td>{{ $izin_siswa->jam_keluar }}</td>
                                     <td>{{ $izin_siswa->alasan }}</td>
                                     <td>{{ $izin_siswa->status }}</td>
                                 </tr>

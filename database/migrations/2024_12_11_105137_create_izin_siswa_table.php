@@ -14,8 +14,10 @@ return new class extends Migration
         Schema::create('izin_siswa', function (Blueprint $table) {
             $table->id();
             $table->date('tanggal')->nullable();
-            $table->time('jam')->nullable();
+            $table->time('jam_keluar')->nullable();
+            $table->time('jam_kembali')->nullable();
             $table->foreignId('id_siswa')->nullable()->index()->references('id')->on('siswa');
+            $table->foreignId('id_kelas')->nullable()->index()->references('id')->on('kelas');
             $table->string('alasan')->nullable();
             $table->foreignId('id_status_izin')->nullable()->index()->references('id')->on('status_izin');
             $table->timestamps();
