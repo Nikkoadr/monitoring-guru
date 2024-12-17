@@ -121,5 +121,7 @@ Route::get('/form_tambah_kesiswaan', [KesiswaanController::class, 'form_tambah_k
 
 Route::get('/data_izin_siswa', [Izin_siswaController::class, 'data_izin_siswa']);
 Route::get('/req_izin_siswa', [Izin_siswaController::class, 'req_izin_siswa']);
+Route::get('/edit_izin_siswa_{id}', [Izin_siswaController::class, 'edit_izin_siswa']);
+Route::patch('/update_izin_siswa_{id}', [Izin_siswaController::class, 'update_izin_siswa']);
 Route::post('/post_izin_siswa', [Izin_siswaController::class, 'post_izin_siswa']);
 Route::get('/print_izin_siswa_{id}', [Izin_siswaController::class, 'print_surat_izin_siswa']);

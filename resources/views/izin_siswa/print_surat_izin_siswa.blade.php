@@ -112,8 +112,8 @@
 
         <!-- Isi Surat -->
         <div class="content">
-            <h2 style="text-align: center">Surat Izin Keluar Sekolah</h2>
-            <p>Bersama dengan surat ini:</p>
+            <h2 style="text-align: center">SURAT IZIN KELUAR SEKOLAH SEMENTARA</h2>
+            <p>Dengan ini kami sampaikan bahwa:</p>
                 <table style="margin-left: 80px">
                     <tr>
                         <td><b>Nama Siswa</b></td>
@@ -146,8 +146,8 @@
                         <td>{{ $data_izin_siswa->jam_kembali }} WIB</td>
                     </tr>
                 </table>
-            <p>Dengan ini telah memberikan izin kepada siswa untuk keluar sekolah sementara.</p>
-            <p>Demikian surat ini dibuat untuk dapat digunakan sebagaimana mestinya.</p>
+            <p>Telah diberikan izin untuk keluar dari lingkungan sekolah sementara waktu dalam rangka keperluan yang telah disebutkan di atas.</p>
+            <p>Demikian surat izin ini dibuat dengan sebenar-benarnya dan diberikan untuk dapat digunakan sebagaimana mestinya. Atas perhatian dan pengertiannya, kami ucapkan terima kasih.</p>
         </div>
         <div class="footer">
             <div>
