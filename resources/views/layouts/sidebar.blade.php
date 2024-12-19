@@ -48,26 +48,16 @@
                     </p>
                     </a>
                 </li>
-                @can('admin')
-                <li class="nav-item">
-                    <a href="/data_izin_siswa" class="nav-link {{ request()->is('data_izin_siswa') ? 'active' : '' }}">
-                    <i class="nav-icon fa-regular fa-folder-open"></i>
-                    <p>
-                        Izin Siswa
-                    </p>
-                    </a>
-                </li>
-                @endcan
-                @can('siswa')
-                <li class="nav-item">
-                    <a href="req_izin_siswa" class="nav-link {{ request()->is('req_izin_siswa') ? 'active' : '' }}">
-                    <i class="nav-icon fa-solid fa-circle-info"></i>
-                    <p>
-                        Izin Siswa
-                    </p>
-                    </a>
-                </li>
-                @endcan
+                @foreach (['admin' => '/data_izin_siswa', 'siswa' => 'req_izin_siswa'] as $role => $href)
+                    @can($role)
+                    <li class="nav-item">
+                        <a href="{{ $href }}" class="nav-link {{ request()->is(ltrim($href, '/')) ? 'active' : '' }}">
+                            <i class="nav-icon {{ $role === 'admin' ? 'fa-regular fa-envelope' : 'fa-solid fa-circle-info' }}"></i>
+                            <p>{{ $role === 'admin' ? 'Data Izin Siswa' : 'Izin Siswa' }}</p>
+                        </a>
+                    </li>
+                    @endcan
+                @endforeach
                 @can('admin')
                 <li class="nav-item menu-open">
                     <a href="" class="nav-link {{ in_array(request()->path(), ['data_guru', 'data_user', 'data_mapel', 'data_role', 'data_jurusan', 'data_kelas', 'data_siswa', 'data_ketua_kelas', 'data_walas']) ? 'active' : '' }}">
@@ -151,6 +141,23 @@
                     </a>
                 </li>
                 @endcan
+                @php
+                    $is_guru = DB::table('guru')
+                                ->where('id_user', Auth::user()->id)
+                                ->exists();
+                @endphp
+                @if($is_guru)
+                <li class="nav-item">
+                    <a href="/presensi_pengajar" class="nav-link {{ request()->is('presensi_pengajar') ? 'active' : '' }}">
+                    <i class="nav-icon fa-solid fa-clipboard-user"></i>
+                    <p>
+                        Presensi
+                    </p>
+                    </a>
+                </li>
+                @else
+                    
+                @endif
                 @php
                     $isWalas = DB::table('walas')
                                 ->join('guru', 'walas.id_guru', '=', 'guru.id')

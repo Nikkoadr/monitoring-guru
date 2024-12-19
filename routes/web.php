@@ -17,6 +17,7 @@ use App\Http\Controllers\SettingController;
 use App\Http\Controllers\AbsensiController;
 use App\Http\Controllers\Izin_siswaController;
 use App\Http\Controllers\KesiswaanController;
+use App\Http\Controllers\LaporanController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -112,7 +113,6 @@ Route::get('/form_edit_siswa_{id}', [SiswaController::class, 'form_edit_siswa'])
 Route::put('/update_siswa_{id}', [SiswaController::class, 'update_siswa']);
 Route::get('/hapus_siswa_{id}', [SiswaController::class, 'hapus_siswa']);
 
-Route::get('/laporan', [HomeController::class, 'laporan'])->name('laporan');
 Route::get('/setting', [SettingController::class, 'index']);
 Route::post('/import_data', [SettingController::class, 'import_data']);
 
@@ -125,3 +125,7 @@ Route::get('/edit_izin_siswa_{id}', [Izin_siswaController::class, 'edit_izin_sis
 Route::patch('/update_izin_siswa_{id}', [Izin_siswaController::class, 'update_izin_siswa']);
 Route::post('/post_izin_siswa', [Izin_siswaController::class, 'post_izin_siswa']);
 Route::get('/print_izin_siswa_{id}', [Izin_siswaController::class, 'print_surat_izin_siswa']);
+
+Route::get('/laporan', [LaporanController::class, 'index']);
+
+Route::get('/presensi_pengajar', [AbsensiController::class, 'presensi_pengajar']);

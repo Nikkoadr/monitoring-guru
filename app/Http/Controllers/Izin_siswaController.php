@@ -15,6 +15,7 @@ class Izin_siswaController extends Controller
             ->join('users', 'siswa.id_user', '=', 'users.id')
             ->join('status_izin', 'izin_siswa.id_status_izin', '=', 'status_izin.id')
             ->select('izin_siswa.*', 'users.name as nama_siswa', 'status_izin.status_izin')
+            ->whereDate('izin_siswa.tanggal', '=', date('Y-m-d')) // Sesuaikan nama kolom dengan tabel Anda
             ->get();
         return view('izin_siswa.data_izin_siswa', compact('data_izin_siswa'));
     }

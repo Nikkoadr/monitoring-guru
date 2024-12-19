@@ -15,9 +15,11 @@ return new class extends Migration
             $table->id();
             $table->string('nama_aplikasi');
             $table->string('logo_aplikasi');
-            $table->string('lokasi_longitude');
             $table->string('lokasi_latitude');
+            $table->string('lokasi_longitude');
             $table->string('radius_lokasi');
+            $table->time('mulai_presensi');
+            $table->time('limit_presensi');
             $table->timestamps();
         });
     }

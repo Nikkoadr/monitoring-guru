@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Gate;
+use App\Models\Setting;
 
 class AbsensiController extends Controller
 {
@@ -171,5 +172,16 @@ class AbsensiController extends Controller
             ->value('status_hadir');
 
         return redirect('/lihat_presensi_siswa_' . $request->id_kbm)->with('success', 'Status Hadir ' . $status_hadir . ' Berhasil Diubah');
+    }
+
+        public function presensi_pengajar()
+    {
+            $tanggal = date("Y-m-d");
+            $id = Auth::user()->id;
+            $cek = DB::table('absensi_guru')->where('tanggal', $tanggal)->where('id_guru', $id)->count();
+            $setting = Setting::first();
+            $limit_presensi = $setting->limit_presensi;
+            $jam = date("H:i:s");
+            return view('absensi.presensi_pengajar', compact('cek', 'setting', 'jam', 'limit_presensi'));
     }
 }

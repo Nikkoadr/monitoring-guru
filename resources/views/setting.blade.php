@@ -22,9 +22,46 @@
         <div class="content">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-6">
+                    <div class="col-12">
                         <div class="card">
                             <div class="card-body">
+                                <form action="/editSetting" method="POST">
+                                    @csrf
+                                    @method('put')
+                                    <input type="hidden" name="id" value="{{ $setting->id }}">
+                                    <div class="form-group">
+                                        <label for="nama_aplikasi">Nama Lokasi:</label>
+                                        <input type="text" class="form-control" id="nama_aplikasi" name="nama_aplikasi" value="{{ $setting->nama_aplikasi }}">
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label for="lokasi_latitude">Latitude:</label>
+                                            <input type="text" class="form-control" id="lokasi_latitude" name="lokasi_latitude" value="{{ $setting->lokasi_latitude }}">
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label for="lokasi_longitude">Longitude:</label>
+                                            <input type="text" class="form-control" id="lokasi_longitude" name="lokasi_longitude" value="{{ $setting->lokasi_longitude }}">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="radius_lokasi">Radius:</label>
+                                        <input type="text" class="form-control" id="radius_lokasi" name="radius_lokasi" value="{{ $setting->radius_lokasi }}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="mulai_presensi">Limit Absen Harian</label>
+                                        <input type="time" class="form-control" id="mulai_presensi" name="mulai_presensi" value="{{ $setting->mulai_presensi }}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="limit_absen">Limit Absen Harian</label>
+                                        <input type="time" class="form-control" id="limit_absen" name="limit_absen" value="{{ $setting->limit_presensi }}">
+                                    </div>
+                                    <button style="float: right" type="submit" class="btn btn-primary">Edit</button>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="card">
+                                <div class="card-body">
                                 <form action="/import_data" method="POST" enctype="multipart/form-data" class="form-horizontal">
                                     @csrf
                                     <label for="file">Import Master Data :</label>
@@ -45,37 +82,8 @@
                                         @enderror
                                         </div>
                                 </form>
+                                </div>
                             </div>
-                            {{-- <div class="card-body">
-                                <form action="/edit_setting" method="POST">
-                                    @csrf
-                                    @method('put')
-                                    <input type="hidden" name="id" value="">
-                                    <div class="form-group">
-                                        <label for="namaLokasi">Nama Lokasi:</label>
-                                        <input type="text" class="form-control" id="namaLokasi" name="namaLokasi" value="">
-                                    </div>
-                                    <div class="form-row">
-                                        <div class="form-group col-md-6">
-                                            <label for="latitude">Latitude:</label>
-                                            <input type="text" class="form-control" id="latitude" name="latitude" value="">
-                                        </div>
-                                        <div class="form-group col-md-6">
-                                            <label for="longitude">Longitude:</label>
-                                            <input type="text" class="form-control" id="longitude" name="longitude" value="">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="radius">Radius:</label>
-                                        <input type="text" class="form-control" id="radius" name="radius" value="">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="radius">Limit Absen Harian</label>
-                                        <input type="time" class="form-control" id="limit_absen" name="limit_absen" value="">
-                                    </div>
-                                    <button style="float: right" type="submit" class="btn btn-primary">Edit</button>
-                                </form>
-                            </div> --}}
                         </div>
                     </div>
                 </div>

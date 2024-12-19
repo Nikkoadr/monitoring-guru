@@ -8,6 +8,7 @@ use App\Models\Jurusan;
 use App\Models\Role;
 use App\Models\Status_hadir;
 use App\Models\Status_izin;
+use App\Models\Setting;
 
 class DatabaseSeeder extends Seeder
 {
@@ -17,6 +18,14 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // User::factory(10)->create();
+        Setting::create([
+            'namaLokasi' => 'SMK Muhammadiyah Kandanghaur',
+            'latitude' => '-6.363041',
+            'longitude' => '108.113627',
+            'radius' => '70',
+            'mulai_presensi' => '6:45',
+            'limit_presensi' => '13:00',
+        ]);
 
         Role::create([
             'nama_role' => 'Admin',
