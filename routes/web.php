@@ -128,4 +128,5 @@ Route::get('/print_izin_siswa_{id}', [Izin_siswaController::class, 'print_surat_
 
 Route::get('/laporan', [LaporanController::class, 'index']);
 
-Route::get('/presensi_pengajar', [AbsensiController::class, 'presensi_pengajar']);
+Route::get('/presensi_pendidik', [AbsensiController::class, 'presensi_pendidik']);
+Route::post('/post_presensi_pendidik', [AbsensiController::class, 'post_presensi_pendidik']);

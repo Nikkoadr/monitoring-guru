@@ -148,7 +148,7 @@
                 @endphp
                 @if($is_guru)
                 <li class="nav-item">
-                    <a href="/presensi_pengajar" class="nav-link {{ request()->is('presensi_pengajar') ? 'active' : '' }}">
+                    <a href="/presensi_pendidik" class="nav-link {{ request()->is('presensi_pendidik') ? 'active' : '' }}">
                     <i class="nav-icon fa-solid fa-clipboard-user"></i>
                     <p>
                         Presensi

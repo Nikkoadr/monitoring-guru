@@ -60,7 +60,7 @@
                         <div class="col">
                             @if($cek > 0)
                                 @if($jam > "15:00:00")
-                                    <button id="ambilFoto" class="btn btn-danger btn-block">
+                                    <button id="ambil_presensi" class="btn btn-danger btn-block">
                                         <i class="fa-solid fa-camera-retro"></i> Absen Pulang
                                     </button>
                                 @endif
@@ -70,7 +70,7 @@
                                         <i class="fa-solid fa-camera-retro"></i> Absen Masuk
                                     </button>
                                     @else
-                                    <button id="ambilFoto" class="btn btn-primary btn-block">
+                                    <button id="ambil_presensi" class="btn btn-primary btn-block">
                                         <i class="fa-solid fa-camera-retro"></i> Absen Masuk
                                     </button>
                                 @endif
@@ -102,6 +102,7 @@
 @section('js')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/webcamjs/1.0.26/webcam.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
         Webcam.set({
         width: 320,
@@ -114,88 +115,84 @@
 </script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-    var lokasi = document.getElementById('lokasi');
+    document.addEventListener("DOMContentLoaded", function () {
+        var lokasiInput = document.getElementById('lokasi');
 
-    function initMap(lokasi_latitude, lokasi_longitude) {
-        if (lokasi) {
-            lokasi.value = lokasi_latitude + "," + lokasi_longitude;
-        }
-        var map = L.map('map').setView([lokasi_latitude, lokasi_longitude], 16);
-        var lokasi_presensi_latitude = parseFloat("{{ $setting->lokasi_latitude }}");
-        var lokasi_presensi_longitude = parseFloat("{{ $setting->lokasi_longitude }}");
-        var lokasi_presensi_radius = parseFloat("{{ $setting->radius_lokasi }}");
-
-        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
-            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-        }).addTo(map);
-
-        L.marker([lokasi_latitude, lokasi_longitude]).addTo(map);
-
-        L.circle([lokasi_presensi_latitude, lokasi_presensi_longitude], {
-            color: 'red',
-            fillColor: '#f03',
-            fillOpacity: 0.3,
-            radius: lokasi_presensi_radius
-        }).addTo(map);
-    }
-
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-            function (position) {
-                initMap(position.coords.latitude, position.coords.longitude);
-            },
-            function (error) {
-                console.error('Error getting geolocation:', error);
-                alert('Tidak dapat mengambil lokasi. Pastikan geolokasi diaktifkan.');
-            },
-            { timeout: 10000 }
-        );
-    } else {
-        console.error('Geolocation is not supported by this browser.');
-        alert('Browser Anda tidak mendukung geolokasi.');
-    }
-</script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
-<script>
-    $("#ambilFoto").click(function (e) {
-        Webcam.snap(function (url) {
-            foto = url;
-            sendAbsenRequest();
-        });
-    });
-    function sendAbsenRequest() {
-        var lokasi = $("#lokasi").val();
-        $.ajax({
-            type: 'POST',
-            url: '/absenMasuk',
-            data: {
-                _token: "{{ csrf_token() }}",
-                foto: foto,
-                lokasi: lokasi
-            },
-            cache: false,
-            success: function (respond) {
-                var status = respond.split("|");
-                if (status[0] == "sukses") {
-                    var Toast = Swal.fire({
-                        title: "Terimakasih",
-                        text: status[1],
-                        icon: "success"
-                    });
-                    setTimeout(function () {
-                        location.href = '/home';
-                    }, 2000);
-                } else {
-                    var Toast = Swal.fire({
-                        title: "Opss..!!!",
-                        text: status[1],
-                        icon: "error"
-                    });
-                }
+        function initMap(lat, lng) {
+            if (lokasiInput) {
+                lokasiInput.value = lat + "," + lng;
             }
+
+            var map = L.map('map').setView([lat, lng], 16);
+            var lokasiPresensiLat = parseFloat("{{ $setting->lokasi_latitude }}");
+            var lokasiPresensiLng = parseFloat("{{ $setting->lokasi_longitude }}");
+            var lokasiPresensiRadius = parseFloat("{{ $setting->radius_lokasi }}");
+
+            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            }).addTo(map);
+
+            L.marker([lat, lng]).addTo(map);
+            L.circle([lokasiPresensiLat, lokasiPresensiLng], {
+                color: 'red',
+                fillColor: '#f03',
+                fillOpacity: 0.3,
+                radius: lokasiPresensiRadius
+            }).addTo(map);
+        }
+
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                function (position) {
+                    initMap(position.coords.latitude, position.coords.longitude);
+                },
+                function (error) {
+                    console.error('Error getting geolocation:', error);
+                    alert('Tidak dapat mengambil lokasi. Pastikan GPS diaktifkan.');
+                },
+                { timeout: 10000 }
+            );
+        } else {
+            console.error('Geolocation is not supported by this browser.');
+            alert('Browser Anda tidak mendukung GPS.');
+        }
+
+        document.getElementById("ambil_presensi")?.addEventListener("click", function () {
+            Webcam.snap(function (url) {
+                kirimPresensi(url);
+            });
         });
-    }
+
+        function kirimPresensi(foto) {
+            var lokasi = lokasiInput?.value || "";
+            $.ajax({
+                type: 'POST',
+                url: '/post_presensi_pendidik',
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    foto: foto,
+                    lokasi: lokasi
+                },
+                cache: false,
+                success: function (respond) {
+                    var { status, message } = respond;
+                    if (status === "success") {
+                        Swal.fire("Terimakasih", message, "success");
+                        setTimeout(() => {
+                            location.href = '/home';
+                        }, 2000);
+                    } else {
+                        Swal.fire("Opss..!!!", message, "error");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error('AJAX Error:', error);
+                    Swal.fire("Error", "Terjadi kesalahan saat mengirim presensi.", "error");
+                }
+            });
+        }
+    });
 </script>
 <script>
 $("#tombolpulang").click(function() {

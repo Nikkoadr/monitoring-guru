@@ -11,15 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('absensi_guru', function (Blueprint $table) {
+        Schema::create('absensi_pendidik', function (Blueprint $table) {
             $table->id();
             $table->foreignId('id_guru')->nullable()->index()->references('id')->on('guru');
             $table->foreignId('id_status_hadir')->nullable()->index()->references('id')->on('status_hadir');
             $table->date('tanggal')->nullable();
             $table->time('jam_masuk')->nullable();
             $table->time('jam_keluar')->nullable();
-            $table->string('foto')->nullable();
-            $table->string('lokasi')->nullable();
+            $table->string('foto_masuk')->nullable();
+            $table->string('foto_keluar')->nullable();
+            $table->string('lokasi_masuk')->nullable();
+            $table->string('lokasi_keluar')->nullable();
             $table->timestamps();
         });
     }
@@ -29,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('absensi_guru');
+        Schema::dropIfExists('absensi_pendidik');
     }
 };
