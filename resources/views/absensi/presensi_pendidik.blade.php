@@ -59,11 +59,9 @@
                         <div class="row mt-3">
                         <div class="col">
                             @if($cek > 0)
-                                @if($jam > "15:00:00")
-                                    <button id="ambil_presensi" class="btn btn-danger btn-block">
-                                        <i class="fa-solid fa-camera-retro"></i> Absen Pulang
-                                    </button>
-                                @endif
+                                <button id="ambil_presensi" class="btn btn-danger btn-block">
+                                    <i class="fa-solid fa-camera-retro"></i> Absen Pulang
+                                </button>
                             @else
                                 @if($jam > $setting->limit_presensi)
                                     <button id="tombolLimit" class="btn btn-primary btn-block disabled">

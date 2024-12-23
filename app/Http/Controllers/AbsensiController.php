@@ -196,7 +196,7 @@ class AbsensiController extends Controller
     $user = Auth::user();
     $guru = DB::table('guru')->where('id_user', $user->id)->first();
     $hari_ini = now()->toDateString();
-    $jam = now()->toTimeString();
+    $jam = Carbon::now();
     $setting = Setting::first();
 
     [$latUser, $lngUser] = explode(",", $request->lokasi);
@@ -224,7 +224,8 @@ class AbsensiController extends Controller
             return response()->json(['status' => 'error', 'message' => 'Anda sudah absen Pulang hari ini.']);
         }
 
-        if (now()->diffInSeconds($cekPresensi->jam_masuk) < 300) {
+        $selisih = strtotime($jam) - strtotime($cekPresensi->jam_masuk);
+        if ($selisih < 300) {
             return response()->json(['status' => 'error', 'message' => 'Anda tidak bisa absen keluar terlalu cepat setelah absen masuk! Tunggu 5 menit.']);
         }
 
