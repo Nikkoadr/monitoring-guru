@@ -30,7 +30,35 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-body">
-                                <p class="card-title">Assalaamu’alaikum Warahmatullaahi Wabarakaatuh. {{ Auth::user()->name }}</p>
+                                @can('admin')
+                                <h5>Daftar Kelas dan Status KBM</h5>
+                                <p><strong>Tanggal:</strong> {{ $hariIni }}</p>
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Nama Kelas</th>
+                                            <th>Status KBM</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @forelse ($kelas as $index => $item)
+                                            <tr>
+                                                <td>{{ $loop->iteration }}</td>
+                                                <td>{{ $item->nama_kelas }}</td>
+                                                <td>{{ $item->status }}</td>
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="3" class="text-center">Tidak ada data kelas.</td>
+                                            </tr>
+                                        @endforelse
+                                    </tbody>
+                                </table>
+                                @endcan
+                                @can('guru' || 'siswa' || 'karyawan')
+                                    <p class="card-title">Assalaamu’alaikum Warahmatullaahi Wabarakaatuh. {{ Auth::user()->name }}</p>
+                                @endcan
                             </div>
                         </div>
                     </div>
