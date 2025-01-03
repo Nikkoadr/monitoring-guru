@@ -19,10 +19,11 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
         Setting::create([
-            'namaLokasi' => 'SMK Muhammadiyah Kandanghaur',
-            'latitude' => '-6.363041',
-            'longitude' => '108.113627',
-            'radius' => '70',
+            'nama_aplikasi' => 'SMK Muhammadiyah Kandanghaur',
+            'logo_aplikasi' => 'dafault.png',
+            'lokasi_latitude' => '-6.363041',
+            'lokasi_longitude' => '108.113627',
+            'radius_lokasi' => '70',
             'mulai_presensi' => '6:45',
             'limit_presensi' => '13:00',
         ]);
