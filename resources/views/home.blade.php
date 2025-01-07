@@ -39,6 +39,9 @@
                                             <th>#</th>
                                             <th>Nama Kelas</th>
                                             <th>Status KBM</th>
+                                            <th>Jumlah Hadir</th>
+                                            <th>Jumlah Belum Hadir</th>
+                                            <th>Total Siswa</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -47,18 +50,42 @@
                                                 <td>{{ $loop->iteration }}</td>
                                                 <td>{{ $item->nama_kelas }}</td>
                                                 <td>{{ $item->status }}</td>
+                                                <td>{{ $item->jumlah_hadir }}</td>
+                                                <td>{{ $item->jumlah_belum_hadir }}</td>
+                                                <td>{{ $item->total_siswa }}</td>
                                             </tr>
                                         @empty
                                             <tr>
-                                                <td colspan="3" class="text-center">Tidak ada data kelas.</td>
+                                                <td colspan="6" class="text-center">Tidak ada data kelas.</td>
                                             </tr>
                                         @endforelse
                                     </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="3" class="text-end"><strong>Total Kelas yang mulai KBM:</strong></td>
+                                            <td colspan="3" class="text-start">{{ $totalKelasHadir }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3" class="text-end"><strong>Total Jumlah Siswa Hadir:</strong></td>
+                                            <td colspan="3" class="text-start">{{ $totalJumlahHadir }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3" class="text-end"><strong>Total Jumlah Siswa Belum Hadir:</strong></td>
+                                            <td colspan="3" class="text-start">{{ $totalJumlahBelumHadir }}</td>
+                                        </tr>
+                                    </tfoot>
                                 </table>
                                 @endcan
-                                @can('guru' || 'siswa' || 'karyawan')
-                                    <p class="card-title">Assalaamu’alaikum Warahmatullaahi Wabarakaatuh. {{ Auth::user()->name }}</p>
-                                @endcan
+                                @if (Auth::user()->can('siswa') && isset($userKelas))
+                                    <p class="card-title">
+                                        Assalaamu’alaikum Warahmatullaahi Wabarakaatuh. <b>{{ Auth::user()->name }}</b>
+                                        Kelas: <b>{{ $userKelas->nama_kelas }}</b> Selamat belajar!
+                                    </p>
+                                @elseif (Auth::user()->can('guru') || Auth::user()->can('karyawan'))
+                                    <p class="card-title">
+                                        Assalaamu’alaikum Warahmatullaahi Wabarakaatuh. {{ Auth::user()->name }}
+                                    </p>
+                                @endif
                             </div>
                         </div>
                     </div>

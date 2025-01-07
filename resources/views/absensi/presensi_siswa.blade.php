@@ -78,8 +78,8 @@
     </div>
 @endsection
 @section('js')
-<script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+<script>
 const video = document.getElementById('video');
 const canvas = document.getElementById('canvas');
 const captureButton = document.getElementById('capture');
@@ -90,12 +90,11 @@ const cameraContainer = document.getElementById('camera-container');
 const fotoData = document.getElementById('foto_data');
 
 let currentStream;
-let currentCamera = 'user';  // Default ke kamera belakang
+let currentCamera = 'user';
 
-// Fungsi untuk mengakses kamera
 async function startCamera(cameraType) {
     if (currentStream) {
-        currentStream.getTracks().forEach(track => track.stop()); // Hentikan stream sebelumnya
+        currentStream.getTracks().forEach(track => track.stop());
     }
 
     try {
@@ -108,10 +107,8 @@ async function startCamera(cameraType) {
     }
 }
 
-// Panggil fungsi untuk memulai kamera
 startCamera(currentCamera);
 
-// Fungsi untuk mengambil foto
 captureButton.addEventListener('click', function () {
     const context = canvas.getContext('2d');
     canvas.width = video.videoWidth;
@@ -121,17 +118,16 @@ captureButton.addEventListener('click', function () {
     const dataURL = canvas.toDataURL('image/png');
     fotoData.value = dataURL;
 
-    // Tampilkan preview gambar
     previewImage.src = dataURL;
-    previewContainer.style.display = 'block';  // Tampilkan div preview
-    cameraContainer.style.display = 'none';    // Sembunyikan kamera
+    previewContainer.style.display = 'block';
+    cameraContainer.style.display = 'none';
 });
 
 // Fungsi untuk mengambil ulang foto
 retakeButton.addEventListener('click', function () {
-    previewContainer.style.display = 'none';   // Sembunyikan preview gambar
-    cameraContainer.style.display = 'block';   // Tampilkan kembali kamera
-    startCamera(currentCamera);  // Mulai ulang kamera
+    previewContainer.style.display = 'none';
+    cameraContainer.style.display = 'block';
+    startCamera(currentCamera);
 });
 </script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
