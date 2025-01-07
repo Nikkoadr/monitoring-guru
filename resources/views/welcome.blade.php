@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+{{-- <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
         <meta charset="utf-8">
@@ -169,4 +169,137 @@
             </div>
         </div>
     </body>
+</html> --}}
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>Smkmuhkandanghaur</title>
+  <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    rel="stylesheet"
+  />
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  />
+</head>
+<body class="bg-light">
+  <div class="container mt-5">
+    <div class="card shadow-lg">
+    <div class="card-header text-center">
+    <h5 class="mb-0">Smkmuhkandanghaur</h5>
+    </div>
+      <div class="card-body">
+        <div class="d-flex align-items-center mb-4">
+          <img
+            src="https://storage.googleapis.com/a1aa/image/9Py5N4xi3qrML9pqQ19lqoDye4f1fJuABr0Wo6xnCaPVHUFoA.jpg"
+            alt="Profile picture of Dwi Putri Gantini"
+            class="rounded-circle"
+            width="50"
+            height="50"
+          />
+          <div class="ml-3">
+            <p class="mb-0 text-secondary">SMK Muhammadiyah Kandanghaur</p>
+            <h6 class="mb-0 font-weight-bold">Nikko Adrian</h6>
+            <p class="mb-0 text-secondary">Tenaga Administrasi Sekolah</p>
+          </div>
+        </div>
+        <div class="d-flex justify-content-between align-items-center bg-light p-3 rounded mb-4">
+          <div class="d-flex align-items-center">
+            <i class="fas fa-map-marker-alt text-success mr-2"></i>
+            <div>
+              <p class="mb-0 text-sm">Skema: ABSENSI DIKANTOR</p>
+              <p class="mb-0 text-sm">Lokasi: UPTD RUMAH SAKIT UMUM DAERAH AL-IHSAN</p>
+              <p class="mb-0 text-sm">Jarak realtime: 100000 M</p>
+            </div>
+          </div>
+          <i class="fas fa-calendar-alt text-warning"></i>
+        </div>
+        <div class="d-flex justify-content-between">
+        <!-- Absen Masuk -->
+        <div class="bg-primary text-white d-flex align-items-center p-3 rounded mb-4" style="width: 48%;">
+            <img src="path_to_image.jpg" alt="Foto Absen Masuk" class="rounded-circle me-3" style="width: 50px; height: 50px;">
+            <div class="text-center flex-grow-1">
+            <p class="mb-1">Absen Masuk</p>
+            <p class="mb-0">Minggu, 08 May 2022 10:06:13</p>
+            </div>
+        </div>
+
+        <!-- Absen Pulang -->
+        <div class="bg-danger text-white d-flex align-items-center p-3 rounded mb-4" style="width: 48%;">
+            <img src="path_to_image.jpg" alt="Foto Absen Pulang" class="rounded-circle me-3" style="width: 50px; height: 50px;">
+            <div class="text-center flex-grow-1">
+            <p class="mb-1">Absen Pulang</p>
+            <p class="mb-0">Minggu, 08 May 2022 10:06:13</p>
+            </div>
+        </div>
+        </div>
+        <div class="row text-center">
+          <div class="col-3 mb-3">
+            <i class="fas fa-envelope text-success fa-2x"></i>
+            <p class="mt-2">Surat</p>
+          </div>
+          <div class="col-3 mb-3">
+            <i class="fas fa-fire text-danger fa-2x"></i>
+            <p class="mt-2">EWS</p>
+          </div>
+          <div class="col-3 mb-3">
+            <i class="fas fa-check-circle text-primary fa-2x"></i>
+            <p class="mt-2">Persetujuan</p>
+          </div>
+          <div class="col-3 mb-3">
+            <i class="fas fa-signature text-purple fa-2x"></i>
+            <p class="mt-2">E-signature</p>
+          </div>
+          <div class="col-3">
+            <i class="fas fa-chart-bar text-warning fa-2x"></i>
+            <p class="mt-2">Laporan</p>
+          </div>
+          <div class="col-3">
+            <i class="fas fa-briefcase text-info fa-2x"></i>
+            <p class="mt-2">Dinas Luar</p>
+          </div>
+          <div class="col-3">
+            <i class="fas fa-calendar-times text-secondary fa-2x"></i>
+            <p class="mt-2">Cuti</p>
+          </div>
+          <div class="col-3">
+            <i class="fas fa-clock text-cyan fa-2x"></i>
+            <p class="mt-2">Izin</p>
+          </div>
+        </div>
+        {{-- <div class="bg-white p-3 rounded shadow-sm">
+          <p class="text-center font-weight-bold mb-0">
+            PROGRESS KEHADIRAN BULAN BERJALAN
+          </p>
+        </div> --}}
+      </div>
+      <div class="card-footer d-flex justify-content-around">
+        <button class="btn btn-link text-primary text-center">
+          <i class="fas fa-home fa-2x"></i>
+          <p class="mt-1">Beranda</p>
+        </button>
+        <button class="btn btn-link text-secondary text-center">
+          <i class="fas fa-plus-circle fa-2x"></i>
+          <p class="mt-1">Tambah</p>
+        </button>
+        <button class="btn btn-link text-secondary text-center">
+          <i class="fas fa-cog fa-2x"></i>
+          <p class="mt-1">Pengaturan</p>
+        </button>
+        <button class="btn btn-link text-secondary text-center">
+          <i class="fas fa-user fa-2x"></i>
+          <p class="mt-1">Profile</p>
+        </button>
+      </div>
+    </div>
+  </div>
+  <script
+    src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+  ></script>
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"
+  ></script>
+</body>
 </html>
