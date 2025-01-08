@@ -47,7 +47,7 @@
                                 <select class="form-control" name="id_status_izin" id="id_status_izin" required>
                                     <option value="">Pilih Status</option>
                                     @foreach ($status_izin as $status)
-                                        <option value="{{ $status->id }}" {{ $data_izin_siswa->id_status_izin == $status->id ? 'selected' : '' }}>{{ $status->status_izin }}</option>
+                                        <option value="{{ $status->id }}" {{ $data_izin_siswa->id_status_izin == $status->id ? 'selected' : '' }}>{{ $status->nama_status_izin }}</option>
                                     @endforeach
                                 </select>
                                     <button class="btn btn-primary mt-2 float-right" type="submit">Edit Izin</button>

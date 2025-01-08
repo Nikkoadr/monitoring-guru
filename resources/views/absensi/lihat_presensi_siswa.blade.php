@@ -59,7 +59,7 @@
                                                 <select name="id_status_hadir" class="form-control" id="id_status_hadir_{{ $absensi->id_siswa }}" onchange="this.form.submit()">
                                                     <option value="" {{ $absensi->id_status_hadir == null ? 'selected' : '' }}>Pilih Status Hadir</option>
                                                     @foreach ($status_hadir as $status)
-                                                        <option value="{{ $status->id }}" {{ $absensi->id_status_hadir == $status->id ? 'selected' : '' }}>{{ $status->status_hadir }}</option>
+                                                        <option value="{{ $status->id }}" {{ $absensi->id_status_hadir == $status->id ? 'selected' : '' }}>{{ $status->nama_status_hadir }}</option>
                                                     @endforeach
                                                 </select>
                                             </form>

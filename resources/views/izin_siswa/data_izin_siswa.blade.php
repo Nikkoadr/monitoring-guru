@@ -49,7 +49,7 @@
                                             <td>{{ $izin_siswa->jam_keluar }}</td>
                                             <td>{{ $izin_siswa->nama_siswa }}</td>
                                             <td>{{ $izin_siswa->alasan }}</td>
-                                            <td>{{ $izin_siswa->status_izin }}</td>
+                                            <td>{{ $izin_siswa->nama_status_izin }}</td>
                                             <td>
                                                 <button class="btn btn-danger float-right m-1" onclick="confirmDelete({{ $izin_siswa->id }})"><i class="fa-solid fa-trash-can"></i></button>
                                                 <a href="/print_izin_siswa_{{ $izin_siswa->id }}" class="btn btn-info float-right m-1"><i class="fa-solid fa-print"></i></a>

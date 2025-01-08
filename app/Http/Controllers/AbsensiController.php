@@ -137,7 +137,7 @@ class AbsensiController extends Controller
                 'siswa.id as id_siswa',
                 'users.name as nama_siswa',
                 'kelas.nama_kelas',
-                DB::raw('COALESCE(status_hadir.status_hadir, "Alfa") as status_hadir'),
+                DB::raw('COALESCE(status_hadir.nama_status_hadir, "Alfa") as status_hadir'),
                 DB::raw('COALESCE(absensi_siswa.foto, "default.jpeg") as foto'),
                 DB::raw('COALESCE(absensi_siswa.jam_hadir, "00:00") as jam_hadir')
             )
@@ -169,7 +169,7 @@ class AbsensiController extends Controller
 
         $status_hadir = DB::table('status_hadir')
             ->where('id', $request->id_status_hadir)
-            ->value('status_hadir');
+            ->value('nama_status_hadir');
 
         return redirect('/lihat_presensi_siswa_' . $request->id_kbm)->with('success', 'Status Hadir ' . $status_hadir . ' Berhasil Diubah');
     }

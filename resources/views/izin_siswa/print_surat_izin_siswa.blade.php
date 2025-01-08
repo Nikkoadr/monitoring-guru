@@ -176,7 +176,7 @@
                 <tr>
                     <td><b>Status Izin</b></td>
                     <td>:</td>
-                    <td>{{ $data_izin_siswa->status_izin }}</td>
+                    <td>{{ $data_izin_siswa->nama_status_izin }}</td>
                 </tr>
             </table>
             <p>Telah diberikan izin untuk keluar dari lingkungan sekolah sementara waktu dalam rangka keperluan yang telah disebutkan di atas.</p>

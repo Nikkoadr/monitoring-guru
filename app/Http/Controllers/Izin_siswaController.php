@@ -14,7 +14,7 @@ class Izin_siswaController extends Controller
             ->join('siswa', 'izin_siswa.id_siswa', '=', 'siswa.id')
             ->join('users', 'siswa.id_user', '=', 'users.id')
             ->join('status_izin', 'izin_siswa.id_status_izin', '=', 'status_izin.id')
-            ->select('izin_siswa.*', 'users.name as nama_siswa', 'status_izin.status_izin')
+            ->select('izin_siswa.*', 'users.name as nama_siswa', 'status_izin.nama_status_izin')
             ->whereDate('izin_siswa.tanggal', '=', date('Y-m-d')) // Sesuaikan nama kolom dengan tabel Anda
             ->get();
         return view('izin_siswa.data_izin_siswa', compact('data_izin_siswa'));
@@ -26,7 +26,7 @@ class Izin_siswaController extends Controller
             ->join('siswa', 'izin_siswa.id_siswa', '=', 'siswa.id')
             ->join('users', 'siswa.id_user', '=', 'users.id')
             ->join('status_izin', 'izin_siswa.id_status_izin', '=', 'status_izin.id')
-            ->select('izin_siswa.*', 'users.name as nama_siswa', 'status_izin.status_izin')
+            ->select('izin_siswa.*', 'users.name as nama_siswa', 'status_izin.nama_status_izin')
             ->where('izin_siswa.id_siswa', $id_siswa)
             ->get();
 
@@ -61,7 +61,7 @@ class Izin_siswaController extends Controller
             ->join('siswa', 'izin_siswa.id_siswa', '=', 'siswa.id')
             ->join('users', 'siswa.id_user', '=', 'users.id')
             ->join('status_izin', 'izin_siswa.id_status_izin', '=', 'status_izin.id')
-            ->select('izin_siswa.*', 'users.name as nama_siswa', 'status_izin.status_izin')
+            ->select('izin_siswa.*', 'users.name as nama_siswa', 'status_izin.nama_status_izin')
             ->where('izin_siswa.id', $id)
             ->first();
         $status_izin = DB::table('status_izin')->get();
@@ -94,7 +94,7 @@ class Izin_siswaController extends Controller
             ->join('users', 'siswa.id_user', '=', 'users.id')
             ->join('kelas', 'izin_siswa.id_kelas', '=', 'kelas.id')
             ->join('status_izin', 'izin_siswa.id_status_izin', '=', 'status_izin.id')
-            ->select('izin_siswa.*', 'users.name as nama_siswa', 'kelas.nama_kelas','status_izin.status_izin')
+            ->select('izin_siswa.*', 'users.name as nama_siswa', 'kelas.nama_kelas','status_izin.nama_status_izin')
             ->where('izin_siswa.id', $id)
             ->first();
         return view('izin_siswa.print_surat_izin_siswa', compact('data_izin_siswa'));

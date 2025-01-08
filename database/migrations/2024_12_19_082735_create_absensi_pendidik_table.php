@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('absensi_pendidik', function (Blueprint $table) {
             $table->id();
             $table->foreignId('id_guru')->nullable()->index()->references('id')->on('guru');
-            $table->foreignId('id_karyawan')->nullable()->index()->references('id')->on('karayawan');
+            $table->foreignId('id_karyawan')->nullable()->index()->references('id')->on('karyawan');
             $table->foreignId('id_status_hadir')->nullable()->index()->references('id')->on('status_hadir');
             $table->date('tanggal')->nullable();
             $table->time('jam_masuk')->nullable();
