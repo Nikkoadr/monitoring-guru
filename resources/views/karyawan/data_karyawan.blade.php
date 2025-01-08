@@ -16,7 +16,7 @@
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="#">Home</a></li>
-                    <li class="breadcrumb-item active">Data Kepsek</li>
+                    <li class="breadcrumb-item active">Data Karyawan</li>
                     </ol>
                 </div>
                 </div>
@@ -28,25 +28,25 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-                                <h3 class="card-title">Data Kesiswaan</h3>
-                                <a href="/tambah_Kesiswaan" class="btn btn-primary float-right">Tambah Kesiswaan</a>
+                                <h3 class="card-title">Data Karyawan</h3>
+                                <a href="/tambah_karyawan" class="btn btn-primary float-right">Tambah Karyawan</a>
                             </div>
                             <div class="card-body">
-                                <table id="tabel_kesiswaan" class="table table-bordered table-striped">
+                                <table id="tabel_kepsek" class="table table-bordered table-striped">
                                     <thead>
                                         <th>No</th>
-                                        <th>Nama Kesiswaan</th>
-                                        <th>Tugas</th>
+                                        <th>Nama Karyawan</th>
+                                        <th>Nama tugas</th>
                                         <th>Menu</th>
                                     </thead>
                                     <tbody>
-                                        @foreach ($data_kesiswaan as  $data)
+                                        @foreach ($data_karyawan as  $data)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $data->nama_kesiswaan }}</td>
+                                            <td>{{ $data->nama_karyawan }}</td>
                                             <td>{{ $data->tugas }}</td>
                                             <td>
-                                                </i></a><a href="/hapus_kesiswaan_{{ $data->id }}" class="btn btn-danger float-right m-1"><i class="fa-solid fa-trash"></i></a>
+                                                </i></a><a href="/hapus_kepsek_{{ $data->id }}" class="btn btn-danger float-right m-1"><i class="fa-solid fa-trash"></i></a>
                                             </td>
                                         </tr>
                                         @endforeach
@@ -79,7 +79,7 @@
 
 <script>
 $(function () {
-$("#tabel_kesiswaan").DataTable({
+$("#tabel_kepsek").DataTable({
     "responsive": true, 
     "lengthChange": true, 
     "autoWidth": true, 
@@ -89,7 +89,7 @@ $("#tabel_kesiswaan").DataTable({
         [25, 50, 100, 200, "All"]
     ],
     "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-}).buttons().container().appendTo('#tabel_kesiswaan_wrapper .col-md-6:eq(0)');
+}).buttons().container().appendTo('#tabel_kepsek_wrapper .col-md-6:eq(0)');
 });
 </script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
@@ -108,7 +108,7 @@ $("#tabel_kesiswaan").DataTable({
     @endif
 </script>
 <script>
-    function confirmDelete(Id) {
+    function confirmDelete(roleId) {
         Swal.fire({
             title: 'Apakah Anda yakin?',
             text: "Data tidak dapat dikembalikan setelah dihapus!",
@@ -120,7 +120,7 @@ $("#tabel_kesiswaan").DataTable({
             cancelButtonText: 'Batal'
         }).then((result) => {
             if (result.isConfirmed) {
-                window.location.href = `/hapus_kesiswaan_${Id}`;
+                window.location.href = `/hapus_role_${roleId}`;
             }
         });
     }

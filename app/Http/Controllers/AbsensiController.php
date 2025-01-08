@@ -174,19 +174,34 @@ class AbsensiController extends Controller
         return redirect('/lihat_presensi_siswa_' . $request->id_kbm)->with('success', 'Status Hadir ' . $status_hadir . ' Berhasil Diubah');
     }
 
-        public function presensi_pendidik()
-    {
-            $tanggal = date("Y-m-d");
-            $user = Auth::user();
-            $guru = DB::table('guru')->where('id_user', $user->id)->first();
-            $cek = DB::table('absensi_pendidik')->where('tanggal', $tanggal)->where('id_guru', $guru->id)->count();
-            $setting = Setting::first();
-            $limit_presensi = $setting->limit_presensi;
-            $jam = date("H:i:s");
-            return view('absensi.presensi_pendidik', compact('cek', 'setting', 'jam', 'limit_presensi'));
+public function presensi_pendidik()
+{
+    $tanggal = date("Y-m-d");
+    $user = Auth::user();
+
+    // Mengecek apakah user adalah guru atau karyawan
+    $guru = DB::table('guru')->where('id_user', $user->id)->first();
+    $karyawan = DB::table('karyawan')->where('id_user', $user->id)->first();
+
+    $cek = null; // Variabel untuk mengecek presensi
+
+    // Jika yang login adalah guru
+    if ($guru) {
+        $cek = DB::table('absensi_pendidik')->where('tanggal', $tanggal)->where('id_guru', $guru->id)->count();
+    }
+    // Jika yang login adalah karyawan
+    elseif ($karyawan) {
+        $cek = DB::table('absensi_pendidik')->where('tanggal', $tanggal)->where('id_karyawan', $karyawan->id)->count();
     }
 
-    public function post_presensi_pendidik(Request $request)
+    $setting = Setting::first();
+    $limit_presensi = $setting->limit_presensi;
+    $jam = date("H:i:s");
+
+    return view('absensi.presensi_pendidik', compact('cek', 'setting', 'jam', 'limit_presensi'));
+}
+
+public function post_presensi_pendidik(Request $request)
 {
     $request->validate([
         'foto' => 'required|string',
@@ -194,7 +209,20 @@ class AbsensiController extends Controller
     ]);
 
     $user = Auth::user();
+
     $guru = DB::table('guru')->where('id_user', $user->id)->first();
+    $karyawan = DB::table('karyawan')->where('id_user', $user->id)->first();
+
+    if ($guru) {
+        $idGuru = $guru->id;
+        $idKaryawan = null;
+    } elseif ($karyawan) {
+        $idGuru = null;
+        $idKaryawan = $karyawan->id;
+    } else {
+        return response()->json(['status' => 'error', 'message' => 'User tidak terdaftar sebagai guru atau karyawan.']);
+    }
+
     $hari_ini = now()->toDateString();
     $jam = Carbon::now();
     $setting = Setting::first();
@@ -207,14 +235,22 @@ class AbsensiController extends Controller
         $lngUser
     )["meters"]);
 
-    $cekPresensi = DB::table('absensi_pendidik')
-        ->where('tanggal', $hari_ini)
-        ->where('id_guru', $guru->id)
-        ->first();
-
     if ($radius > $setting->radius_lokasi) {
         return response()->json(['status' => 'error', 'message' => "Maaf, Jarak Anda $radius M dari {$setting->nama_aplikasi}"]);
     }
+
+    // Cek presensi berdasarkan guru atau karyawan
+    $cekPresensi = DB::table('absensi_pendidik')
+        ->where('tanggal', $hari_ini)
+        ->where(function ($query) use ($idGuru, $idKaryawan) {
+            if ($idGuru) {
+                $query->where('id_guru', $idGuru);
+            }
+            if ($idKaryawan) {
+                $query->where('id_karyawan', $idKaryawan);
+            }
+        })
+        ->first();
 
     $fotoPath = "{$user->id}-$hari_ini-" . ($cekPresensi ? "keluar" : "masuk") . ".png";
     $fotoBase64 = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $request->foto));
@@ -229,6 +265,7 @@ class AbsensiController extends Controller
             return response()->json(['status' => 'error', 'message' => 'Anda tidak bisa absen keluar terlalu cepat setelah absen masuk! Tunggu 5 menit.']);
         }
 
+        // Update data presensi keluar
         $updateData = [
             'jam_keluar' => $jam,
             'foto_keluar' => $fotoPath,
@@ -236,9 +273,11 @@ class AbsensiController extends Controller
         ];
         DB::table('absensi_pendidik')->where('id', $cekPresensi->id)->update($updateData);
     } else {
+        // Insert data presensi masuk
         $insertData = [
             'id_status_hadir' => 1,
-            'id_guru' => $guru->id,
+            'id_guru' => $idGuru,
+            'id_karyawan' => $idKaryawan,
             'tanggal' => $hari_ini,
             'jam_masuk' => $jam,
             'foto_masuk' => $fotoPath,
@@ -247,9 +286,10 @@ class AbsensiController extends Controller
         DB::table('absensi_pendidik')->insert($insertData);
     }
 
+    // Simpan foto presensi
     Storage::disk(env('STORAGE_DISK'))->put('foto_presensi_pendidik/' . $fotoPath, $fotoBase64);
 
-    $message = $cekPresensi ? 'Anda Sudah Absen Pulang. Hati - hati di jalan!' : 'Terima kasih Anda sudah melakukan absen masuk. Jangan lupa presensi keluar!';
+    $message = $cekPresensi ? 'Anda Sudah Absen Pulang. Hati-hati di jalan!' : 'Terima kasih Anda sudah melakukan absen masuk. Jangan lupa presensi keluar!';
     return response()->json(['status' => 'success', 'message' => $message]);
 }
 

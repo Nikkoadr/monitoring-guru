@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('waka', function (Blueprint $table) {
             $table->id();
             $table->foreignId('id_guru')->nullable()->index()->references('id')->on('guru');
+            $table->string('jabatan');
             $table->timestamps();
         });
     }

@@ -16,6 +16,9 @@ use App\Http\Controllers\KbmController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\AbsensiController;
 use App\Http\Controllers\Izin_siswaController;
+use App\Http\Controllers\KaryawanController;
+use App\Http\Controllers\KepsekController;
+use App\Http\Controllers\WakaController;
 use App\Http\Controllers\KesiswaanController;
 use App\Http\Controllers\LaporanController;
 
@@ -67,6 +70,11 @@ Route::post('/post_guru', [GuruController::class, 'post_guru']);
 Route::get('/form_edit_guru_{id}', [GuruController::class, 'post_guru']);
 Route::post('/update_edit_guru_{id}', [GuruController::class, 'post_guru']);
 Route::get('/hapus_guru_{id}', [GuruController::class, 'hapus_guru']);
+
+Route::get('/data_karyawan', [KaryawanController::class, 'index']);
+Route::get('/data_kepsek', [KepsekController::class, 'index']);
+Route::get('/data_waka', [WakaController::class, 'index']);
+Route::get('/data_kesiswaan', [KesiswaanController::class, 'index']);
 
 Route::get('/data_mapel', [MapelController::class, 'index']);
 Route::get('/form_tambah_mapel', [MapelController::class, 'form_tambah_mapel']);

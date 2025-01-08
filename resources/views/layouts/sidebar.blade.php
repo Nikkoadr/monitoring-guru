@@ -41,12 +41,18 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="kbm" class="nav-link {{ request()->is('kbm') ? 'active' : '' }}">
-                    <i class="nav-icon fa-solid fa-people-roof"></i>
-                    <p>
-                        KBM
-                    </p>
-                    </a>
+                    @php
+                        $isKaryawan = DB::table('karyawan')->where('id_user', auth()->id())->exists();
+                    @endphp
+
+                    @if (!$isKaryawan)
+                        <a href="/kbm" class="nav-link {{ request()->is('kbm') ? 'active' : '' }}">
+                            <i class="nav-icon fa-solid fa-people-roof"></i>
+                            <p>
+                                KBM
+                            </p>
+                        </a>
+                    @endif
                 </li>
                 @foreach (['admin' => '/data_izin_siswa', 'siswa' => 'req_izin_siswa'] as $role => $href)
                     @can($role)
@@ -84,6 +90,30 @@
                         <a href="/data_guru" class="nav-link {{ request()->is('data_guru') ? 'active' : '' }}">
                         <i class="far fa-circle nav-icon"></i>
                         <p>Data Guru</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/data_karyawan" class="nav-link {{ request()->is('data_karyawan') ? 'active' : '' }}">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Data Karyawan</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/data_kepsek" class="nav-link {{ request()->is('data_kepsek') ? 'active' : '' }}">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Data kepala Sekolah</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/data_waka" class="nav-link {{ request()->is('data_waka') ? 'active' : '' }}">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Data WaKa</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/data_kesiswaan" class="nav-link {{ request()->is('data_kesiswaan') ? 'active' : '' }}">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Data Kesiswaan</p>
                         </a>
                     </li>
                     <li class="nav-item">
@@ -142,11 +172,11 @@
                 </li>
                 @endcan
                 @php
-                    $is_guru = DB::table('guru')
+                    $isGuru = DB::table('guru')
                                 ->where('id_user', Auth::user()->id)
                                 ->exists();
                 @endphp
-                @if($is_guru)
+                @if($isGuru || $isKaryawan)
                 <li class="nav-item">
                     <a href="/presensi_pendidik" class="nav-link {{ request()->is('presensi_pendidik') ? 'active' : '' }}">
                     <i class="nav-icon fa-solid fa-clipboard-user"></i>
