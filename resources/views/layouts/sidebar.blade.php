@@ -55,14 +55,22 @@
                     @endif
                 </li>
                 @foreach (['admin' => '/data_izin_siswa', 'siswa' => 'req_izin_siswa'] as $role => $href)
-                    @can($role)
+                    @if (
+                        ($role === 'admin' &&
+                        (auth()->user()->can('admin') || 
+                        \DB::table('kesiswaan')
+                            ->join('guru', 'kesiswaan.id_guru', '=', 'guru.id')
+                            ->where('guru.id_user', auth()->id())
+                            ->exists())) 
+                        || auth()->user()->can($role)
+                    )
                     <li class="nav-item">
                         <a href="{{ $href }}" class="nav-link {{ request()->is(ltrim($href, '/')) ? 'active' : '' }}">
                             <i class="nav-icon {{ $role === 'admin' ? 'fa-regular fa-envelope' : 'fa-solid fa-circle-info' }}"></i>
                             <p>{{ $role === 'admin' ? 'Data Izin Siswa' : 'Izin Siswa' }}</p>
                         </a>
                     </li>
-                    @endcan
+                    @endif
                 @endforeach
                 @can('admin')
                 <li class="nav-item menu-open">
