@@ -71,84 +71,55 @@
         </div>
         <h3>Periode : {{ \Carbon\Carbon::createFromFormat('Y-m-d', $tanggalAwal)->translatedFormat('d F Y') }} - {{ \Carbon\Carbon::createFromFormat('Y-m-d', $tanggalAkhir)->translatedFormat('d F Y') }}</h3>
         <table style="border: 1px solid black; border-collapse: collapse; width: 100%;">
-            <thead>
-                <tr>
-                    <th style="border: 1px solid black; padding: 5px;" rowspan="2">Nama</th>
-                    <th style="border: 1px solid black; padding: 5px;" rowspan="2">Jabatan</th>
-                    @php
-                        $jumlahHari = \Carbon\Carbon::createFromFormat('Y-m-d', $tanggalAwal)
-                                    ->diffInDays(\Carbon\Carbon::createFromFormat('Y-m-d', $tanggalAkhir)) + 1;
-                    @endphp
-                    <th style="border: 1px solid black; padding: 5px;" colspan="{{ $jumlahHari }}">Tanggal</th>
-                    <th style="border: 1px solid black; padding: 5px;" rowspan="2">Jumlah</th>
-                    <th style="border: 1px solid black; padding: 5px;" rowspan="2">Keterangan</th>
-                </tr>
-                <tr>
-                    @php
-                        $start = \Carbon\Carbon::createFromFormat('Y-m-d', $tanggalAwal);
-                        $end = \Carbon\Carbon::createFromFormat('Y-m-d', $tanggalAkhir);
-                    @endphp
-                    @while ($start <= $end)
-                        <th style="border: 1px solid black; padding: 5px; text-align: center;">{{ $start->day }}</th>
-                        @php
-                            $start->addDay();
-                        @endphp
-                    @endwhile
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($rekap as $data)
-                    <tr>
-                        <td style="border: 1px solid black; padding: 5px;">{{ $data->nama }}</td>
-                        <td style="border: 1px solid black; padding: 5px;">{{ $data->jabatan ?? 'Tidak ada jabatan' }}</td>
-                        @php
-                            $start = \Carbon\Carbon::createFromFormat('Y-m-d', $tanggalAwal);
-                            $end = \Carbon\Carbon::createFromFormat('Y-m-d', $tanggalAkhir);
-                            $totalHadirKBM = 0;
-                            $totalHadirSaja = 0;
-                        @endphp
-                        @while ($start <= $end)
-                            <td style="border: 1px solid black; padding: 5px; text-align: center;">
-                                @if (isset($data->keterangan_perhari['tgl_'.$start->day]))
-                                    @php
-                                        $keterangan = $data->keterangan_perhari['tgl_'.$start->day];
-                                    @endphp
-                                    @if ($keterangan === 'Masuk Kelas')
-                                        H
-                                        @php $totalHadirKBM++; @endphp
-                                    @elseif ($keterangan === 'Masuk tapi tidak masuk kelas')
-                                        ?
-                                        @php $totalHadirSaja++; @endphp
-                                    @elseif ($keterangan === 'Hadir')
-                                        H
-                                        @php $totalHadirSaja++; @endphp
-                                    @endif
-                                @else
-                                    -
-                                @endif
-                            </td>
-                            @php
-                                $start->addDay();
-                            @endphp
-                        @endwhile
-                        <td style="border: 1px solid black; padding: 5px; text-align: center;">{{ $totalHadirKBM + $totalHadirSaja }}</td>
-                        <td style="border: 1px solid black; padding: 5px;">
-                            @if ($data->jabatan === 'Guru')
-                                Hadir di KBM: {{ $totalHadirKBM }}, Hadir saja: {{ $totalHadirSaja }}
-                            @elseif ($data->jabatan === 'Kepala Sekolah')
-                                Memimpin sekolah dengan total kehadiran: {{ $totalHadirSaja }} hari.
-                            @elseif ($data->jenis_pengguna === 'Guru')
-                                Menjalankan tugas sebagai {{ $data->jabatan }} dengan kehadiran: {{ $totalHadirSaja }} hari.
-                            @elseif ($data->jenis_pengguna === 'Karyawan')
-                                Melaksanakan tugas sebagai {{ $data->jabatan }}, hadir: {{ $totalHadirSaja }} hari.
-                            @else
-                                Kehadiran tidak terdefinisi.
-                            @endif
-                        </td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
+    <thead>
+        <tr>
+            <th rowspan="2" style="border: 1px solid black; padding: 5px;">Nama</th>
+            <th rowspan="2" style="border: 1px solid black; padding: 5px;">Jabatan</th>
+            @php
+                $jumlahHari = \Carbon\Carbon::createFromFormat('Y-m-d', $tanggalAwal)
+                    ->diffInDays(\Carbon\Carbon::createFromFormat('Y-m-d', $tanggalAkhir)) + 1;
+            @endphp
+            <th colspan="{{ $jumlahHari }}" style="border: 1px solid black; padding: 5px;">Tanggal</th>
+            <th colspan="4" style="border: 1px solid black; padding: 5px;">Jumlah</th>
+        </tr>
+        <tr>
+            @php
+                $start = \Carbon\Carbon::createFromFormat('Y-m-d', $tanggalAwal);
+                $end = \Carbon\Carbon::createFromFormat('Y-m-d', $tanggalAkhir);
+            @endphp
+            @while ($start <= $end)
+                <th style="border: 1px solid black; padding: 5px; text-align: center;">{{ $start->day }}</th>
+                @php $start->addDay(); @endphp
+            @endwhile
+            <th style="border: 1px solid black; padding: 5px; text-align: center;">Hadir</th>
+            <th style="border: 1px solid black; padding: 5px; text-align: center;">Izin</th>
+            <th style="border: 1px solid black; padding: 5px; text-align: center;">Sakit</th>
+            <th style="border: 1px solid black; padding: 5px; text-align: center;">Tidak masuk Kelas</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach ($rekap as $data)
+            <tr>
+                <td style="border: 1px solid black; padding: 5px;">{{ $data->nama }}</td>
+                <td style="border: 1px solid black; padding: 5px;">{{ $data->jabatan ?? 'Tidak ada jabatan' }}</td>
+                @php
+                    $start = \Carbon\Carbon::createFromFormat('Y-m-d', $tanggalAwal);
+                    $end = \Carbon\Carbon::createFromFormat('Y-m-d', $tanggalAkhir);
+                @endphp
+                @while ($start <= $end)
+                    <td style="border: 1px solid black; padding: 5px; text-align: center;">
+                        {{ $data->keterangan_perhari['tgl_'.$start->day] ?? '-' }}
+                    </td>
+                    @php $start->addDay(); @endphp
+                @endwhile
+                <td style="border: 1px solid black; padding: 5px; text-align: center;">{{ $data->total_hadir }}</td>
+                <td style="border: 1px solid black; padding: 5px; text-align: center;">{{ $data->total_izin }}</td>
+                <td style="border: 1px solid black; padding: 5px; text-align: center;">{{ $data->total_sakit }}</td>
+                <td style="border: 1px solid black; padding: 5px; text-align: center;">{{ $data->total_tidak_di_kbm }}</td>
+            </tr>
+        @endforeach
+    </tbody>
+</table>
     </div>
 </section>
 <script> window.print(); </script>

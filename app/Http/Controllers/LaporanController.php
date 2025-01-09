@@ -57,13 +57,27 @@ public function print_laporan_bulanan_pendidik(Request $request)
     $tanggalMulai = Carbon::parse($tanggalAwal);
     $tanggalSelesai = Carbon::parse($tanggalAkhir);
 
+    // Loop untuk setiap tanggal dalam periode
     while ($tanggalMulai->lte($tanggalSelesai)) {
         $hari = $tanggalMulai->day;
-        $selectStatements[] = "MAX(CASE WHEN DAY(absensi_pendidik.tanggal) = $hari THEN CONCAT(absensi_pendidik.jam_masuk, '-', IFNULL(absensi_pendidik.jam_keluar, '00:00:00')) ELSE '' END) as tgl_$hari";
+        $selectStatements[] = "
+            MAX(CASE 
+                WHEN DAY(absensi_pendidik.tanggal) = $hari 
+                THEN 
+                    CASE 
+                        WHEN absensi_pendidik.id_status_hadir = 1 THEN 'H'
+                        WHEN absensi_pendidik.id_status_hadir = 2 THEN 'A'
+                        WHEN absensi_pendidik.id_status_hadir = 3 THEN 'I'
+                        WHEN absensi_pendidik.id_status_hadir = 4 THEN 'S'
+                        WHEN absensi_pendidik.id_status_hadir = 5 THEN 'B'
+                        ELSE '?'
+                    END
+                ELSE '' 
+            END) as tgl_$hari";
         $tanggalMulai->addDay();
     }
 
-    // Query untuk Guru
+    // Query Guru
     $queryGuru = DB::table('guru')
         ->selectRaw('
             users.name as nama,
@@ -84,7 +98,7 @@ public function print_laporan_bulanan_pendidik(Request $request)
         })
         ->groupByRaw('guru.id, users.name, kepsek.id, waka.id');
 
-    // Query untuk Karyawan
+    // Query Karyawan
     $queryKaryawan = DB::table('karyawan')
         ->selectRaw('
             users.name as nama,
@@ -107,30 +121,70 @@ public function print_laporan_bulanan_pendidik(Request $request)
         ->orderBy('nama')
         ->get();
 
-    // Proses keterangan per hari
-    foreach ($rekap as $data) {
+    // Proses data untuk hanya menyertakan keterangan_perhari dan total kehadiran
+    $filter_rekap = $rekap->map(function ($data) use ($tanggalAwal) {
         $keteranganPerHari = [];
+        $totalHadir = 0;
+        $totalAlpha = 0;
+        $totalIzin = 0;
+        $totalSakit = 0;
+        $totalBolos = 0;
+        $totalTidakDiKBM = 0;
+
         for ($i = 1; $i <= 31; $i++) {
             $key = "tgl_$i";
             $tanggal = Carbon::createFromFormat('Y-m-d', $tanggalAwal)->startOfMonth()->addDays($i - 1);
+
             if (isset($data->$key) && $data->$key !== '') {
-                if ($data->jabatan === 'Guru') {
+                $statusKehadiran = $data->$key;
+
+                // Logika tambahan untuk Guru tanpa jabatan
+                if ($data->jenis_pengguna === 'Guru' && $data->jabatan === 'Guru') {
                     $adaKbm = DB::table('kbm')
                         ->where('id_guru', $data->id_pendidik)
                         ->whereDate('tanggal', $tanggal->format('Y-m-d'))
                         ->exists();
-                    $keteranganPerHari[$key] = $adaKbm ? 'Masuk Kelas' : 'Masuk tapi tidak masuk kelas';
-                } else {
-                    $keteranganPerHari[$key] = 'Hadir';
+
+                    if ($data->$key === 'H') {
+                        $statusKehadiran = $adaKbm ? 'H' : '?';
+                    }
                 }
+
+                $keteranganPerHari["tgl_$i"] = $statusKehadiran;
+
+                // Tambahkan ke total
+                match ($statusKehadiran) {
+                    'H' => $totalHadir++,
+                    'A' => $totalAlpha++,
+                    'I' => $totalIzin++,
+                    'S' => $totalSakit++,
+                    'B' => $totalBolos++,
+                    '?' => $totalTidakDiKBM++,
+                    default => null,
+                };
             }
         }
-        $data->keterangan_perhari = $keteranganPerHari;
-    }
-    //dd($rekap);
-    return view('laporan.print_laporan_bulanan_pendidik', compact('tanggalAwal', 'tanggalAkhir', 'rekap'));
-}
 
+        return (object) [
+            'nama' => $data->nama,
+            'id_pendidik' => $data->id_pendidik,
+            'jenis_pengguna' => $data->jenis_pengguna,
+            'jabatan' => $data->jabatan,
+            'keterangan_perhari' => $keteranganPerHari,
+            'total_hadir' => $totalHadir,
+            'total_alpha' => $totalAlpha,
+            'total_izin' => $totalIzin,
+            'total_sakit' => $totalSakit,
+            'total_bolos' => $totalBolos,
+            'total_tidak_di_kbm' => $totalTidakDiKBM,
+        ];
+    });
+    return view('laporan.print_laporan_bulanan_pendidik', [
+        'tanggalAwal' => $tanggalAwal,
+        'tanggalAkhir' => $tanggalAkhir,
+        'rekap' => $filter_rekap,
+    ]);
+}
 
 // public function downloadLaporanBulanan(Request $request)
 // {
