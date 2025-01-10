@@ -50,6 +50,7 @@
                                     <canvas id="canvas" style="display: none;"></canvas>
                                     <input type="hidden" name="foto_keluar" id="foto_keluar_data">
                                     <button class="btn btn-primary mt-2 float-right" type="submit">Simpan</button>
+                                    <a href="/kbm" class="btn btn-danger mt-2 float-right mr-2">Batal</a>
                                 </form>
                             </div>
                         </div>

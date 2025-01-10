@@ -49,6 +49,7 @@
                                     <label class="form-label" for="keterangan">Keterangan: </label>
                                     <textarea class="form-control" name="keterangan" id="keterangan" rows="5" required >{{ $data_kbm->keterangan }}</textarea>
                                     <button class="btn btn-primary mt-2 float-right" type="submit">Simpan</button>
+                                    <a href="/kbm" class="btn btn-danger mt-2 float-right mr-2">Batal</a>
                                 </form>
                             </div>
                         </div>

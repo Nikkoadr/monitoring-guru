@@ -29,6 +29,7 @@
                         <div class="card">
                             <div class="card-header">
                                 <h3 class="card-title">Lihat Presensi Siswa</h3>
+                                <a href="/kbm" class="btn btn-danger float-right">Kembali</a>
                             </div>
                             <div class="card-body">
                                 <table id="table_presensi_siswa" class="table table-bordered table-striped">

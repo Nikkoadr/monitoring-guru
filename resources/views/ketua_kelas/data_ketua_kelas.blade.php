@@ -49,7 +49,7 @@
                                             <td>{{ $ketua_kelas->keterangan }}</td>
                                             <td>
                                                 {{-- <a href="/form_edit_ketua_kelas_{{ $ketua_kelas->id }}" class="btn btn-info float-right m-1"><i class="fa-solid fa-pen-to-square"></i></a> --}}
-                                            <button class="btn btn-danger float-right m-1" onclick="confirmDelete({{ $ketua_kelas->id }})">Hapus</button>
+                                            <button class="btn btn-danger float-right m-1" onclick="confirmDelete({{ $ketua_kelas->id }})"><i class="fa-solid fa-trash-can"></i></button>
                                             </td>
                                         </tr>
                                         @endforeach

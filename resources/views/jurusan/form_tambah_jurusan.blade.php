@@ -33,6 +33,7 @@
                                     <label for="nama_jurusan">Nama Kompetensi Keahlian:</label>
                                     <input class="form-control" type="text" id="nama_jurusan" name="nama_jurusan" autocomplete="off">
                                     <button class="btn btn-primary mt-2 float-right" type="submit">Simpan</button>
+                                    <a href="/data_jurusan" class="btn btn-danger mt-2 float-right mr-2">Batal</a>
                                 </form>
                             </div>
                         </div>

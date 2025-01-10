@@ -51,6 +51,7 @@
                                     @endforeach
                                 </select>
                                     <button class="btn btn-primary mt-2 float-right" type="submit">Edit Izin</button>
+                                    <a href="/data_izin_siswa" class="btn btn-danger mt-2 float-right mr-2">Batal</a>
                                 </form>
                             </div>
                         </div>

@@ -39,6 +39,7 @@
                                     <label for="nama_kelas">Nama Kelas:</label>
                                     <input class="form-control" type="text" id="nama_kelas" name="nama_kelas" autocomplete="off">
                                     <button class="btn btn-primary mt-2 float-right" type="submit">Simpan</button>
+                                    <a href="/data_kelas" class="btn btn-danger mt-2 float-right mr-2">Batal</a>
                                 </form>
                             </div>
                         </div>

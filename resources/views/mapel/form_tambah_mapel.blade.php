@@ -33,6 +33,7 @@
                                 <label for="nama_mapel">Nama Mata Pelajaran:</label>
                                 <input class="form-control" type="text" id="nama_mapel" name="nama_mapel" autocomplete="off">
                                 <button class="btn btn-primary mt-2 float-right" type="submit">Simpan</button>
+                                <a href="/data_mapel" class="btn btn-danger mt-2 float-right mr-2">Batal</a>
                             </form>
                             </div>
                         </div>

@@ -41,6 +41,7 @@
                                     <label for="password">Password:</label>
                                     <input class="form-control" type="password" id="password" name="password" autocomplete="off">
                                     <button class="btn btn-primary mt-2 float-right" type="submit">Simpan</button>
+                                    <a href="/data_user" class="btn btn-danger mt-2 float-right mr-2">Batal</a>
                                 </form>
                             </div>
                         </div>

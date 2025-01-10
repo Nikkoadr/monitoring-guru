@@ -46,7 +46,7 @@
                                             <td>{{ $data->nama_waka }}</td>
                                             <td>{{ $data->jabatan }}</td>
                                             <td>
-                                                </i></a><a href="/hapus_waka_{{ $data->id }}" class="btn btn-danger float-right m-1"><i class="fa-solid fa-trash"></i></a>
+                                                </i></a><a href="/hapus_waka_{{ $data->id }}" class="btn btn-danger float-right m-1"><i class="fa-solid fa-trash-can"></i></a>
                                             </td>
                                         </tr>
                                         @endforeach

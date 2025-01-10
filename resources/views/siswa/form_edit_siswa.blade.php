@@ -52,6 +52,7 @@
                                     <div class="suggestions dropdown-item" id="suggestions"></div>
                                     
                                     <button class="btn btn-primary mt-2 float-right" type="submit">Simpan</button>
+                                    <a href="/data_siswa" class="btn btn-danger mt-2 float-right mr-2">Batal</a>
                                 </form>
                             </div>
                         </div>
