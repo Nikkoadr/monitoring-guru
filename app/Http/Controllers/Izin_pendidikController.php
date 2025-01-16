@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class Izin_pendidikController extends Controller
 {
@@ -92,4 +94,60 @@ public function index()
         return redirect()->back()->with('error', 'Data izin tidak ditemukan.');
     }
 
+    public function request_izin_pendidik()
+    {
+        return view('izin_pendidik.request_izin_pendidik');
+    }
+
+    public function post_request_izin_pendidik(Request $request)
+        {
+            $request->validate([
+                'alasan' => 'required|string|max:255',
+                'file' => 'nullable|file|mimes:pdf,jpeg,png,jpg',
+            ]);
+
+            // Proses untuk menyimpan alasan
+            $alasan = $request->input('alasan');
+
+            // Mendapatkan user yang sedang login
+            $user = Auth::user();
+
+            // Cek apakah user adalah guru atau karyawan
+            $idGuru = null;
+            $idKaryawan = null;
+
+            // Jika user adalah seorang guru
+            $guru = DB::table('guru')->where('id_user', $user->id)->first();
+            if ($guru) {
+                $idGuru = $guru->id;
+            } else {
+                // Jika user adalah seorang karyawan
+                $karyawan = DB::table('karyawan')->where('id_user', $user->id)->first();
+                if ($karyawan) {
+                    $idKaryawan = $karyawan->id;
+                }
+            }
+
+            // Jika tidak ditemukan data guru atau karyawan, kirimkan error
+            if (!$idGuru && !$idKaryawan) {
+                return redirect()->back()->with('error', 'Anda tidak terdaftar sebagai guru atau karyawan.');
+            }
+
+            if ($request->hasFile('file')) {
+                $file = $request->file('file');
+                $fileName = $file->getClientOriginalName();
+                $filePath = Storage::disk(env('STORAGE_DISK'))->put('file_izin_pendidik/' . $fileName, file_get_contents($file));
+            }
+            // Simpan data izin ke database
+            DB::table('izin_pendidik')->insert([
+                'alasan' => $alasan,
+                'file' => isset($filePath) ? $filePath : null,
+                'id_guru' => $idGuru,
+                'id_karyawan' => $idKaryawan,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+
+            return redirect()->back()->with('success', 'Permohonan izin berhasil dikirim.');
+        }
 }

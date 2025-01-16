@@ -81,6 +81,14 @@
                     </p>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="/data_prensensi_pendidik" class="nav-link {{ request()->is('data_prensensi_pendidik') ? 'active' : '' }}">
+                    <i class="nav-icon fa-solid fa-fingerprint"></i>
+                    <p>
+                        Presensi Pendidik
+                    </p>
+                    </a>
+                </li>
                 <li class="nav-item menu-open">
                     <a href="" class="nav-link {{ in_array(request()->path(), ['data_guru', 'data_user', 'data_mapel', 'data_role', 'data_jurusan', 'data_kelas', 'data_siswa', 'data_ketua_kelas', 'data_walas', 'data_ketua_kelas', 'data_walas','data_waka','data_kepsek','data_kesiswaan','data_karyawan']) ? 'active' : '' }}">
                     <i class="nav-icon fas fa-database"></i>
@@ -202,7 +210,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="/req_izin_pendidik" class="nav-link {{ request()->is('req_izin_pendidik') ? 'active' : '' }}">
+                    <a href="/request_izin_pendidik" class="nav-link {{ request()->is('req_izin_pendidik') ? 'active' : '' }}">
                     <i class="nav-icon fa-solid fa-code-pull-request"></i>
                     <p>
                         Request Izin

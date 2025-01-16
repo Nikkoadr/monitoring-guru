@@ -28,61 +28,63 @@ class KbmController extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function index()
-{
-    $user = Auth::user();
-    $isKmKelas = DB::table('ketua_kelas')
-            ->join('siswa', 'ketua_kelas.id_siswa', '=', 'siswa.id')
-            ->where('siswa.id_user', $user->id)
-            ->exists();
+    {
+        $user = Auth::user();
+        $hari_ini = now()->toDateString();
 
-    $isWalas = DB::table('walas')
-                ->join('guru', 'walas.id_guru', '=', 'guru.id')
-                ->where('guru.id_user', $user->id)
-                ->exists();
+        // Cek apakah user adalah Ketua Kelas atau Walas
+        $isKmKelas = DB::table('ketua_kelas')
+                    ->join('siswa', 'ketua_kelas.id_siswa', '=', 'siswa.id')
+                    ->where('siswa.id_user', $user->id)
+                    ->exists();
 
-    $hari_ini = now()->toDateString();
-    if ($user->id_role == 1) {
-        $data_kbm = DB::table('kbm')
+        $isWalas = DB::table('walas')
+                    ->join('guru', 'walas.id_guru', '=', 'guru.id')
+                    ->where('guru.id_user', $user->id)
+                    ->exists();
+
+        // Menentukan query dasar untuk data KBM
+        $query = DB::table('kbm')
             ->join('mapel', 'kbm.id_mapel', '=', 'mapel.id')
             ->join('guru', 'kbm.id_guru', '=', 'guru.id')
             ->join('users', 'guru.id_user', '=', 'users.id')
             ->join('kelas', 'kbm.id_kelas', '=', 'kelas.id')
             ->select('kbm.*', 'mapel.nama_mapel', 'users.name as nama_guru', 'kelas.nama_kelas')
-            ->whereDate('kbm.tanggal', $hari_ini)
-            ->get();
-    }elseif ($user->id_role == 2) {
-        $guru = DB::table('guru')
-            ->where('id_user', $user->id)
-            ->first();
-        if ($guru) {
-            $data_kbm = DB::table('kbm')
-                ->join('mapel', 'kbm.id_mapel', '=', 'mapel.id')
-                ->join('guru', 'kbm.id_guru', '=', 'guru.id')
-                ->join('users', 'guru.id_user', '=', 'users.id')
-                ->join('kelas', 'kbm.id_kelas', '=', 'kelas.id')
-                ->select('kbm.*', 'mapel.nama_mapel', 'users.name as nama_guru', 'kelas.nama_kelas')
-                ->where('kbm.id_guru', $guru->id)
-                ->whereDate('kbm.tanggal', $hari_ini)
-                ->get();
+            ->whereDate('kbm.tanggal', $hari_ini);
+
+        // Menyesuaikan query berdasarkan peran user
+        if ($user->id_role == 1) {
+            // Admin, semua data KBM
+            $data_kbm = $query->get();
+        } elseif ($user->id_role == 2) {
+            // Guru, filter berdasarkan guru
+            $guru = DB::table('guru')
+                ->where('id_user', $user->id)
+                ->first();
+
+            if ($guru) {
+                $data_kbm = $query->where('kbm.id_guru', $guru->id)->get();
+            } else {
+                $data_kbm = collect(); // Kembalikan koleksi kosong jika guru tidak ditemukan
+            }
+        } elseif ($user->id_role == 4 || $isKmKelas) {
+            // Siswa atau Ketua Kelas, filter berdasarkan kelas siswa
+            $siswa = DB::table('siswa')
+                ->where('id_user', $user->id)
+                ->first();
+
+            if ($siswa) {
+                $data_kbm = $query->where('kbm.id_kelas', $siswa->id_kelas)->get();
+            } else {
+                $data_kbm = collect(); // Kembalikan koleksi kosong jika siswa tidak ditemukan
+            }
+        } else {
+            // Jika peran tidak dikenali, kembalikan koleksi kosong
+            $data_kbm = collect();
         }
-    } elseif ($user->id_role == 4 || $isKmKelas) {
-        $siswa = DB::table('siswa')
-            ->where('id_user', $user->id)
-            ->first();
-        if ($siswa) {
-            $data_kbm = DB::table('kbm')
-                ->join('mapel', 'kbm.id_mapel', '=', 'mapel.id')
-                ->join('guru', 'kbm.id_guru', '=', 'guru.id')
-                ->join('users', 'guru.id_user', '=', 'users.id')
-                ->join('kelas', 'kbm.id_kelas', '=', 'kelas.id')
-                ->select('kbm.*', 'mapel.nama_mapel', 'users.name as nama_guru', 'kelas.nama_kelas')
-                ->where('kbm.id_kelas', $siswa->id_kelas)
-                ->whereDate('kbm.tanggal', $hari_ini)
-                ->get();
-        }
+
+        return view('kbm.data_kbm', compact('data_kbm', 'user', 'isKmKelas', 'isWalas'));
     }
-    return view('kbm.data_kbm', compact('data_kbm','user','isKmKelas','isWalas'));
-}
 
     public function form_tambah_kbm() {
         $user = Auth::user();

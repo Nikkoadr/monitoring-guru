@@ -161,6 +161,8 @@ Route::get('/print_izin_siswa_{id}', [Izin_siswaController::class, 'print_surat_
 Route::get('/data_izin_pendidik', [Izin_pendidikController::class, 'index']);
 Route::get('/izin_pendidik/acc/{id}', [Izin_pendidikController::class, 'acc']);
 Route::get('/izin_pendidik/reject/{id}', [Izin_pendidikController::class, 'reject']);
+Route::get('/request_izin_pendidik', [Izin_pendidikController::class, 'request_izin_pendidik']);
+Route::put('/post_request_izin_pendidik', [Izin_pendidikController::class, 'post_request_izin_pendidik']);
 
 
 Route::get('/laporan', [LaporanController::class, 'index']);

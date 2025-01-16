@@ -201,96 +201,90 @@ public function presensi_pendidik()
     return view('absensi.presensi_pendidik', compact('cek', 'setting', 'jam', 'limit_presensi'));
 }
 
-public function post_presensi_pendidik(Request $request)
-{
-    $request->validate([
-        'foto' => 'required|string',
-        'lokasi' => 'required|string',
-    ]);
+    public function post_presensi_pendidik(Request $request)
+    {
+        // Validasi input
+        $request->validate([
+            'foto' => 'required|string',
+            'lokasi' => 'required|string',
+        ]);
 
-    $user = Auth::user();
+        $user = Auth::user();
+        $hari_ini = now()->toDateString();
+        $jam = Carbon::now();
 
-    $guru = DB::table('guru')->where('id_user', $user->id)->first();
-    $karyawan = DB::table('karyawan')->where('id_user', $user->id)->first();
+        // Ambil data guru atau karyawan
+        $guru = DB::table('guru')->where('id_user', $user->id)->first();
+        $karyawan = DB::table('karyawan')->where('id_user', $user->id)->first();
 
-    if ($guru) {
-        $idGuru = $guru->id;
-        $idKaryawan = null;
-    } elseif ($karyawan) {
-        $idGuru = null;
-        $idKaryawan = $karyawan->id;
-    } else {
-        return response()->json(['status' => 'error', 'message' => 'User tidak terdaftar sebagai guru atau karyawan.']);
-    }
+        // Tentukan ID guru atau karyawan
+        $idGuru = $guru ? $guru->id : null;
+        $idKaryawan = $karyawan ? $karyawan->id : null;
 
-    $hari_ini = now()->toDateString();
-    $jam = Carbon::now();
-    $setting = Setting::first();
-
-    [$latUser, $lngUser] = explode(",", $request->lokasi);
-    $radius = round($this->distance(
-        $setting->lokasi_latitude,
-        $setting->lokasi_longitude,
-        $latUser,
-        $lngUser
-    )["meters"]);
-
-    if ($radius > $setting->radius_lokasi) {
-        return response()->json(['status' => 'error', 'message' => "Maaf, Jarak Anda $radius M dari {$setting->nama_aplikasi}"]);
-    }
-
-    // Cek presensi berdasarkan guru atau karyawan
-    $cekPresensi = DB::table('absensi_pendidik')
-        ->where('tanggal', $hari_ini)
-        ->where(function ($query) use ($idGuru, $idKaryawan) {
-            if ($idGuru) {
-                $query->where('id_guru', $idGuru);
-            }
-            if ($idKaryawan) {
-                $query->where('id_karyawan', $idKaryawan);
-            }
-        })
-        ->first();
-
-    $fotoPath = "{$user->id}-$hari_ini-" . ($cekPresensi ? "keluar" : "masuk") . ".png";
-    $fotoBase64 = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $request->foto));
-
-    if ($cekPresensi) {
-        if ($cekPresensi->jam_keluar) {
-            return response()->json(['status' => 'error', 'message' => 'Anda sudah absen Pulang hari ini.']);
+        if (!$idGuru && !$idKaryawan) {
+            return response()->json(['status' => 'error', 'message' => 'User tidak terdaftar sebagai guru atau karyawan.']);
         }
 
-        $selisih = strtotime($jam) - strtotime($cekPresensi->jam_masuk);
-        if ($selisih < 300) {
-            return response()->json(['status' => 'error', 'message' => 'Anda tidak bisa absen keluar terlalu cepat setelah absen masuk! Tunggu 5 menit.']);
+        // Ambil pengaturan lokasi
+        $setting = Setting::first();
+        [$latUser, $lngUser] = explode(",", $request->lokasi);
+
+        // Hitung jarak dan cek jika berada dalam radius yang ditentukan
+        $radius = round($this->distance($setting->lokasi_latitude, $setting->lokasi_longitude, $latUser, $lngUser)["meters"]);
+        if ($radius > $setting->radius_lokasi) {
+            return response()->json(['status' => 'error', 'message' => "Maaf, Jarak Anda $radius M dari {$setting->nama_aplikasi}"]);
         }
 
-        // Update data presensi keluar
-        $updateData = [
-            'jam_keluar' => $jam,
-            'foto_keluar' => $fotoPath,
-            'lokasi_keluar' => $request->lokasi,
-        ];
-        DB::table('absensi_pendidik')->where('id', $cekPresensi->id)->update($updateData);
-    } else {
-        // Insert data presensi masuk
-        $insertData = [
-            'id_status_hadir' => 1,
-            'id_guru' => $idGuru,
-            'id_karyawan' => $idKaryawan,
-            'tanggal' => $hari_ini,
-            'jam_masuk' => $jam,
-            'foto_masuk' => $fotoPath,
-            'lokasi_masuk' => $request->lokasi,
-        ];
-        DB::table('absensi_pendidik')->insert($insertData);
+        // Cek apakah sudah absen
+        $cekPresensi = DB::table('absensi_pendidik')
+            ->where('tanggal', $hari_ini)
+            ->where(function ($query) use ($idGuru, $idKaryawan) {
+                $query->where('id_guru', $idGuru)
+                    ->orWhere('id_karyawan', $idKaryawan);
+            })
+            ->first();
+
+        // Tentukan foto path dan decode foto
+        $fotoPath = "{$user->id}-$hari_ini-" . ($cekPresensi ? "keluar" : "masuk") . ".png";
+        $fotoBase64 = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $request->foto));
+
+        if ($cekPresensi) {
+            // Jika sudah absen keluar
+            if ($cekPresensi->jam_keluar) {
+                return response()->json(['status' => 'error', 'message' => 'Anda sudah absen Pulang hari ini.']);
+            }
+
+            // Cek apakah bisa absen keluar
+            $selisih = strtotime($jam) - strtotime($cekPresensi->jam_masuk);
+            if ($selisih < 300) {
+                return response()->json(['status' => 'error', 'message' => 'Anda tidak bisa absen keluar terlalu cepat setelah absen masuk! Tunggu 5 menit.']);
+            }
+
+            // Update data presensi keluar
+            DB::table('absensi_pendidik')->where('id', $cekPresensi->id)->update([
+                'jam_keluar' => $jam,
+                'foto_keluar' => $fotoPath,
+                'lokasi_keluar' => $request->lokasi,
+            ]);
+        } else {
+            // Insert data presensi masuk
+            DB::table('absensi_pendidik')->insert([
+                'id_status_hadir' => 1,
+                'id_guru' => $idGuru,
+                'id_karyawan' => $idKaryawan,
+                'tanggal' => $hari_ini,
+                'jam_masuk' => $jam,
+                'foto_masuk' => $fotoPath,
+                'lokasi_masuk' => $request->lokasi,
+            ]);
+        }
+
+        // Simpan foto presensi
+        Storage::disk(env('STORAGE_DISK'))->put('foto_presensi_pendidik/' . $fotoPath, $fotoBase64);
+
+        // Kembalikan response
+        $message = $cekPresensi ? 'Anda Sudah Absen Pulang. Hati-hati di jalan!' : 'Terima kasih Anda sudah melakukan absen masuk. Jangan lupa presensi keluar!';
+        return response()->json(['status' => 'success', 'message' => $message]);
     }
-
-    // Simpan foto presensi
-    Storage::disk(env('STORAGE_DISK'))->put('foto_presensi_pendidik/' . $fotoPath, $fotoBase64);
-
-    $message = $cekPresensi ? 'Anda Sudah Absen Pulang. Hati-hati di jalan!' : 'Terima kasih Anda sudah melakukan absen masuk. Jangan lupa presensi keluar!';
-    return response()->json(['status' => 'success', 'message' => $message]);
-}
 
 }
