@@ -33,7 +33,7 @@
                 <!-- Add icons to the links using the .nav-icon class
                     with font-awesome or any other icon font library -->
                 <li class="nav-item">
-                    <a href="home" class="nav-link {{ request()->is('home') ? 'active' : '' }}">
+                    <a href="/home" class="nav-link {{ request()->is('home') ? 'active' : '' }}">
                     <i class="nav-icon fas fa-tachometer-alt"></i>
                     <p>
                         Dashboard
@@ -73,6 +73,14 @@
                     @endif
                 @endforeach
                 @can('admin')
+                <li class="nav-item">
+                    <a href="/data_izin_pendidik" class="nav-link {{ request()->is('data_izin_pendidik') ? 'active' : '' }}">
+                    <i class="nav-icon fa-solid fa-clipboard-user"></i>
+                    <p>
+                        Izin Pendidik
+                    </p>
+                    </a>
+                </li>
                 <li class="nav-item menu-open">
                     <a href="" class="nav-link {{ in_array(request()->path(), ['data_guru', 'data_user', 'data_mapel', 'data_role', 'data_jurusan', 'data_kelas', 'data_siswa', 'data_ketua_kelas', 'data_walas', 'data_ketua_kelas', 'data_walas','data_waka','data_kepsek','data_kesiswaan','data_karyawan']) ? 'active' : '' }}">
                     <i class="nav-icon fas fa-database"></i>
@@ -190,6 +198,14 @@
                     <i class="nav-icon fa-solid fa-clipboard-user"></i>
                     <p>
                         Presensi
+                    </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/req_izin_pendidik" class="nav-link {{ request()->is('req_izin_pendidik') ? 'active' : '' }}">
+                    <i class="nav-icon fa-solid fa-code-pull-request"></i>
+                    <p>
+                        Request Izin
                     </p>
                     </a>
                 </li>

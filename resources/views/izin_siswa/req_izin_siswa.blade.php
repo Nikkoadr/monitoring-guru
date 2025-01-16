@@ -59,7 +59,7 @@
                                     <td>{{ $izin_siswa->tanggal }}</td>
                                     <td>{{ $izin_siswa->jam_keluar }}</td>
                                     <td>{{ $izin_siswa->alasan }}</td>
-                                    <td>{{ $izin_siswa->status_izin }}</td>
+                                    <td>{{ $izin_siswa->nama_status_izin }}</td>
                                 </tr>
                                 @endforeach
                             </tbody>

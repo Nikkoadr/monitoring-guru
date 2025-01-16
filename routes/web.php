@@ -15,6 +15,7 @@ use App\Http\Controllers\SiswaController;
 use App\Http\Controllers\KbmController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\AbsensiController;
+use App\Http\Controllers\Izin_pendidikController;
 use App\Http\Controllers\Izin_siswaController;
 use App\Http\Controllers\KaryawanController;
 use App\Http\Controllers\KepsekController;
@@ -72,9 +73,32 @@ Route::post('/update_edit_guru_{id}', [GuruController::class, 'post_guru']);
 Route::get('/hapus_guru_{id}', [GuruController::class, 'hapus_guru']);
 
 Route::get('/data_karyawan', [KaryawanController::class, 'index']);
+Route::get('/form_tambah_karyawan', [KaryawanController::class, 'form_tambah_karyawan']);
+Route::post('/post_karyawan', [KaryawanController::class, 'post_karyawan']);
+Route::get('/form_edit_karyawan_{id}', [KaryawanController::class, 'form_edit_karyawan']);
+Route::put('/update_karyawan_{id}', [KaryawanController::class, 'update_karyawan']);
+Route::get('/hapus_karyawan_{id}', [KaryawanController::class, 'hapus_karyawan']);
+
 Route::get('/data_kepsek', [KepsekController::class, 'index']);
+Route::get('/form_tambah_kepsek', [KepsekController::class, 'form_tambah_kepsek']);
+Route::post('/post_kepsek', [KepsekController::class, 'post_kepsek']);
+Route::get('/form_edit_kepsek_{id}', [KepsekController::class, 'form_edit_kepsek']);
+Route::put('/update_edit_kepsek_{id}', [KepsekController::class, 'update_edit_kepsek']);
+Route::get('/hapus_kepsek_{id}', [KepsekController::class, 'hapus_kepsek']);
+
 Route::get('/data_waka', [WakaController::class, 'index']);
+Route::get('/form_tambah_waka', [WakaController::class, 'form_tambah_waka']);
+Route::post('/post_waka', [WakaController::class, 'post_waka']);
+Route::get('/form_edit_waka_{id}', [WakaController::class, 'form_edit_waka']);
+Route::put('/update_waka_{id}', [WakaController::class, 'update_waka']);
+Route::get('/hapus_waka_{id}', [WakaController::class, 'hapus_waka']);
+
 Route::get('/data_kesiswaan', [KesiswaanController::class, 'index']);
+Route::get('/form_tambah_kesiswaan', [KesiswaanController::class, 'form_tambah_kesiswaan']);
+Route::post('/post_kesiswaan', [KesiswaanController::class, 'post_kesiswaan']);
+Route::get('/form_edit_kesiswaan_{id}', [KesiswaanController::class, 'form_edit_kesiswaan']);
+Route::put('/update_kesiswaan_{id}', [KesiswaanController::class, 'update_kesiswaan']);
+Route::get('/hapus_kesiswaan_{id}', [KesiswaanController::class, 'hapus_kesiswaan']);
 
 Route::get('/data_mapel', [MapelController::class, 'index']);
 Route::get('/form_tambah_mapel', [MapelController::class, 'form_tambah_mapel']);
@@ -133,6 +157,11 @@ Route::get('/edit_izin_siswa_{id}', [Izin_siswaController::class, 'edit_izin_sis
 Route::patch('/update_izin_siswa_{id}', [Izin_siswaController::class, 'update_izin_siswa']);
 Route::post('/post_izin_siswa', [Izin_siswaController::class, 'post_izin_siswa']);
 Route::get('/print_izin_siswa_{id}', [Izin_siswaController::class, 'print_surat_izin_siswa']);
+
+Route::get('/data_izin_pendidik', [Izin_pendidikController::class, 'index']);
+Route::get('/izin_pendidik/acc/{id}', [Izin_pendidikController::class, 'acc']);
+Route::get('/izin_pendidik/reject/{id}', [Izin_pendidikController::class, 'reject']);
+
 
 Route::get('/laporan', [LaporanController::class, 'index']);
 Route::put('/print_laporan_bulanan_pendidik', [LaporanController::class, 'print_laporan_bulanan_pendidik']);

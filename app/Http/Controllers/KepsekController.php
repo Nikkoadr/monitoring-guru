@@ -30,4 +30,18 @@ class KepsekController extends Controller
         ->get();
         return view('kepsek.data_kepsek', compact('data_kepsek'));
     }
+    public function form_tambah_kepsek(){
+        return view('kepsek.form_tambah_kepsek');
+    }
+    public function post_kepsek(Request $request){
+        DB::table('kepsek')->insert([
+            'id_guru' => $request->id_guru,
+        ]);
+        return redirect('/data_kepsek')->with('success', 'Data Berhasil Ditambahkan');
+    }
+
+    public function hapus_kepsek($id){
+        DB::table('kepsek')->where('id', $id)->delete();
+        return redirect('/data_kepsek')->with('success', 'Data Berhasil Hapus');
+    }
 }

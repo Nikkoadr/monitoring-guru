@@ -122,4 +122,9 @@ class Ketua_kelasController extends Controller{
         DB::table('ketua_kelas')->insert($data);
         return redirect('/data_ketua_kelas')->with('success', 'Data Berhasil Tambah');
     }
+
+    public function hapus_ketua_kelas($id){
+        DB::table('ketua_kelas')->where('id', $id)->delete();
+        return redirect('/data_ketua_kelas')->with('success', 'Data Berhasil Dihapus');
+    }
 }

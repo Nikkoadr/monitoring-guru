@@ -123,7 +123,7 @@ $("#table_ketua_kelas").DataTable({
             cancelButtonText: 'Batal'
         }).then((result) => {
             if (result.isConfirmed) {
-                window.location.href = `/hapus_role_${roleId}`;
+                window.location.href = `/hapus_ketua_kelas_${roleId}`;
             }
         });
     }

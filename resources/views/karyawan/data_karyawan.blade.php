@@ -29,7 +29,7 @@
                         <div class="card">
                             <div class="card-header">
                                 <h3 class="card-title">Data Karyawan</h3>
-                                <a href="/tambah_karyawan" class="btn btn-primary float-right">Tambah Karyawan</a>
+                                <a href="/form_tambah_karyawan" class="btn btn-primary float-right">Tambah Karyawan</a>
                             </div>
                             <div class="card-body">
                                 <table id="tabel_kepsek" class="table table-bordered table-striped">
@@ -46,7 +46,8 @@
                                             <td>{{ $data->nama_karyawan }}</td>
                                             <td>{{ $data->tugas }}</td>
                                             <td>
-                                                </i></a><a href="/hapus_kepsek_{{ $data->id }}" class="btn btn-danger float-right m-1"><i class="fa-solid fa-trash-can"></i></a>
+                                                <a href="/form_edit_karyawan_{{ $data->id }}" class="btn btn-warning float-right m-1"><i class="fa-solid fa-pen-to-square"></i></a>
+                                                <button class="btn btn-danger float-right m-1" onclick="confirmDelete({{ $data->id }})"><i class="fa-solid fa-trash-can"></i></button>
                                             </td>
                                         </tr>
                                         @endforeach
@@ -120,7 +121,7 @@ $("#tabel_kepsek").DataTable({
             cancelButtonText: 'Batal'
         }).then((result) => {
             if (result.isConfirmed) {
-                window.location.href = `/hapus_role_${roleId}`;
+                window.location.href = `/hapus_karyawan_${roleId}`;
             }
         });
     }

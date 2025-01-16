@@ -48,13 +48,13 @@ class MapelController extends Controller
     public function get_guru(Request $request)
         {
             $search = $request->input('q');
-            $gurus = DB::table('guru')
+            $guru = DB::table('guru')
                 ->join('users', 'guru.id_user', '=', 'users.id')
                 ->where('users.name', 'LIKE', "%{$search}%")
                 ->select('guru.id', 'users.name')
                 ->get();
             
-            return response()->json($gurus);
+            return response()->json($guru);
         }
 
         public function post_guru_pengampu(Request $request, $id){

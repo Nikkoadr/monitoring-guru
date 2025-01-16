@@ -29,7 +29,7 @@
                         <div class="card">
                             <div class="card-header">
                                 <h3 class="card-title">Data Kepsek</h3>
-                                <a href="/tambah_kepsek" class="btn btn-primary float-right">Tambah Kepsek</a>
+                                <a href="/form_tambah_kepsek" class="btn btn-primary float-right">Tambah Kepsek</a>
                             </div>
                             <div class="card-body">
                                 <table id="tabel_kepsek" class="table table-bordered table-striped">

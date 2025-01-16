@@ -29,7 +29,7 @@
                         <div class="card">
                             <div class="card-header">
                                 <h3 class="card-title">Data Kesiswaan</h3>
-                                <a href="/tambah_Kesiswaan" class="btn btn-primary float-right">Tambah Kesiswaan</a>
+                                <a href="/form_tambah_kesiswaan" class="btn btn-primary float-right">Tambah Kesiswaan</a>
                             </div>
                             <div class="card-body">
                                 <table id="tabel_kesiswaan" class="table table-bordered table-striped">
@@ -46,7 +46,8 @@
                                             <td>{{ $data->nama_kesiswaan }}</td>
                                             <td>{{ $data->tugas }}</td>
                                             <td>
-                                                </i></a><a href="/hapus_kesiswaan_{{ $data->id }}" class="btn btn-danger float-right m-1"><i class="fa-solid fa-trash-can"></i></a>
+                                                <a href="/form_edit_kesiswaan_{{ $data->id }}" class="btn btn-warning float-right m-1"><i class="fa-solid fa-pen-to-square"></i></a>
+                                                <button class="btn btn-danger float-right m-1" onclick="confirmDelete({{ $data->id }})"><i class="fa-solid fa-trash"></i></button>
                                             </td>
                                         </tr>
                                         @endforeach
