@@ -124,25 +124,6 @@ $(function () {
         })
     @endif
 </script>
-
-<script>
-    function confirmDelete(roleId) {
-        Swal.fire({
-            title: 'Apakah Anda yakin?',
-            text: "Data tidak dapat dikembalikan setelah dihapus!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Ya, hapus!',
-            cancelButtonText: 'Batal'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                window.location.href = `/hapus_izin_pendidik_${roleId}`;
-            }
-        });
-    }
-</script>
 <script>
     function confirmAcc(id) {
         Swal.fire({

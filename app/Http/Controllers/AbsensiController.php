@@ -323,7 +323,7 @@ public function presensi_pendidik()
     }
 
 public function admin_post_presensi_pendidik(Request $request)
-{
+    {
     // Validasi input
     $request->validate([
         'id_pendidik' => 'required|integer',
@@ -376,6 +376,105 @@ public function admin_post_presensi_pendidik(Request $request)
         // Jika tidak ditemukan
         return redirect('/data_presensi_pendidik')->with('error', 'Data pendidik tidak ditemukan.');
     }
+    }
+public function form_edit_presensi_pendidik($id)
+{
+    $data = DB::table('absensi_pendidik')
+        ->leftJoin('guru', 'guru.id', '=', 'absensi_pendidik.id_guru')
+        ->leftJoin('users as guru_users', 'guru.id_user', '=', 'guru_users.id') // Relasi ke tabel users untuk guru
+        ->leftJoin('karyawan', 'karyawan.id', '=', 'absensi_pendidik.id_karyawan')
+        ->leftJoin('users as karyawan_users', 'karyawan.id_user', '=', 'karyawan_users.id') // Relasi ke tabel users untuk karyawan
+        ->join('status_hadir', 'status_hadir.id', '=', 'absensi_pendidik.id_status_hadir')
+        ->where('absensi_pendidik.id', $id)
+        ->select(
+            'absensi_pendidik.*',
+            'status_hadir.id as id_status_hadir',
+            DB::raw("
+                CASE 
+                    WHEN absensi_pendidik.id_guru IS NOT NULL THEN guru_users.name
+                    WHEN absensi_pendidik.id_karyawan IS NOT NULL THEN karyawan_users.name
+                    ELSE 'Tidak Diketahui'
+                END as nama_pendidik")
+        )
+        ->first();
+
+    $status_hadir = DB::table('status_hadir')->get();
+
+    // Menentukan ID pendidik yang sesuai
+    $id_pendidik = $data->id_guru ? $data->id_guru : $data->id_karyawan;
+
+    return view('absensi.form_edit_presensi_pendidik', compact('data', 'status_hadir', 'id_pendidik'));
 }
 
+    public function update_presensi_pendidik(Request $request, $id)
+    {
+        // Validasi input
+        $request->validate([
+            'id_status_hadir' => 'required|integer',
+            'tanggal' => 'required|date',
+            'jam_masuk' => 'nullable',
+            'jam_keluar' => 'nullable|after_or_equal:jam_masuk',
+            'foto_masuk' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'foto_keluar' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+        ]);
+
+        // Ambil data absensi dari database
+        $absensi = DB::table('absensi_pendidik')->where('id', $id)->first();
+        if (!$absensi) {
+            return redirect('/data_presensi_pendidik')->with('error', 'Data presensi tidak ditemukan.');
+        }
+
+        // Default gunakan foto lama
+        $fileMasuk = $absensi->foto_masuk;
+        $fileKeluar = $absensi->foto_keluar;
+
+        // Proses foto masuk
+        if ($request->hasFile('foto_masuk')) {
+            $file = $request->file('foto_masuk');
+            $fileMasuk = time() . '_masuk_' . $file->getClientOriginalName();
+            Storage::disk(env('STORAGE_DISK', 'public'))->put('foto_presensi_pendidik/' . $fileMasuk, file_get_contents($file));
+
+            // Hapus foto masuk lama jika ada
+            if ($absensi->foto_masuk) {
+                Storage::disk(env('STORAGE_DISK', 'public'))->delete('foto_presensi_pendidik/' . $absensi->foto_masuk);
+            }
+        }
+
+        // Proses foto keluar
+        if ($request->hasFile('foto_keluar')) {
+            $file = $request->file('foto_keluar');
+            $fileKeluar = time() . '_keluar_' . $file->getClientOriginalName();
+            Storage::disk(env('STORAGE_DISK', 'public'))->put('foto_presensi_pendidik/' . $fileKeluar, file_get_contents($file));
+
+            // Hapus foto keluar lama jika ada
+            if ($absensi->foto_keluar) {
+                Storage::disk(env('STORAGE_DISK', 'public'))->delete('foto_presensi_pendidik/' . $absensi->foto_keluar);
+            }
+        }
+
+        // Update data presensi
+        DB::beginTransaction();
+        try {
+            DB::table('absensi_pendidik')->where('id', $id)->update([
+                'id_status_hadir' => $request->id_status_hadir,
+                'tanggal' => $request->tanggal,
+                'jam_masuk' => $request->jam_masuk,
+                'jam_keluar' => $request->jam_keluar,
+                'foto_masuk' => $fileMasuk,
+                'foto_keluar' => $fileKeluar,
+            ]);
+
+            DB::commit();
+            return redirect('/data_presensi_pendidik')->with('success', 'Presensi berhasil diupdate.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect('/data_presensi_pendidik')->with('error', 'Terjadi kesalahan saat mengupdate presensi: ' . $e->getMessage());
+        }
+    }
+
+    public function hapus_presensi_pendidik($id)
+    {
+        DB::table('absensi_pendidik')->where('id', $id)->delete();
+        return redirect('/data_presensi_pendidik')->with('success', 'Presensi berhasil dihapus.');
+    }
 }

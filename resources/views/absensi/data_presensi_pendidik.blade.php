@@ -1,4 +1,7 @@
 @extends('layouts.main')
+@section('css')
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+@endsection
 @section('content')
 <div class="content-wrapper">
     <div class="content-header">
@@ -66,13 +69,13 @@
                                         <td>{{ $item->jam_keluar }}</td>
                                         <td>{{ $item->status_hadir }}</td>
                                         <td>
-                                            <a harf="/form_edit_presensi_pendidik_{{ $item->id }}" class="btn btn-warning"><i class="fa-solid fa-pen-to-square"></i></a>
-                                            <a href="/hapus_presensi_pendidik_{{ $item->id }}" class="btn btn-danger" onclick="confirmDelete({{ $item->id }})"><i class="fa-solid fa-trash-can"></i></a>
+                                            <a href="/form_edit_presensi_pendidik_{{ $item->id }}" class="btn btn-warning"><i class="fa-solid fa-pencil"></i></a>
+                                            <button class="btn btn-danger" onclick="confirmDelete({{ $item->id }})"><i class="fa-solid fa-trash"></i></button>
                                         </td>
                                     </tr>
                                     @empty
                                     <tr>
-                                        <td colspan="6" class="text-center">Data tidak ditemukan.</td>
+                                        <td colspan="7" class="text-center">Data tidak ditemukan.</td>
                                     </tr>
                                     @endforelse
                                 </tbody>
@@ -85,4 +88,40 @@
         </div>
     </div>
 </div>
+@endsection
+@section('js')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+<script>
+    function confirmDelete(roleId) {
+        Swal.fire({
+            title: 'Apakah Anda yakin?',
+            text: "Data tidak dapat dikembalikan setelah dihapus!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, hapus!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = `/hapus_presensi_pendidik_${roleId}`;
+            }
+        });
+    }
+</script>
+<script>
+    @if (session()->has('error'))
+    var Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 5000
+    });
+        Toast.fire({
+        icon: 'error',
+        title: '{{ session('error') }}'
+        })
+    @endif
+</script>
+
 @endsection
