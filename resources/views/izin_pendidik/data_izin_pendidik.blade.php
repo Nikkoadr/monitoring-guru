@@ -53,7 +53,7 @@
                                         <td>{{ $izin_pendidik->nama_pemohon }}</td>
                                         <td>{{ $izin_pendidik->alasan }}</td>
                                         <td>{{ $izin_pendidik->status_izin }}</td>
-                                        <td><a href="{{ asset('storage/file_izin_pendidik/'.$izin_pendidik->file) }}">lihat</a></td>
+                                        <td><a target="_blank" href="{{ asset('storage/file_izin_pendidik/'.$izin_pendidik->file) }}">lihat</a></td>
                                         <td>
                                             <!-- Tombol ACC -->
                                             <button class="btn btn-success float-right m-1" onclick="confirmAcc({{ $izin_pendidik->id }})">

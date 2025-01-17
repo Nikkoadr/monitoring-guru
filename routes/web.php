@@ -170,3 +170,10 @@ Route::put('/print_laporan_bulanan_pendidik', [LaporanController::class, 'print_
 
 Route::get('/presensi_pendidik', [AbsensiController::class, 'presensi_pendidik']);
 Route::post('/post_presensi_pendidik', [AbsensiController::class, 'post_presensi_pendidik']);
+
+Route::get('/data_presensi_pendidik', [AbsensiController::class, 'data_presensi_pendidik']);
+Route::get('/form_tambah_presensi_pendidik', [AbsensiController::class, 'form_tambah_presensi_pendidik']);
+Route::post('/admin_post_presensi_pendidik', [AbsensiController::class, 'admin_post_presensi_pendidik']);
+Route::get('/edit_presensi_pendidik_{id}', [AbsensiController::class, 'edit_presensi_pendidik']);
+Route::put('/update_presensi_pendidik_{id}', [AbsensiController::class, 'update_presensi_pendidik']);
+Route::get('/hapus_presensi_pendidik_{id}', [AbsensiController::class, 'hapus_presensi_pendidik']);

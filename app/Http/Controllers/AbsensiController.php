@@ -286,5 +286,96 @@ public function presensi_pendidik()
         $message = $cekPresensi ? 'Anda Sudah Absen Pulang. Hati-hati di jalan!' : 'Terima kasih Anda sudah melakukan absen masuk. Jangan lupa presensi keluar!';
         return response()->json(['status' => 'success', 'message' => $message]);
     }
+    public function data_presensi_pendidik(Request $request)
+    {
+        // Ambil tanggal filter dari request, default adalah hari ini
+        $tanggal = $request->input('tanggal', now()->toDateString());
+
+        // Query data presensi
+        $data = DB::table('absensi_pendidik')
+            ->leftJoin('guru', 'guru.id', '=', 'absensi_pendidik.id_guru')
+            ->leftJoin('users as user_guru', 'user_guru.id', '=', 'guru.id_user')
+            ->leftJoin('karyawan', 'karyawan.id', '=', 'absensi_pendidik.id_karyawan')
+            ->leftJoin('users as user_karyawan', 'user_karyawan.id', '=', 'karyawan.id_user')
+            ->join('status_hadir', 'status_hadir.id', '=', 'absensi_pendidik.id_status_hadir')
+            ->select(
+                'absensi_pendidik.*',
+                DB::raw("CASE 
+                    WHEN guru.id IS NOT NULL THEN user_guru.name
+                    WHEN karyawan.id IS NOT NULL THEN user_karyawan.name
+                    ELSE 'Tidak Diketahui'
+                END as nama_pendidik"),
+                'status_hadir.nama_status_hadir as status_hadir'
+            )
+            ->whereDate('absensi_pendidik.tanggal', '=', $tanggal) // Filter berdasarkan tanggal
+            ->orderBy('absensi_pendidik.tanggal', 'desc')
+            ->orderBy('absensi_pendidik.created_at', 'desc')
+            ->get();
+
+        // Kirim data dan tanggal ke view
+        return view('absensi.data_presensi_pendidik', compact('data', 'tanggal'));
+    }
+
+    public function form_tambah_presensi_pendidik()
+    {
+        $status_hadir = DB::table('status_hadir')->get();
+        return view('absensi.form_tambah_presensi_pendidik', compact('status_hadir'));
+    }
+
+public function admin_post_presensi_pendidik(Request $request)
+{
+    // Validasi input
+    $request->validate([
+        'id_pendidik' => 'required|integer',
+        'id_status_hadir' => 'required|integer',
+        'tanggal' => 'required|date',
+        'jam_masuk' => 'nullable|date_format:H:i',
+        'jam_keluar' => 'nullable|date_format:H:i|after_or_equal:jam_masuk',
+        'foto_masuk' => 'nullable|image|mimes:jpeg,png,jpg|max:2048', // Maksimal 2MB
+    ]);
+
+    // Cek apakah pendidik adalah guru atau karyawan
+    $cek_guru = DB::table('guru')->where('id_user', $request->id_pendidik)->first();
+    $cek_karyawan = DB::table('karyawan')->where('id_user', $request->id_pendidik)->first();
+
+    // Inisialisasi variabel untuk nama file
+    $fileName = null;
+
+    // Jika ada file yang diunggah
+    if ($request->hasFile('foto_masuk')) {
+        $file = $request->file('foto_masuk');
+        $fileName = time() . '_' . $file->getClientOriginalName();
+        Storage::disk(env('STORAGE_DISK', 'public'))->put('foto_presensi_pendidik/' . $fileName, file_get_contents($file));
+    }
+
+    if ($cek_guru) {
+        // Jika pendidik adalah guru
+        DB::table('absensi_pendidik')->insert([
+            'id_status_hadir' => $request->id_status_hadir,
+            'id_guru' => $cek_guru->id,
+            'id_karyawan' => null,
+            'tanggal' => $request->tanggal,
+            'jam_masuk' => $request->jam_masuk,
+            'jam_keluar' => $request->jam_keluar,
+            'foto_masuk' => $fileName,
+        ]);
+        return redirect('/data_presensi_pendidik')->with('success', 'Presensi berhasil ditambahkan untuk Guru.');
+    } elseif ($cek_karyawan) {
+        // Jika pendidik adalah karyawan
+        DB::table('absensi_pendidik')->insert([
+            'id_status_hadir' => $request->id_status_hadir,
+            'id_guru' => null,
+            'id_karyawan' => $cek_karyawan->id,
+            'tanggal' => $request->tanggal,
+            'jam_masuk' => $request->jam_masuk,
+            'jam_keluar' => $request->jam_keluar,
+            'foto_masuk' => $fileName,
+        ]);
+        return redirect('/data_presensi_pendidik')->with('success', 'Presensi berhasil ditambahkan untuk Karyawan.');
+    } else {
+        // Jika tidak ditemukan
+        return redirect('/data_presensi_pendidik')->with('error', 'Data pendidik tidak ditemukan.');
+    }
+}
 
 }
