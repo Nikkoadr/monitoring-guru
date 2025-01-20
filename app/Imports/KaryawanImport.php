@@ -1,12 +1,11 @@
 <?php
-
 namespace App\Imports;
 
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
-use App\Models\Guru_mapel;
+use App\Models\Karyawan;
 
-class Guru_mapelImport implements ToModel, WithHeadingRow
+class KaryawanImport implements ToModel, WithHeadingRow
 {
     /**
     * @param array $row
@@ -15,9 +14,10 @@ class Guru_mapelImport implements ToModel, WithHeadingRow
     */
     public function model(array $row)
     {
-        return new Guru_mapel([
-            'id_mapel'  => $row['id_mapel'],
-            'id_guru'  => $row['id_guru'],
+        return new Karyawan([
+            'id_user'  => $row['id_user'],
+            'tugas'  => $row['tugas'],
         ]);
+
     }
 }

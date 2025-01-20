@@ -13,7 +13,7 @@ class DatabaseSeeder extends Seeder
             RolesTableSeeder::class,
             JurusanTableSeeder::class,
             MapelTableSeeder::class,
-            KelasTableSeeder::class,
+            // KelasTableSeeder::class,
             StatusHadirTableSeeder::class,
             StatusIzinTableSeeder::class,
             UsersTableSeeder::class,
