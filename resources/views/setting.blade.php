@@ -59,7 +59,7 @@
                                 </form>
                             </div>
                         </div>
-                        <div class="col-6">
+                        <div class="col-12">
                             <div class="card">
                                 <div class="card-body">
                                 <form action="/import_data" method="POST" enctype="multipart/form-data" class="form-horizontal">

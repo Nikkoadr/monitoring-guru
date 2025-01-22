@@ -26,22 +26,24 @@ class WakaController extends Controller
     $data_waka = DB::table('waka')
         ->join('guru', 'waka.id_guru', '=', 'guru.id')
         ->join('users', 'guru.id_user', '=', 'users.id')
-        ->select('waka.*', 'users.name as nama_waka')
+        ->join('jabatan', 'waka.id_jabatan', '=', 'jabatan.id')
+        ->select('waka.*', 'users.name as nama_waka', 'jabatan.nama_jabatan')
         ->get();
         return view('waka.data_waka', compact('data_waka'));
     }
 
     public function form_tambah_waka(){
-        return view('waka.form_tambah_waka');
+        $data_jabatan = DB::table('jabatan')->get();
+        return view('waka.form_tambah_waka', compact('data_jabatan'));
     }
     public function post_waka(Request $request){
         $request->validate([
             'id_guru' => 'required',
-            'jabatan' => 'required',
+            'id_jabatan' => 'required',
         ]);
         $data = [
             'id_guru' => $request->id_guru,
-            'jabatan' => $request->jabatan,
+            'id_jabatan' => $request->id_jabatan,
             'created_at' => now(),
         ];
         DB::table('waka')->insert($data);
@@ -50,6 +52,7 @@ class WakaController extends Controller
 
     public function form_edit_waka($id)
     {
+        $data_jabatan = DB::table('jabatan')->get();
         $data_waka = DB::table('waka')
             ->join('guru', 'waka.id_guru', '=', 'guru.id')
             ->join('users', 'guru.id_user', '=', 'users.id')
@@ -61,15 +64,15 @@ class WakaController extends Controller
             return redirect()->route('waka.index')->with('error', 'Data Wakasek tidak ditemukan.');
         }
 
-        return view('waka.form_edit_waka', compact('data_waka'));
+        return view('waka.form_edit_waka', compact('data_waka', 'data_jabatan'));
     }
 
     public function update_waka(Request $request, $id){
         $request->validate([
-            'jabatan' => 'required',
+            'id_jabatan' => 'required',
         ]);
         $data = [
-            'jabatan' => $request->jabatan,
+            'id_jabatan' => $request->id_jabatan,
             'updated_at' => now(),
         ];
         DB::table('waka')->where('id', $id)->update($data);

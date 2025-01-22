@@ -11,10 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('waka', function (Blueprint $table) {
+        Schema::create('jabatan', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('id_guru')->nullable()->index()->references('id')->on('guru');
-            $table->foreignId('id_jabatan')->nullable()->index()->references('id')->on('jabatan');
+            $table->string('nama_jabatan');
             $table->timestamps();
         });
     }
@@ -24,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('waka');
+        Schema::dropIfExists('jabatan_tabel');
     }
 };

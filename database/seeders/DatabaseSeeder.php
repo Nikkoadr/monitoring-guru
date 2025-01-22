@@ -10,6 +10,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             SettingsTableSeeder::class,
+            JabatanSeeder::class,
             RolesTableSeeder::class,
             JurusanTableSeeder::class,
             MapelTableSeeder::class,

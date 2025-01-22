@@ -9,30 +9,32 @@ use Illuminate\Support\Facades\Storage;
 
 class Izin_pendidikController extends Controller
 {
-public function index()
-{
-    $data_izin_pendidik = DB::table('izin_pendidik')
-        ->leftJoin('guru', 'izin_pendidik.id_guru', '=', 'guru.id')
-        ->leftJoin('users as user_guru', 'guru.id_user', '=', 'user_guru.id')
-        ->leftJoin('karyawan', 'izin_pendidik.id_karyawan', '=', 'karyawan.id')
-        ->leftJoin('users as user_karyawan', 'karyawan.id_user', '=', 'user_karyawan.id')
-        ->join('status_izin', 'izin_pendidik.id_status_izin', '=', 'status_izin.id')
-        ->select(
-            'izin_pendidik.*',
-            DB::raw("CASE 
-                WHEN guru.id IS NOT NULL THEN user_guru.name
-                WHEN karyawan.id IS NOT NULL THEN user_karyawan.name
-                ELSE 'Tidak Diketahui' 
-            END as nama_pemohon"),
-            'status_izin.nama_status_izin as status_izin'
-        )
-        ->whereDate('izin_pendidik.tanggal', '=', now()->toDateString())
-        ->orderBy('izin_pendidik.tanggal', 'desc')
-        ->orderBy('izin_pendidik.created_at', 'desc')
-        ->get();
+    public function index()
+    {
+        $data_izin_pendidik = DB::table('izin_pendidik')
+            ->leftJoin('guru', 'izin_pendidik.id_guru', '=', 'guru.id')
+            ->leftJoin('users as user_guru', 'guru.id_user', '=', 'user_guru.id')
+            ->leftJoin('karyawan', 'izin_pendidik.id_karyawan', '=', 'karyawan.id')
+            ->leftJoin('users as user_karyawan', 'karyawan.id_user', '=', 'user_karyawan.id')
+            ->join('status_izin', 'izin_pendidik.id_status_izin', '=', 'status_izin.id')
+            ->leftJoin('users as pemberi_izin', 'izin_pendidik.id_user_yang_menyetujui', '=', 'pemberi_izin.id')
+            ->select(
+                'izin_pendidik.*',
+                DB::raw("CASE 
+                    WHEN guru.id IS NOT NULL THEN user_guru.name
+                    WHEN karyawan.id IS NOT NULL THEN user_karyawan.name
+                    ELSE 'Tidak Diketahui' 
+                END as nama_pemohon"),
+                'status_izin.nama_status_izin as status_izin',
+                'pemberi_izin.name as nama_pemberi_izin' // Tambahkan nama pemberi izin
+            )
+            ->whereDate('izin_pendidik.tanggal', '=', now()->toDateString())
+            ->orderBy('izin_pendidik.tanggal', 'desc')
+            ->orderBy('izin_pendidik.created_at', 'desc')
+            ->get();
 
-    return view('izin_pendidik.data_izin_pendidik', compact('data_izin_pendidik'));
-}
+        return view('izin_pendidik.data_izin_pendidik', compact('data_izin_pendidik'));
+    }
 
     public function acc(Request $request, $id)
     {
@@ -46,7 +48,7 @@ public function index()
                 return redirect()->back()->with('error', 'Jenis izin tidak valid.');
             }
 
-            DB::table('izin_pendidik')->where('id', $id)->update(['id_status_izin' => 2]);
+            DB::table('izin_pendidik')->where('id', $id)->update(['id_status_izin' => 2, 'id_user_yang_menyetujui' => Auth::user()->id]);
 
             DB::table('absensi_pendidik')->insert([
                 'id_guru' => $izin->id_guru,

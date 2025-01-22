@@ -42,6 +42,7 @@
                                     <th>Alasan</th>
                                     <th>Status Izin</th>
                                     <th>File Pendukung</th>
+                                    <th>Yang Memberi Izin</th>
                                     <th>Menu</th>
                                 </thead>
                                 <tbody>
@@ -54,6 +55,7 @@
                                         <td>{{ $izin_pendidik->alasan }}</td>
                                         <td>{{ $izin_pendidik->status_izin }}</td>
                                         <td><a target="_blank" href="{{ asset('storage/file_izin_pendidik/'.$izin_pendidik->file) }}">lihat</a></td>
+                                        <td>{{ $izin_pendidik->nama_pemberi_izin }}</td>
                                         <td>
                                             <!-- Tombol ACC -->
                                             <button class="btn btn-success float-right m-1" onclick="confirmAcc({{ $izin_pendidik->id }})">

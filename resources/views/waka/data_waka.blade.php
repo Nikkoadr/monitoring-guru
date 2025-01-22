@@ -44,7 +44,7 @@
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
                                             <td>{{ $data->nama_waka }}</td>
-                                            <td>{{ $data->jabatan }}</td>
+                                            <td>{{ $data->nama_jabatan }}</td>
                                             <td>
                                                 <a href="/form_edit_waka_{{ $data->id }}" class="btn btn-warning float-right m-1"><i class="fa-solid fa-pen-to-square"></i></a>
                                                 <button class="btn btn-danger float-right m-1" onclick="confirmDelete({{ $data->id }})"><i class="fa-solid fa-trash"></i></button>

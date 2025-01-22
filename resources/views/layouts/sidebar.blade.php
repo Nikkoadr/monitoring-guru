@@ -27,11 +27,8 @@
                 </div>
                 </div>
             </div>
-            <!-- Sidebar Menu -->
             <nav class="mt-2">
                 <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                <!-- Add icons to the links using the .nav-icon class
-                    with font-awesome or any other icon font library -->
                 <li class="nav-item">
                     <a href="/home" class="nav-link {{ request()->is('home') ? 'active' : '' }}">
                     <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -44,7 +41,6 @@
                     @php
                         $isKaryawan = DB::table('karyawan')->where('id_user', auth()->id())->exists();
                     @endphp
-
                     @if (!$isKaryawan)
                         <a href="/kbm" class="nav-link {{ request()->is('kbm') ? 'active' : '' }}">
                             <i class="nav-icon fa-solid fa-people-roof"></i>
@@ -72,6 +68,27 @@
                     </li>
                     @endif
                 @endforeach
+                @php
+                $is_kepsek = DB::table('kepsek')
+                            ->join('guru', 'kepsek.id_guru', '=', 'guru.id')
+                            ->where('guru.id_user', Auth::user()->id)
+                            ->exists();
+                $is_waka = DB::table('waka')
+                    ->join('guru', 'waka.id_guru', '=', 'guru.id')
+                    ->where('guru.id_user', Auth::user()->id)
+                    ->where('waka.id_jabatan', 2)
+                    ->exists();
+                @endphp
+                @if($is_kepsek || $is_waka)
+                    <li class="nav-item">
+                        <a href="/data_izin_pendidik" class="nav-link {{ request()->is('data_izin_pendidik') ? 'active' : '' }}">
+                        <i class="nav-icon fa-solid fa-clipboard-user"></i>
+                        <p>
+                            Izin Pendidik
+                        </p>
+                        </a>
+                    </li>
+                @endif
                 @can('admin')
                 <li class="nav-item">
                     <a href="/data_izin_pendidik" class="nav-link {{ request()->is('data_izin_pendidik') ? 'active' : '' }}">

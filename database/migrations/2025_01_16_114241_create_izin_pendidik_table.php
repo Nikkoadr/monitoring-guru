@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('alasan')->nullable();
             $table->string('file')->nullable();
             $table->foreignId('id_status_izin')->nullable()->index()->references('id')->on('status_izin');
+            $table->foreignId('id_user_yang_menyetujui')->nullable()->index()->references('id')->on('users');
             $table->timestamps();
         });
     }

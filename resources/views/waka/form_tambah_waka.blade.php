@@ -35,8 +35,12 @@
                                     <input class="form-control" type="text" id="waka" name="waka" autocomplete="off">
                                     <input type="hidden" id="id_guru" name="id_guru">
                                     <div class="suggestions dropdown-item" id="suggestions"></div>
-                                    <label for="jabatan">Jabatan:</label>
-                                    <input class="form-control" type="text" id="jabatan" name="jabatan">
+                                    <label for="id_jabatan">Jabatan:</label>
+                                    <select class="form-control" id="id_jabatan" name="id_jabatan">
+                                        @foreach ($data_jabatan as $jabatan)
+                                            <option value="{{ $jabatan->id }}">{{ $jabatan->nama_jabatan }}</option>
+                                        @endforeach
+                                    </select>
                                     <button class="btn btn-primary mt-2 float-right" type="submit">Simpan</button>
                                     <a href="/data_waka" class="btn btn-danger mt-2 float-right mr-2">Batal</a>
                                 </form>

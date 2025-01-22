@@ -35,7 +35,11 @@
                                     <label class="form-label" for="waka">Nama Waka:</label>
                                     <input class="form-control" type="text" value="{{ $data_waka->nama_waka }}" readonly required>
                                     <label class="form-label" for="jabatan">Jabatan:</label>
-                                    <input class="form-control" type="text" id="jabatan" name="jabatan" value="{{ $data_waka->jabatan }}" required>
+                                    <select class="form-control" name="id_jabatan" id="id_jabatan" required>
+                                        @foreach ($data_jabatan as $jabatan)
+                                            <option value="{{ $jabatan->id }}" {{ $data_waka->id_jabatan == $jabatan->id ? 'selected' : '' }}>{{ $jabatan->nama_jabatan }}</option>
+                                        @endforeach
+                                    </select>
                                     <button class="btn btn-primary mt-2 float-right" type="submit">Simpan</button>
                                     <a href="/data_waka" class="btn btn-danger mt-2 float-right mr-2">Batal</a>
                                 </form>
