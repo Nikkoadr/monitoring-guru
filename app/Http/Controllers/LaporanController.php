@@ -284,5 +284,97 @@ public function index(Request $request)
 
 //     return view('layouts.component.downloadSemuaLaporan', compact('tanggalAwal', 'tanggalAkhir', 'rekap'));
 // }
+public function print_laporan_bulanan_kelas(Request $request)
+{
+    $tanggalAwal = $request->tanggal_awal;
+    $tanggalAkhir = $request->tanggal_akhir;
+
+    $selectStatements = [];
+    $tanggalMulai = Carbon::parse($tanggalAwal);
+    $tanggalSelesai = Carbon::parse($tanggalAkhir);
+
+    // Loop untuk membuat kolom per tanggal
+    while ($tanggalMulai->lte($tanggalSelesai)) {
+        $hari = $tanggalMulai->day;
+        $selectStatements[] = "
+            COALESCE(
+                MAX(CASE 
+                    WHEN DAY(absensi_siswa.tanggal) = $hari 
+                    THEN 
+                        CASE 
+                            WHEN absensi_siswa.id_status_hadir = 1 THEN 'H'
+                            WHEN absensi_siswa.id_status_hadir = 2 THEN 'A'
+                            WHEN absensi_siswa.id_status_hadir = 3 THEN 'I'
+                            WHEN absensi_siswa.id_status_hadir = 4 THEN 'S'
+                            ELSE '?'
+                        END
+                    ELSE NULL 
+                END), '-') as tgl_$hari";
+        $tanggalMulai->addDay();
+    }
+
+    // Query Data Absensi Siswa
+    $rekap = DB::table('siswa')
+        ->selectRaw('
+            users.name as nama_siswa,
+            siswa.id as id_siswa,
+            kelas.nama_kelas,
+            ' . implode(', ', $selectStatements))
+        ->leftJoin('users', 'siswa.id_user', '=', 'users.id')
+        ->leftJoin('kelas', 'siswa.id_kelas', '=', 'kelas.id')
+        ->leftJoin('absensi_siswa', function ($join) use ($tanggalAwal, $tanggalAkhir) {
+            $join->on('siswa.id', '=', 'absensi_siswa.id_siswa')
+                ->whereBetween('absensi_siswa.tanggal', [$tanggalAwal, $tanggalAkhir]);
+        })
+        ->whereNotNull('siswa.id_kelas') // Hanya siswa yang memiliki kelas
+        ->groupByRaw('siswa.id, users.name, kelas.nama_kelas')
+        ->orderBy('kelas.nama_kelas')
+        ->orderBy('nama_siswa')
+        ->get();
+
+    // Proses data untuk perhitungan total
+    $filter_rekap = $rekap->map(function ($data) use ($tanggalAwal) {
+        $keteranganPerHari = [];
+        $totalHadir = 0;
+        $totalAlpha = 0;
+        $totalIzin = 0;
+        $totalSakit = 0;
+        $totalTidakDiketahui = 0;
+
+        for ($i = 1; $i <= 31; $i++) {
+            $key = "tgl_$i";
+            $statusKehadiran = $data->$key ?? '-';
+
+            $keteranganPerHari[$key] = $statusKehadiran;
+
+            match ($statusKehadiran) {
+                'H' => $totalHadir++,
+                'A' => $totalAlpha++,
+                'I' => $totalIzin++,
+                'S' => $totalSakit++,
+                '?' => $totalTidakDiketahui++,
+                default => null,
+            };
+        }
+
+        return (object) [
+            'nama_siswa' => $data->nama_siswa,
+            'nama_kelas' => $data->nama_kelas,
+            'keterangan_perhari' => $keteranganPerHari,
+            'total_hadir' => $totalHadir,
+            'total_alpha' => $totalAlpha,
+            'total_izin' => $totalIzin,
+            'total_sakit' => $totalSakit,
+            'total_tidak_diketahui' => $totalTidakDiketahui,
+        ];
+    });
+
+    return view('laporan.print_laporan_bulanan_kelas', [
+        'tanggalAwal' => $tanggalAwal,
+        'tanggalAkhir' => $tanggalAkhir,
+        'rekap' => $filter_rekap,
+    ]);
+}
+
 
 }

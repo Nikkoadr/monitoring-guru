@@ -35,7 +35,7 @@
                                     <input type="text" class="form-control" id="id_kelas" name="id_kelas" value="{{ $data_jurusan->nama_jurusan }}" readonly>
                                     <label for="id_kelas">Kelas:</label>
                                     <input class="form-control" type="hidden" id="id_kelas" name="id_kelas" value="{{ $data_kelas->id }}">
-                                    <input class="form-control" type="text" id="id_kelas" name="id_kelas" value="{{ $data_kelas->nama_kelas }}" readonly>
+                                    <input class="form-control" type="text" id="nama_kelas" name="nama_kelas" value="{{ $data_kelas->nama_kelas }}" readonly>
                                     <label for="nama_siswa">Nama Siswa:</label>
                                     <input class="form-control" type="text" id="nama_siswa" name="nama_siswa" autocomplete="off">
                                     <input type="hidden" id="id_user" name="id_user">

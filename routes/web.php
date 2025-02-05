@@ -167,6 +167,7 @@ Route::put('/post_request_izin_pendidik', [Izin_pendidikController::class, 'post
 
 Route::get('/laporan', [LaporanController::class, 'index']);
 Route::put('/print_laporan_bulanan_pendidik', [LaporanController::class, 'print_laporan_bulanan_pendidik']);
+Route::put('/print_laporan_bulanan_kelas', [LaporanController::class, 'print_laporan_bulanan_kelas']);
 
 Route::get('/presensi_pendidik', [AbsensiController::class, 'presensi_pendidik']);
 Route::post('/post_presensi_pendidik', [AbsensiController::class, 'post_presensi_pendidik']);

@@ -30,7 +30,13 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-body">
-                                @can('admin')
+                                @php
+                                    $is_kepsek = DB::table('kepsek')
+                                                ->join('guru', 'kepsek.id_guru', '=', 'guru.id')
+                                                ->where('guru.id_user', Auth::user()->id)
+                                                ->exists();
+                                @endphp
+                                @if($is_kepsek || Auth::user()->can('admin'))
                                 <h5>Daftar Kelas dan Status KBM</h5>
                                 <p><strong>Tanggal:</strong> {{ $hariIni }}</p>
                                 <table class="table table-bordered">
@@ -75,8 +81,8 @@
                                         </tr>
                                     </tfoot>
                                 </table>
-                                @endcan
-                                @if (Auth::user()->can('siswa') && isset($userKelas))
+
+                                @elseif (Auth::user()->can('siswa') && isset($userKelas))
                                     <p class="card-title">
                                         Assalaamu’alaikum Warahmatullaahi Wabarakaatuh. <b>{{ Auth::user()->name }}</b>
                                         Kelas: <b>{{ $userKelas->nama_kelas }}</b> Selamat belajar!
