@@ -174,33 +174,72 @@ class AbsensiController extends Controller
         return redirect('/lihat_presensi_siswa_' . $request->id_kbm)->with('success', 'Status Hadir ' . $status_hadir . ' Berhasil Diubah');
     }
 
-public function presensi_pendidik()
-{
-    $tanggal = date("Y-m-d");
-    $user = Auth::user();
+    public function presensi_pendidik()
+    {
+        $tanggal = date("Y-m-d");
+        $user = Auth::user();
 
-    // Mengecek apakah user adalah guru atau karyawan
-    $guru = DB::table('guru')->where('id_user', $user->id)->first();
-    $karyawan = DB::table('karyawan')->where('id_user', $user->id)->first();
+        // Mengecek apakah user adalah guru atau karyawan
+        $guru = DB::table('guru')->where('id_user', $user->id)->first();
+        $karyawan = DB::table('karyawan')->where('id_user', $user->id)->first();
 
-    $cek = null; // Variabel untuk mengecek presensi
+        $cek = null; // Variabel untuk mengecek presensi
 
-    // Jika yang login adalah guru
-    if ($guru) {
-        $cek = DB::table('absensi_pendidik')->where('tanggal', $tanggal)->where('id_guru', $guru->id)->count();
+        // Jika yang login adalah guru
+        if ($guru) {
+            $cek = DB::table('absensi_pendidik')->where('tanggal', $tanggal)->where('id_guru', $guru->id)->count();
+        }
+        // Jika yang login adalah karyawan
+        elseif ($karyawan) {
+            $cek = DB::table('absensi_pendidik')->where('tanggal', $tanggal)->where('id_karyawan', $karyawan->id)->count();
+        }
+
+        $setting = Setting::first();
+        $limit_presensi = $setting->limit_presensi;
+        $jam = date("H:i:s");
+
+        return view('absensi.presensi_pendidik', compact('cek', 'setting', 'jam', 'limit_presensi'));
     }
-    // Jika yang login adalah karyawan
-    elseif ($karyawan) {
-        $cek = DB::table('absensi_pendidik')->where('tanggal', $tanggal)->where('id_karyawan', $karyawan->id)->count();
+
+    public function simpanDatasetWajah(Request $request) {
+        $user = Auth::user();
+
+        if (!$user) {
+            return response()->json(['status' => 'error', 'message' => 'User tidak ditemukan'], 403);
+        }
+
+        // Validasi request
+        $request->validate([
+            'dataset_wajah' => 'required|string',
+        ]);
+
+        // Cek apakah dataset_wajah adalah JSON valid
+        $dataset = json_decode($request->dataset_wajah, true);
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            return response()->json(['status' => 'error', 'message' => 'Dataset wajah tidak valid'], 400);
+        }
+
+        // Simpan dataset_wajah ke database
+        $user->dataset_wajah = json_encode($dataset);
+        if ($user->save()) {
+            return response()->json(['status' => 'success', 'message' => 'Dataset wajah berhasil disimpan!']);
+        } else {
+            return response()->json(['status' => 'error', 'message' => 'Gagal menyimpan dataset wajah.']);
+        }
     }
 
-    $setting = Setting::first();
-    $limit_presensi = $setting->limit_presensi;
-    $jam = date("H:i:s");
+    public function ambilDatasetWajah() {
+        $user = Auth::user();
 
-    return view('absensi.presensi_pendidik', compact('cek', 'setting', 'jam', 'limit_presensi'));
-}
+        if (!$user || empty($user->dataset_wajah)) {
+            return response()->json(['status' => 'error', 'message' => 'Dataset wajah tidak ditemukan'], 404);
+        }
 
+        return response()->json([
+            'status' => 'success',
+            'data' => $user->dataset_wajah
+        ]);
+    }
     public function post_presensi_pendidik(Request $request)
     {
         // Validasi input
@@ -377,34 +416,34 @@ public function admin_post_presensi_pendidik(Request $request)
         return redirect('/data_presensi_pendidik')->with('error', 'Data pendidik tidak ditemukan.');
     }
     }
-public function form_edit_presensi_pendidik($id)
-{
-    $data = DB::table('absensi_pendidik')
-        ->leftJoin('guru', 'guru.id', '=', 'absensi_pendidik.id_guru')
-        ->leftJoin('users as guru_users', 'guru.id_user', '=', 'guru_users.id') // Relasi ke tabel users untuk guru
-        ->leftJoin('karyawan', 'karyawan.id', '=', 'absensi_pendidik.id_karyawan')
-        ->leftJoin('users as karyawan_users', 'karyawan.id_user', '=', 'karyawan_users.id') // Relasi ke tabel users untuk karyawan
-        ->join('status_hadir', 'status_hadir.id', '=', 'absensi_pendidik.id_status_hadir')
-        ->where('absensi_pendidik.id', $id)
-        ->select(
-            'absensi_pendidik.*',
-            'status_hadir.id as id_status_hadir',
-            DB::raw("
-                CASE 
-                    WHEN absensi_pendidik.id_guru IS NOT NULL THEN guru_users.name
-                    WHEN absensi_pendidik.id_karyawan IS NOT NULL THEN karyawan_users.name
-                    ELSE 'Tidak Diketahui'
-                END as nama_pendidik")
-        )
-        ->first();
+    public function form_edit_presensi_pendidik($id)
+    {
+        $data = DB::table('absensi_pendidik')
+            ->leftJoin('guru', 'guru.id', '=', 'absensi_pendidik.id_guru')
+            ->leftJoin('users as guru_users', 'guru.id_user', '=', 'guru_users.id') // Relasi ke tabel users untuk guru
+            ->leftJoin('karyawan', 'karyawan.id', '=', 'absensi_pendidik.id_karyawan')
+            ->leftJoin('users as karyawan_users', 'karyawan.id_user', '=', 'karyawan_users.id') // Relasi ke tabel users untuk karyawan
+            ->join('status_hadir', 'status_hadir.id', '=', 'absensi_pendidik.id_status_hadir')
+            ->where('absensi_pendidik.id', $id)
+            ->select(
+                'absensi_pendidik.*',
+                'status_hadir.id as id_status_hadir',
+                DB::raw("
+                    CASE 
+                        WHEN absensi_pendidik.id_guru IS NOT NULL THEN guru_users.name
+                        WHEN absensi_pendidik.id_karyawan IS NOT NULL THEN karyawan_users.name
+                        ELSE 'Tidak Diketahui'
+                    END as nama_pendidik")
+            )
+            ->first();
 
-    $status_hadir = DB::table('status_hadir')->get();
+        $status_hadir = DB::table('status_hadir')->get();
 
-    // Menentukan ID pendidik yang sesuai
-    $id_pendidik = $data->id_guru ? $data->id_guru : $data->id_karyawan;
+        // Menentukan ID pendidik yang sesuai
+        $id_pendidik = $data->id_guru ? $data->id_guru : $data->id_karyawan;
 
-    return view('absensi.form_edit_presensi_pendidik', compact('data', 'status_hadir', 'id_pendidik'));
-}
+        return view('absensi.form_edit_presensi_pendidik', compact('data', 'status_hadir', 'id_pendidik'));
+    }
 
     public function update_presensi_pendidik(Request $request, $id)
     {

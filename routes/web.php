@@ -29,6 +29,9 @@ Route::get('/', function () {
 
 Auth::routes(['register' => false]);
 
+Route::post('/simpan_dataset_wajah', [AbsensiController::class, 'simpanDatasetWajah']);
+Route::get('/ambil_dataset_wajah', [AbsensiController::class, 'ambilDatasetWajah']);
+
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/get_user', [GuruController::class, 'get_user']); //search users menggunakan ajax
 Route::get('/get_guru', [MapelController::class, 'get_guru']);//search guru menggunakan ajax
