@@ -105,4 +105,10 @@ class UserController extends Controller
         DB::table('users')->where('id', $id)->delete();
         return redirect('/data_user')->with('success', 'Data User Berhasil Hapus');
     }
+
+    public function hapus_dataset_wajah($id)
+    {
+        DB::table('users')->where('id', $id)->update(['dataset_wajah' => null]);
+        return redirect('/data_user')->with('success', 'Dataset Wajah Berhasil Dihapus');
+    }
 }

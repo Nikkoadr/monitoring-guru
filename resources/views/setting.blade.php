@@ -25,35 +25,53 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-body">
-                                <form action="/editSetting" method="POST">
+                                <form action="/edit_setting/{{ $setting->id }}" method="POST">
                                     @csrf
                                     @method('put')
-                                    <input type="hidden" name="id" value="{{ $setting->id }}">
                                     <div class="form-group">
                                         <label for="nama_aplikasi">Nama Lokasi:</label>
-                                        <input type="text" class="form-control" id="nama_aplikasi" name="nama_aplikasi" value="{{ $setting->nama_aplikasi }}">
+                                        <input type="text" class="form-control @error('nama_aplikasi') is-invalid @enderror" id="nama_aplikasi" name="nama_aplikasi" value="{{ $setting->nama_aplikasi }}">
+                                        @error('nama_aplikasi')
+                                            <div class="invalid-feedback d-block">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="form-row">
                                         <div class="form-group col-md-6">
                                             <label for="lokasi_latitude">Latitude:</label>
-                                            <input type="text" class="form-control" id="lokasi_latitude" name="lokasi_latitude" value="{{ $setting->lokasi_latitude }}">
+                                            <input type="text" class="form-control  @error('lokasi_latitude') is-invalid @enderror" id="lokasi_latitude" name="lokasi_latitude" value="{{ $setting->lokasi_latitude }}">
+                                            @error('lokasi_latitude')
+                                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                                                
+                                            @enderror
                                         </div>
                                         <div class="form-group col-md-6">
                                             <label for="lokasi_longitude">Longitude:</label>
-                                            <input type="text" class="form-control" id="lokasi_longitude" name="lokasi_longitude" value="{{ $setting->lokasi_longitude }}">
+                                            <input type="text" class="form-control @error('lokasi_longitude') is-invalid @enderror" id="lokasi_longitude" name="lokasi_longitude" value="{{ $setting->lokasi_longitude }}">
+                                            @error('lokasi_longitude')
+                                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                                            @enderror
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label for="radius_lokasi">Radius:</label>
-                                        <input type="text" class="form-control" id="radius_lokasi" name="radius_lokasi" value="{{ $setting->radius_lokasi }}">
+                                        <input type="text" class="form-control @error('radius_lokasi') is-invalid @enderror" id="radius_lokasi" name="radius_lokasi" value="{{ $setting->radius_lokasi }}">
+                                        @error('radius_lokasi')
+                                            <div class="invalid-feedback d-block">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="form-group">
                                         <label for="mulai_presensi">Limit Absen Harian</label>
-                                        <input type="time" class="form-control" id="mulai_presensi" name="mulai_presensi" value="{{ $setting->mulai_presensi }}">
+                                        <input type="time" class="form-control @error('mulai_presensi') is-invalid @enderror" id="mulai_presensi" name="mulai_presensi" value="{{ $setting->mulai_presensi }}">
+                                        @error('mulai_presensi')
+                                            <div class="invalid-feedback d-block">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="form-group">
-                                        <label for="limit_absen">Limit Absen Harian</label>
-                                        <input type="time" class="form-control" id="limit_absen" name="limit_absen" value="{{ $setting->limit_presensi }}">
+                                        <label for="limit_presensi">Limit Absen Harian</label>
+                                        <input type="time" class="form-control @error('limit_presensi') is-invalid @enderror" id="limit_presensi" name="limit_presensi" value="{{ $setting->limit_presensi }}">
+                                        @error('limit_presensi')
+                                            <div class="invalid-feedback d-block">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <button style="float: right" type="submit" class="btn btn-primary">Edit</button>
                                 </form>

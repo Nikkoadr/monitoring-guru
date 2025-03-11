@@ -41,17 +41,20 @@ class SettingController extends Controller
         Excel::import(new DataImport, request()->file('file'));
         return redirect('/setting')->with('success', 'Data User Berhasil Import');
     }
-    public function editSetting(Request $request)
+    public function edit_setting(Request $request, $id)
     {
         $data_valid = $request->validate([
             'nama_aplikasi' => ['required'],
             'lokasi_latitude' => ['required'],
             'lokasi_longitude' => ['required'],
-            'lokasi_radius' => ['required'],
+            'radius_lokasi' => ['required'],
             'mulai_presensi' => ['required'],
             'limit_presensi' => ['required'],
         ]);
-        $setting = Setting::find($request->id);
+        $setting = Setting::find($id);
+        if (!$setting) {
+            return redirect('setting')->with('error', 'Data tidak ditemukan');
+        }
         $setting->update($data_valid);
         return redirect('setting')->with('success', 'Data Berhasil di Update');
     }

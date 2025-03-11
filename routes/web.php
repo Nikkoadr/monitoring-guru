@@ -67,6 +67,7 @@ Route::get('/form_edit_password_user_{id}', [UserController::class, 'form_edit_p
 Route::put('/update_password_user_{id}', [UserController::class, 'update_password_user']);
 Route::put('/update_edit_user_{id}', [UserController::class, 'update_user']);
 Route::get('/hapus_user_{id}', [UserController::class, 'hapus_user']);
+Route::get('/hapus_dataset_wajah_{id}', [UserController::class, 'hapus_dataset_wajah']);
 
 Route::get('/data_guru', [GuruController::class, 'index']);
 Route::get('/form_tambah_guru', [GuruController::class, 'form_tambah_guru']);
@@ -149,6 +150,7 @@ Route::put('/update_siswa_{id}', [SiswaController::class, 'update_siswa']);
 Route::get('/hapus_siswa_{id}', [SiswaController::class, 'hapus_siswa']);
 
 Route::get('/setting', [SettingController::class, 'index']);
+Route::put('/edit_setting/{id}', [SettingController::class, 'edit_setting']);
 Route::post('/import_data', [SettingController::class, 'import_data']);
 
 Route::get('/data_kesiswaan', [KesiswaanController::class, 'index']);

@@ -51,6 +51,7 @@
                                                 <a href="/form_edit_user_{{ $user->id }}" class="btn btn-info float-right m-1"><i class="fa-solid fa-pen-to-square"></i></a>
                                                 <a href="/form_edit_password_user_{{ $user->id }}" class="btn btn-warning float-right m-1"><i class="fa-solid fa-key"></i></a>
                                                 <button class="btn btn-danger float-right m-1" onclick="confirmDelete({{ $user->id }})"><i class="fa-solid fa-trash-can"></i></button>
+                                                <button class="btn btn-danger float-right m-1" onclick="confirm_delete_dataset_wajah({{ $user->id }})"><i class="fa-regular fa-face-tired"></i></i></button>
                                             </td>
                                         </tr>
                                         @endforeach
@@ -124,6 +125,22 @@ $("#table_user").DataTable({
         }).then((result) => {
             if (result.isConfirmed) {
                 window.location.href = `/hapus_user_${roleId}`;
+            }
+        });
+    }
+    function confirm_delete_dataset_wajah(roleId) {
+        Swal.fire({
+            title: 'Apakah Anda yakin?',
+            text: "Data Wajah tidak dapat dikembalikan setelah dihapus!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, hapus!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = `/hapus_dataset_wajah_${roleId}`;
             }
         });
     }
