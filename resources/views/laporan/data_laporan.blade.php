@@ -29,14 +29,55 @@
 <section class="content">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-12">
+            <div class="col-6">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Pilih Bulan Untuk Mencetak Laporan ( 25 Bulan Lalu - 24 bulan Sekarang )</h3>
+                        <h3 class="card-title">Laporan Guru dan Karyawan ( 21 Bulan Lalu - 20 bulan Sekarang )</h3>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
                         <form method="POST" action="print_laporan_bulanan_pendidik" target="_blank">
+                            @csrf
+                            @method('put')
+                            <div class="form-row">
+                                <div class="form-group col-6">
+                                    <label for="tanggal_awal" class="col-form-label">Tanggal Awal</label>
+                                    <input id="tanggal_awal" type="date" class="form-control @error('tanggal_awal') is-invalid @enderror" name="tanggal_awal" required autofocus>
+                                    @error('tanggal_awal')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                    @enderror
+                                </div>
+
+                                <div class="form-group col-6">
+                                    <label for="tanggal_akhir" class="col-form-label">Tanggal Akhir</label>
+                                    <input id="tanggal_akhir" type="date" class="form-control @error('tanggal_akhir') is-invalid @enderror" name="tanggal_akhir" required>
+                                    @error('tanggal_akhir')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary float-right">Print Laporan</button>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Laporan Kelas </h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <form method="POST" action="print_laporan_bulanan_kelas" target="_blank">
                             @csrf
                             @method('put')
                             <div class="form-row">
