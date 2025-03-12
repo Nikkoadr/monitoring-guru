@@ -60,14 +60,14 @@
                                         @enderror
                                     </div>
                                     <div class="form-group">
-                                        <label for="mulai_presensi">Limit Absen Harian</label>
+                                        <label for="mulai_presensi">Mulai Absensi</label>
                                         <input type="time" class="form-control @error('mulai_presensi') is-invalid @enderror" id="mulai_presensi" name="mulai_presensi" value="{{ $setting->mulai_presensi }}">
                                         @error('mulai_presensi')
                                             <div class="invalid-feedback d-block">{{ $message }}</div>
                                         @enderror
                                     </div>
                                     <div class="form-group">
-                                        <label for="limit_presensi">Limit Absen Harian</label>
+                                        <label for="limit_presensi">Limit Presensi Harian</label>
                                         <input type="time" class="form-control @error('limit_presensi') is-invalid @enderror" id="limit_presensi" name="limit_presensi" value="{{ $setting->limit_presensi }}">
                                         @error('limit_presensi')
                                             <div class="invalid-feedback d-block">{{ $message }}</div>

@@ -26,7 +26,7 @@ class Izin_pendidikController extends Controller
                     ELSE 'Tidak Diketahui' 
                 END as nama_pemohon"),
                 'status_izin.nama_status_izin as status_izin',
-                'pemberi_izin.name as nama_pemberi_izin' // Tambahkan nama pemberi izin
+                'pemberi_izin.name as nama_pemberi_izin'
             )
             ->whereDate('izin_pendidik.tanggal', '=', now()->toDateString())
             ->orderBy('izin_pendidik.tanggal', 'desc')
@@ -91,70 +91,89 @@ class Izin_pendidikController extends Controller
     public function request_izin_pendidik()
     {
         $user = Auth::user();
+        $startOfMonth = now()->startOfMonth(); // Awal bulan ini
+        $endOfMonth = now()->endOfMonth(); // Akhir bulan ini
 
-        // Dapatkan data izin yang diajukan oleh guru yang sedang login
-        $data_izin_guru = DB::table('izin_pendidik')
+        $izin_guru = DB::table('izin_pendidik')
             ->join('guru', 'izin_pendidik.id_guru', '=', 'guru.id')
             ->join('users as user_guru', 'guru.id_user', '=', 'user_guru.id')
             ->join('status_izin', 'izin_pendidik.id_status_izin', '=', 'status_izin.id')
             ->select(
                 'izin_pendidik.*',
-                'user_guru.name as nama_guru',
-                'status_izin.nama_status_izin as status_izin'
+                'user_guru.name as nama_pemohon',
+                'status_izin.nama_status_izin as status_izin',
+                DB::raw("'Guru' as role")
             )
-            ->where('guru.id_user', $user->id) // Filter izin berdasarkan guru yang login
-            ->orderBy('izin_pendidik.tanggal', 'desc')
-            ->orderBy('izin_pendidik.created_at', 'desc')
+            ->where('guru.id_user', $user->id)
+            ->whereBetween('izin_pendidik.tanggal', [$startOfMonth, $endOfMonth]); // Filter 1 bulan terakhir
+
+        $izin_karyawan = DB::table('izin_pendidik')
+            ->join('karyawan', 'izin_pendidik.id_karyawan', '=', 'karyawan.id')
+            ->join('users as user_karyawan', 'karyawan.id_user', '=', 'user_karyawan.id')
+            ->join('status_izin', 'izin_pendidik.id_status_izin', '=', 'status_izin.id')
+            ->select(
+                'izin_pendidik.*',
+                'user_karyawan.name as nama_pemohon',
+                'status_izin.nama_status_izin as status_izin',
+                DB::raw("'Karyawan' as role")
+            )
+            ->where('karyawan.id_user', $user->id)
+            ->whereBetween('izin_pendidik.tanggal', [$startOfMonth, $endOfMonth]); // Filter 1 bulan terakhir
+
+        $data_izin_pendidik = $izin_guru->union($izin_karyawan)
+            ->orderBy('tanggal', 'desc')
+            ->orderBy('created_at', 'desc')
             ->get();
 
-        return view('izin_pendidik.request_izin_pendidik', compact('data_izin_guru'));
+        return view('izin_pendidik.request_izin_pendidik', compact('data_izin_pendidik'));
     }
 
     public function post_request_izin_pendidik(Request $request)
-        {
-            $request->validate([
-                'alasan' => 'required|string|max:255',
-                'file' => 'nullable|file|mimes:pdf,jpeg,png,jpg',
-            ]);
+    {
+        $request->validate([
+            'alasan' => 'required|string|max:255',
+            'file' => 'nullable|file|mimes:pdf,jpeg,png,jpg',
+        ]);
 
-            $alasan = $request->input('alasan');
+        $alasan = $request->input('alasan');
+        $user = Auth::user();
 
-            $user = Auth::user();
+        $idGuru = null;
+        $idKaryawan = null;
 
-            $idGuru = null;
-            $idKaryawan = null;
-
-            $guru = DB::table('guru')->where('id_user', $user->id)->first();
-            if ($guru) {
-                $idGuru = $guru->id;
-            } else {
-                $karyawan = DB::table('karyawan')->where('id_user', $user->id)->first();
-                if ($karyawan) {
-                    $idKaryawan = $karyawan->id;
-                }
+        $guru = DB::table('guru')->where('id_user', $user->id)->first();
+        if ($guru) {
+            $idGuru = $guru->id;
+        } else {
+            $karyawan = DB::table('karyawan')->where('id_user', $user->id)->first();
+            if ($karyawan) {
+                $idKaryawan = $karyawan->id;
             }
-
-            if (!$idGuru && !$idKaryawan) {
-                return redirect()->back()->with('error', 'Anda tidak terdaftar sebagai guru atau karyawan.');
-            }
-
-            if ($request->hasFile('file')) {
-                $file = $request->file('file');
-                $fileName = $file->getClientOriginalName();
-                Storage::disk(env('STORAGE_DISK'))->put('file_izin_pendidik/' . $fileName, file_get_contents($file));
-            }
-            DB::table('izin_pendidik')->insert([
-                'tanggal' => now(),
-                'jam_izin' => now()->format('H:i:s'),
-                'id_status_izin' => 1,
-                'alasan' => $alasan,
-                'file' => $fileName,
-                'id_guru' => $idGuru,
-                'id_karyawan' => $idKaryawan,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
-
-            return redirect()->back()->with('success', 'Permohonan izin berhasil dikirim.');
         }
+
+        if (!$idGuru && !$idKaryawan) {
+            return redirect()->back()->with('error', 'Anda tidak terdaftar sebagai guru atau karyawan.');
+        }
+
+        $fileName = null;
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+            $fileName = time() . '_' . $file->getClientOriginalName();
+            Storage::disk(env('STORAGE_DISK'))->put('file_izin_pendidik/' . $fileName, file_get_contents($file));
+        }
+
+        DB::table('izin_pendidik')->insert([
+            'tanggal' => now(),
+            'jam_izin' => now()->format('H:i:s'),
+            'id_status_izin' => 1,
+            'alasan' => $alasan,
+            'file' => $fileName,
+            'id_guru' => $idGuru,
+            'id_karyawan' => $idKaryawan,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        return redirect()->back()->with('success', 'Permohonan izin berhasil dikirim.');
+    }
 }

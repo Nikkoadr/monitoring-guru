@@ -69,7 +69,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @forelse($data_izin_guru as $izin)
+                                    @forelse($data_izin_pendidik as $izin)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ \Carbon\Carbon::parse($izin->tanggal)->format('d-m-Y') }}</td>
