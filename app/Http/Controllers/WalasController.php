@@ -42,7 +42,12 @@ class WalasController extends Controller
 
     public function form_tambah_walas()
     {
-        $data_kelas = DB::table('kelas')->get();
+        $data_kelas = DB::table('kelas')
+            ->leftJoin('walas', 'kelas.id', '=', 'walas.id_kelas')
+            ->whereNull('walas.id_kelas') // Hanya ambil kelas yang belum ada di walas
+            ->select('kelas.*')
+            ->get();
+
         return view('walas.form_tambah_walas', compact('data_kelas'));
     }
 

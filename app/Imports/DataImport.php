@@ -13,6 +13,9 @@ class DataImport implements WithMultipleSheets
             'Guru' => new GuruImport(),
             'Karyawan' => new KaryawanImport(),
             'Siswa' => new SiswaImport(),
+            'Walas' => new WalasImport(),
+            'Waka' => new WakaImport(),
+            'Kesiswaan' => new KesiswaanImport(),
             'Mapel' => new MapelImport(),];
 
     }

@@ -109,14 +109,26 @@ $(function () {
 </script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 <script>
-    @if (session()->has('success'))
-    Swal.fire({
-        icon: 'success',
-        title: 'Success',
-        text: '{{ session('success') }}',
-        timer: 5000,
-        showConfirmButton: false
+    document.addEventListener("DOMContentLoaded", function() {
+        @if (session()->has('success'))
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil!',
+                text: '{{ session('success') }}',
+                timer: 5000,
+                showConfirmButton: false
+            });
+        @endif
+
+        @if (session()->has('error'))
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal!',
+                text: '{{ session('error') }}',
+                timer: 5000,
+                showConfirmButton: false
+            });
+        @endif
     });
-    @endif
 </script>
 @endsection

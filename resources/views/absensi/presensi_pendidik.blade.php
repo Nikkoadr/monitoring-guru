@@ -289,7 +289,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                             const distance = faceapi.euclideanDistance(descriptorBaru, descriptorTersimpan);
 
-                            if (distance < 0.4) {
+                            if (distance < 0.5) {
                                 if (checkLocation(userLatitude, userLongitude)) {
                                     kirimPresensi(url);
                                 } else {

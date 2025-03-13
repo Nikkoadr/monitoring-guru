@@ -38,7 +38,6 @@ class Izin_pendidikController extends Controller
 
     public function acc(Request $request, $id)
     {
-        // Ambil data izin berdasarkan ID
         $izin = DB::table('izin_pendidik')->where('id', $id)->first();
 
         if ($izin) {
@@ -91,8 +90,8 @@ class Izin_pendidikController extends Controller
     public function request_izin_pendidik()
     {
         $user = Auth::user();
-        $startOfMonth = now()->startOfMonth(); // Awal bulan ini
-        $endOfMonth = now()->endOfMonth(); // Akhir bulan ini
+        $startOfMonth = now()->startOfMonth();
+        $endOfMonth = now()->endOfMonth();
 
         $izin_guru = DB::table('izin_pendidik')
             ->join('guru', 'izin_pendidik.id_guru', '=', 'guru.id')
@@ -105,7 +104,7 @@ class Izin_pendidikController extends Controller
                 DB::raw("'Guru' as role")
             )
             ->where('guru.id_user', $user->id)
-            ->whereBetween('izin_pendidik.tanggal', [$startOfMonth, $endOfMonth]); // Filter 1 bulan terakhir
+            ->whereBetween('izin_pendidik.tanggal', [$startOfMonth, $endOfMonth]);
 
         $izin_karyawan = DB::table('izin_pendidik')
             ->join('karyawan', 'izin_pendidik.id_karyawan', '=', 'karyawan.id')
@@ -118,7 +117,7 @@ class Izin_pendidikController extends Controller
                 DB::raw("'Karyawan' as role")
             )
             ->where('karyawan.id_user', $user->id)
-            ->whereBetween('izin_pendidik.tanggal', [$startOfMonth, $endOfMonth]); // Filter 1 bulan terakhir
+            ->whereBetween('izin_pendidik.tanggal', [$startOfMonth, $endOfMonth]);
 
         $data_izin_pendidik = $izin_guru->union($izin_karyawan)
             ->orderBy('tanggal', 'desc')
@@ -137,6 +136,7 @@ class Izin_pendidikController extends Controller
 
         $alasan = $request->input('alasan');
         $user = Auth::user();
+        $today = now()->toDateString();
 
         $idGuru = null;
         $idKaryawan = null;
@@ -153,6 +153,22 @@ class Izin_pendidikController extends Controller
 
         if (!$idGuru && !$idKaryawan) {
             return redirect()->back()->with('error', 'Anda tidak terdaftar sebagai guru atau karyawan.');
+        }
+
+        $sudahAbsen = DB::table('absensi_pendidik')
+            ->whereDate('tanggal', $today)
+            ->where(function ($query) use ($idGuru, $idKaryawan) {
+                if ($idGuru) {
+                    $query->where('id_guru', $idGuru);
+                }
+                if ($idKaryawan) {
+                    $query->orWhere('id_karyawan', $idKaryawan);
+                }
+            })
+            ->exists();
+
+        if ($sudahAbsen) {
+            return redirect()->back()->with('error', 'Anda sudah melakukan absensi hari ini dan tidak bisa mengajukan izin.');
         }
 
         $fileName = null;

@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Guru_piket extends Model
 {
     use HasFactory;
+    protected $guarded = [];
+    protected $table = 'guru_piket';
 }
