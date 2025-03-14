@@ -72,6 +72,16 @@ class AbsensiController extends Controller
         $tanggal_sekarang = Carbon::now()->format('Y-m-d');
         $jam_sekarang = Carbon::now()->format('H:i');
 
+        // Pastikan lokasi dikirim
+        if (!$request->lokasi) {
+            return redirect('/kbm')->with('error', 'Lokasi harus diaktifkan untuk melakukan presensi.');
+        }
+
+        // Pastikan foto dikirim
+        if (!$request->has('foto') || empty($request->foto)) {
+            return redirect('/kbm')->with('error', 'Foto harus diunggah untuk melakukan presensi.');
+        }
+
         // Cek apakah siswa sudah absen pada id_kbm ini
         $absensiExists = DB::table('absensi_siswa')
             ->where('id_siswa', $siswa->id)
@@ -89,9 +99,14 @@ class AbsensiController extends Controller
         )["meters"]);
 
         if ($radius > 100) {
-            return redirect('/kbm')->with('error', 'Jarak Anda terlalu jauh dari Sekolah');
+            return redirect('/kbm')->with('error', 'Jarak Anda terlalu jauh dari Sekolah.');
         } else {
-            $data = [
+            // Simpan data absensi
+            $foto_base64 = base64_decode(explode("base64,", $request->foto)[1]);
+            $nama_foto = uniqid() . '.png';
+            Storage::disk(env('STORAGE_DISK'))->put('foto_absensi_siswa/' . $nama_foto, $foto_base64);
+
+            DB::table('absensi_siswa')->insert([
                 'tanggal' => $tanggal_sekarang,
                 'id_siswa' => $siswa->id,
                 'id_kbm' => $request->id_kbm,
@@ -99,19 +114,11 @@ class AbsensiController extends Controller
                 'id_status_hadir' => 1,
                 'jam_hadir' => $jam_sekarang,
                 'lokasi' => $request->lokasi,
-            ];
-
-            if ($request->has('foto')) {
-                $foto_base64 = base64_decode(explode("base64,", $request->foto)[1]);
-                $nama_foto = uniqid() . '.png';
-                Storage::disk(env('STORAGE_DISK'))->put('foto_absensi_siswa/' . $nama_foto, $foto_base64);
-                $data['foto'] = $nama_foto;
-            }
-
-            DB::table('absensi_siswa')->insert($data);
+                'foto' => $nama_foto,
+            ]);
         }
 
-        return redirect('/kbm')->with('success', 'Presensi Anda Berhasil');
+        return redirect('/kbm')->with('success', 'Presensi Anda Berhasil.');
     }
 
     public function lihat_presensi_siswa($id)
