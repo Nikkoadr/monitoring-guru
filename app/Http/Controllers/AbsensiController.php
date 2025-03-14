@@ -145,7 +145,7 @@ class AbsensiController extends Controller
                 'users.name as nama_siswa',
                 'kelas.nama_kelas',
                 DB::raw('COALESCE(status_hadir.nama_status_hadir, "Alfa") as status_hadir'),
-                DB::raw('COALESCE(absensi_siswa.foto, "default.jpeg") as foto'),
+                DB::raw('COALESCE(absensi_siswa.foto, "default.jpg") as foto'),
                 DB::raw('COALESCE(absensi_siswa.jam_hadir, "00:00") as jam_hadir')
             )
             ->get();
