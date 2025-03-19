@@ -47,24 +47,26 @@ class LaporanController extends Controller
     public function index(Request $request)
     {
         $id_user_login = Auth::user()->id;
-        $kelas = DB::table('kelas')
-            ->get();
+
+        // Ambil semua kelas untuk admin, waka, dan kepsek
+        $kelas = DB::table('kelas')->get();
 
         // Periksa apakah user adalah admin, waka, atau kepsek
         $isWakaOrKepsek = DB::table('waka')
             ->join('guru', 'waka.id_guru', '=', 'guru.id')
             ->where('guru.id_user', $id_user_login)
-            ->exists() 
+            ->exists()
             || DB::table('kepsek')
             ->join('guru', 'kepsek.id_guru', '=', 'guru.id')
             ->where('guru.id_user', $id_user_login)
             ->exists();
 
         // Periksa apakah user adalah wali kelas
-        $isWaliKelas = DB::table('walas') // Asumsi tabel wali_kelas
+        $waliKelas = DB::table('walas')
             ->join('guru', 'walas.id_guru', '=', 'guru.id')
             ->where('guru.id_user', $id_user_login)
-            ->exists();
+            ->select('walas.id_kelas')
+            ->first();
 
         // Periksa apakah user adalah guru biasa
         $isGuruBiasa = DB::table('guru')
@@ -77,24 +79,14 @@ class LaporanController extends Controller
             $bulan = $request->input('bulan', now()->month);
             $tahun = $request->input('tahun', now()->year);
 
-            return view('laporan.data_laporan', compact('bulan', 'tahun','kelas'));
-        } elseif ($isWaliKelas) {
-            // Jika wali kelas: tampilkan laporan kelasnya
-            $kelas = DB::table('walas')
-                ->join('kelas', 'walas.id_kelas', '=', 'kelas.id')
-                ->where('walas.id_guru', function ($query) use ($id_user_login) {
-                    $query->select('id')
-                        ->from('guru')
-                        ->where('id_user', $id_user_login)
-                        ->limit(1);
-                })
-                ->select('kelas.nama_kelas')
-                ->first();
+            return view('laporan.data_laporan', compact('bulan', 'tahun', 'kelas', 'isWakaOrKepsek'));
+        } elseif ($waliKelas) {
+            // Jika wali kelas: hanya tampilkan kelasnya sendiri
+            $kelas = DB::table('kelas')
+                ->where('id', $waliKelas->id_kelas)
+                ->get();
 
-            $bulan = $request->input('bulan', now()->month);
-            $tahun = $request->input('tahun', now()->year);
-
-            return view('laporan.print_laporan_bulanan_kelas', compact('kelas', 'bulan', 'tahun'));
+            return view('laporan.data_laporan', compact('kelas'));
         } elseif ($isGuruBiasa) {
             // Jika guru biasa: redirect ke home dengan pesan error
             return redirect()->route('home')->with('error', 'Anda tidak memiliki akses ke laporan.');
@@ -103,6 +95,7 @@ class LaporanController extends Controller
             return redirect()->route('home')->with('error', 'Akses ditolak.');
         }
     }
+
 
     public function print_laporan_bulanan_pendidik(Request $request)
     {
@@ -225,50 +218,50 @@ class LaporanController extends Controller
     }
 
 
-// public function downloadLaporanBulanan(Request $request)
-// {
-//     $tanggalAwal = $request->tanggal_awal;
-//     $tanggalAkhir = $request->tanggal_akhir;
+    // public function downloadLaporanBulanan(Request $request)
+    // {
+    //     $tanggalAwal = $request->tanggal_awal;
+    //     $tanggalAkhir = $request->tanggal_akhir;
 
-//     $selectStatements = [];
-//     $tanggalMulai = Carbon::parse($tanggalAwal);
-//     $tanggalSelesai = Carbon::parse($tanggalAkhir);
+    //     $selectStatements = [];
+    //     $tanggalMulai = Carbon::parse($tanggalAwal);
+    //     $tanggalSelesai = Carbon::parse($tanggalAkhir);
 
-//     while ($tanggalMulai->lte($tanggalSelesai)) {
-//         $hari = $tanggalMulai->day;
-//         $selectStatements[] = "MAX(CASE WHEN DAY(tanggal_absen) = $hari THEN CONCAT(jam_masuk, '-', IFNULL(jam_keluar, '00:00:00')) ELSE '' END) as tgl_$hari";
-//         $tanggalMulai->addDay();
-//     }
+    //     while ($tanggalMulai->lte($tanggalSelesai)) {
+    //         $hari = $tanggalMulai->day;
+    //         $selectStatements[] = "MAX(CASE WHEN DAY(tanggal_absen) = $hari THEN CONCAT(jam_masuk, '-', IFNULL(jam_keluar, '00:00:00')) ELSE '' END) as tgl_$hari";
+    //         $tanggalMulai->addDay();
+    //     }
 
-//     $rekap = DB::table('users')
-//         ->selectRaw('users.id as id_user, users.jam_kerja, users.nama, users.jabatan, ' . implode(', ', $selectStatements))
-//         ->leftJoin('absensi', function($join) use ($tanggalAwal, $tanggalAkhir) {
-//             $join->on('users.id', '=', 'absensi.id_user')
-//                 ->whereBetween('tanggal_absen', [$tanggalAwal, $tanggalAkhir]);
-//         })
-//         ->groupByRaw('users.id, users.jam_kerja, users.nama, users.jabatan')
-//         ->orderBy('users.nama')
-//         ->get();
+    //     $rekap = DB::table('users')
+    //         ->selectRaw('users.id as id_user, users.jam_kerja, users.nama, users.jabatan, ' . implode(', ', $selectStatements))
+    //         ->leftJoin('absensi', function($join) use ($tanggalAwal, $tanggalAkhir) {
+    //             $join->on('users.id', '=', 'absensi.id_user')
+    //                 ->whereBetween('tanggal_absen', [$tanggalAwal, $tanggalAkhir]);
+    //         })
+    //         ->groupByRaw('users.id, users.jam_kerja, users.nama, users.jabatan')
+    //         ->orderBy('users.nama')
+    //         ->get();
 
-//     foreach ($rekap as $data) {
-//         $totalJamTerlambat = 0;
-//         for ($i = 1; $i <= 31; $i++) {
-//             $key = "tgl_$i";
-//             if (isset($data->$key) && $data->$key !== '') {
-//                 $jamMasuk = substr($data->$key, 0, 5);
-//                 $jamKerja = $data->jam_kerja;
+    //     foreach ($rekap as $data) {
+    //         $totalJamTerlambat = 0;
+    //         for ($i = 1; $i <= 31; $i++) {
+    //             $key = "tgl_$i";
+    //             if (isset($data->$key) && $data->$key !== '') {
+    //                 $jamMasuk = substr($data->$key, 0, 5);
+    //                 $jamKerja = $data->jam_kerja;
 
-//                 if ($jamMasuk > $jamKerja) {
-//                     $terlambat = Carbon::parse($jamMasuk)->diffInMinutes(Carbon::parse($jamKerja));
-//                     $totalJamTerlambat += $terlambat / 60;
-//                 }
-//             }
-//         }
-//         $data->total_jam_terlambat = $totalJamTerlambat;
-//     }
+    //                 if ($jamMasuk > $jamKerja) {
+    //                     $terlambat = Carbon::parse($jamMasuk)->diffInMinutes(Carbon::parse($jamKerja));
+    //                     $totalJamTerlambat += $terlambat / 60;
+    //                 }
+    //             }
+    //         }
+    //         $data->total_jam_terlambat = $totalJamTerlambat;
+    //     }
 
-//     return view('layouts.component.downloadSemuaLaporan', compact('tanggalAwal', 'tanggalAkhir', 'rekap'));
-// }
+    //     return view('layouts.component.downloadSemuaLaporan', compact('tanggalAwal', 'tanggalAkhir', 'rekap'));
+    // }
     public function print_laporan_bulanan_kelas(Request $request)
     {
         $tanggalAwal = $request->tanggal_awal;
@@ -368,5 +361,4 @@ class LaporanController extends Controller
             'rekap' => $filter_rekap,
         ]);
     }
-
 }

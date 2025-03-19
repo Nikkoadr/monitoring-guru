@@ -57,7 +57,7 @@
                         </div>
                         <div class="row mt-3">
                         <div class="col">
-                            @if(Auth::user()->dataset_wajah)
+                            {{-- @if(Auth::user()->dataset_wajah) --}}
                                 @if($cek > 0)
                                     <button id="ambil_presensi" class="btn btn-danger btn-block">
                                         <i class="fa-solid fa-camera-retro"></i> Absen Pulang
@@ -73,11 +73,11 @@
                                         </button>
                                     @endif
                                 @endif
-                            @else
+                            {{-- @else
                                 <button id="rekam_wajah" class="btn btn-warning btn-block">
                                     <i class="fa-solid fa-video"></i> Rekam Wajah
                                 </button>
-                            @endif
+                            @endif --}}
                         </div>
                         </div>
                     </div>
@@ -110,7 +110,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
 <script src="https://cdn.jsdelivr.net/npm/@vladmandic/face-api/dist/face-api.min.js"></script>
 
-<script>
+{{-- <script>
 document.addEventListener("DOMContentLoaded", async function () {
     if (typeof faceapi === "undefined") {
         console.error("face-api.js belum dimuat dengan benar!");
@@ -182,7 +182,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         });
     });
 });
-</script>
+</script> --}}
 <script>
 Webcam.set({
     width: 320,
@@ -253,64 +253,18 @@ document.addEventListener("DOMContentLoaded", function () {
         Swal.fire('Error', 'Browser Anda tidak mendukung GPS.', 'error');
     }
 
-    document.getElementById("ambil_presensi")?.addEventListener("click", async function () {
-        Swal.fire("Proses Presensi", "Sistem sedang mengenali wajah...", "info");
+document.getElementById("ambil_presensi")?.addEventListener("click", async function () {
+    Swal.fire("Proses Presensi", "Mengambil gambar untuk presensi...", "info");
 
-        Webcam.snap(async function (url) {
-            const img = new Image();
-            img.src = url;
-            img.onload = async function () {
-                const detection = await faceapi.detectSingleFace(img, new faceapi.TinyFaceDetectorOptions())
-                    .withFaceLandmarks()
-                    .withFaceDescriptor();
-                
-                if (!detection) {
-                    Swal.fire("Gagal!", "Wajah tidak terdeteksi, coba lagi!", "error");
-                    return;
-                }
-                
-                const descriptorBaru = Array.from(detection.descriptor);
-                
-                $.ajax({
-                    type: "GET",
-                    url: "/ambil_dataset_wajah",
-                    success: function (response) {
-                        if (response.status !== "success") {
-                            Swal.fire("Error", response.message || "Gagal mengambil data wajah!", "error");
-                            return;
-                        }
-
-                        try {
-                            let descriptorTersimpan = JSON.parse(response.data).map(Number);
-
-                            if (!Array.isArray(descriptorTersimpan) || descriptorTersimpan.length !== 128) {
-                                throw new Error("Data wajah tidak valid!");
-                            }
-
-                            const distance = faceapi.euclideanDistance(descriptorBaru, descriptorTersimpan);
-
-                            if (distance < 0.6) {
-                                if (checkLocation(userLatitude, userLongitude)) {
-                                    kirimPresensi(url);
-                                } else {
-                                    Swal.fire("Gagal!", "Anda berada di luar area presensi!", "error");
-                                }
-                            } else {
-                                Swal.fire("Gagal!", "Wajah tidak cocok dengan data tersimpan!", "error");
-                            }
-                        } catch (err) {
-                            Swal.fire("Error", "Format data wajah tidak valid!", "error");
-                            console.error("Parsing Error:", err);
-                        }
-                    },
-                    error: function (xhr) {
-                        Swal.fire("Error", "Gagal mengambil data wajah!", "error");
-                        console.error("AJAX Error:", xhr.responseText);
-                    }
-                });
-            };
-        });
+    Webcam.snap(async function (url) {
+        if (checkLocation(userLatitude, userLongitude)) {
+            kirimPresensi(url);
+        } else {
+            Swal.fire("Gagal!", "Anda berada di luar area presensi!", "error");
+        }
     });
+});
+
 
     function kirimPresensi(foto) {
         let lokasi = lokasiInput?.value || "";
