@@ -12,7 +12,7 @@ class UsersTableSeeder extends Seeder
         User::create([
             'name' => 'Administrator',
             'email' => 'admin@smkmuhkandanghaur.sch.id',
-            'password' => bcrypt('P4ssw0rd'),
+            'password' => bcrypt('Secret123'),
             'id_role' => 1,
         ]);
 
